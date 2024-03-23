@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        // added by generator-code
+        "amodio.tsl-problem-matcher",
+        "ms-vscode.extension-test-runner",
+        "dbaeumer.vscode-eslint",
+        //
+        // added by carljdp
+        "codezombiech.gitignore",
+        "ryu1kn.partial-diff"
+    ]
+}
