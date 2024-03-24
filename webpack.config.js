@@ -3,6 +3,8 @@
 'use strict';
 
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 
 //@ts-check
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
@@ -40,6 +42,9 @@ const extensionConfig = {
       }
     ]
   },
+  plugins: [
+    new CleanWebpackPlugin()
+  ],
   devtool: 'nosources-source-map',
   infrastructureLogging: {
     level: "log", // enables logging required for problem matchers

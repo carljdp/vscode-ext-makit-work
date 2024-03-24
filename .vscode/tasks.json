@@ -4,6 +4,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "npm: watch",
 			"type": "npm",
 			"script": "watch",
 			"problemMatcher": "$ts-webpack-watch",
@@ -18,6 +19,7 @@
 			}
 		},
 		{
+			"label": "npm: watch-tests",
 			"type": "npm",
 			"script": "watch-tests",
 			"problemMatcher": "$tsc-watch",
