@@ -7,16 +7,29 @@
 	"configurations": [
 		
 		{
-			"name": "Run/Debug Extension",
+			"name": "Run/Debug",
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
+				"--extensionDevelopmentPath=${workspaceFolder}",
 			],
 			"outFiles": [
 				"${workspaceFolder}/dist/**/*.js"
 			],
-			// "preLaunchTask": "${defaultBuildTask}"
+			"preLaunchTask": "npm: watch"
+			
+		},
+		{
+			"name": "Run/Debug (with profile)",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--profile=vscode-ext-dev-debug",
+			],
+			"outFiles": [
+				"${workspaceFolder}/dist/**/*.js"
+			],
 			"preLaunchTask": "npm: watch"
 			
 		},
@@ -31,7 +44,6 @@
 			"outFiles": [
 				"${workspaceFolder}/dist/**/*.js"
 			],
-			// "preLaunchTask": "${defaultBuildTask}"
 			"preLaunchTask": "npm: watch-tests"
 		}
 	]

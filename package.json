@@ -1,8 +1,9 @@
 {
   "name": "makit-work",
+  "publisher": "carljdp",
   "displayName": "Makit Work",
   "description": "An experimental extension to mimic built-in Profiles",
-"author": {
+  "author": {
     "name": "Carl J du Preez",
     "email": "carljdp@gmail.com",
     "url": "https://linktr.ee/carljdp"
@@ -27,25 +28,64 @@
         "title": "makit-work.disableExtension"
       },
       {
-        "command": "makit-work.helloWorld",
-        "title": "makit-work.helloWorld"
+        "command": "makit-work.extMan.navigateToExtension",
+        "title": "Show Extension in Extension Manager"
       }
-    ]
-  },
-  "viewsContainers": {
-    "activitybar": [
-      {
-        "id": "makit-work.extensionManager",
-        "title": "Extension Manager",
-        "icon": "media/extension-icon.svg"
+    ],
+    "configuration": {
+      "title": "Makit Work",
+      "properties": {
+        "makit-work.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/Disable this extension."
+        },
+        "makit-work.wantedExtensions": {
+          "type": "array",
+          "default": [],
+          "description": "List of wanted extensions"
+        },
+        "makit-work.unwantedExtensions": {
+          "type": "array",
+          "default": [],
+          "description": "List of unwanted extensions"
+        }
       }
-    ]
-  },
-  "views": {
-    "extensionManager": [
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "makit-work-extensionManager",
+          "title": "Makit Work Manager",
+          "icon": "$(extensions-view-icon)"
+        }
+      ]
+    },
+    "views": {
+      "makit-work-extensionManager": [
+        {
+          "id": "makit-work.extMan.view.wanted",
+          "name": "Wanted"
+        },
+        {
+          "id": "makit-work.extMan.view.unwanted",
+          "name": "Unwanted"
+        },
+        {
+          "id": "makit-work.extMan.view.dontCare",
+          "name": "Dont care"
+        }
+      ]
+    },
+    "colors": [
       {
-        "id": "makit-work.extensionView",
-        "name": "Manage Extensions"
+        "id": "disabledForeground",
+        "description": "Foreground color for disabled extensions in the list.",
+        "defaults": {
+          "dark": "#555",
+          "light": "#AAA",
+          "highContrast": "#FFF"
+        }
       }
     ]
   },
@@ -74,5 +114,8 @@
     "typescript": "^5.3.3",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.2.1"
   }
 }

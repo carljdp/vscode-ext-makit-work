@@ -4,6 +4,23 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "npm: install",
+			"detail": "Install all dependencies for a project",
+			"type": "npm",
+			"script": "install",
+			"group": "none",
+			"presentation": {
+				"panel": "shared",
+				"group": "clean",
+				"reveal": "always",
+				"focus": false,
+				"clear": true,
+				"echo": true,
+				"showReuseMessage": true,
+			},
+			"problemMatcher": []
+		},
+		{
 			"label": "npm: watch",
 			"type": "npm",
 			"script": "watch",

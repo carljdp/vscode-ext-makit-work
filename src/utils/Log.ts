@@ -2,20 +2,23 @@
 
 import { ClampedInt } from './Strict';
 
-    
-export class LogEntry {
-    severity: Logging.Severity = Logging.Severity.Error;
+
+export namespace StrictLoggerNS {
+
+export class StrictLogEntry {
+	
+    severity: StrictLogger.Severity = StrictLogger.Severity.Error;
     text: string = "";
     args: any[] = [];
 
-    constructor(severity: Logging.Severity, message: string, ...args: any[]) {
+    constructor(severity: StrictLogger.Severity, message: string, ...args: any[]) {
         this.severity = severity;
         this.text = message;
         this.args = args;
     }
 }
 
-export namespace Logging {
+export namespace StrictLogger {
 
     export enum Severity {
         Info = "info",
@@ -52,6 +55,8 @@ export namespace Logging {
     }
 }
 
+
+
 namespace Notify {
 
     export enum Strategy {
@@ -66,7 +71,9 @@ namespace Notify {
     }
 }
 
-enum LogLevel {
+} // namespace StrictLogger
+
+export enum LogSeverity {
 	Trace = -2,
 	Debug = -1,
 	Log = 0,
@@ -75,18 +82,17 @@ enum LogLevel {
 	Error = 3,
 	Fatal = 4,
 }
+export namespace LogSeverity {
 
-namespace LogLevel {
-
-	export function toString(level: LogLevel): string {
+	export function toString(level: LogSeverity): string {
 		switch (level) {
-			case LogLevel.Trace: return "TRACE";
-			case LogLevel.Debug: return "DEBUG";
-			case LogLevel.Log: return "LOG";
-			case LogLevel.Info: return "INFO";
-			case LogLevel.Warn: return "WARN";
-			case LogLevel.Error: return "ERROR";
-			case LogLevel.Fatal: return "FATAL";
+			case LogSeverity.Trace: return "TRACE";
+			case LogSeverity.Debug: return "DEBUG";
+			case LogSeverity.Log: return "LOG";
+			case LogSeverity.Info: return "INFO";
+			case LogSeverity.Warn: return "WARN";
+			case LogSeverity.Error: return "ERROR";
+			case LogSeverity.Fatal: return "FATAL";
 		}
 		return "UNKNOWN";
 	}
@@ -96,17 +102,21 @@ namespace LogLevel {
 export interface ILoggerOptions {
 	scopeLabel: string;
 	initialRelativeIndent: ClampedInt;
-	initialRelativeSeverity: LogLevel;
+	initialRelativeSeverity: LogSeverity;
 	indentString: string;
 }
 const defaultLoggerOptions: Required<ILoggerOptions> = {
 	scopeLabel: "unknown",
 	initialRelativeIndent: new ClampedInt(0, 0, 8),
-	initialRelativeSeverity: LogLevel.Log,
+	initialRelativeSeverity: LogSeverity.Log,
 	indentString: "  ",
 };
 
 export class Logger {
+
+	public static joinNonEmpty(joiner: string, ...args: string[]): string {
+		return args.filter((arg) => arg.length > 0).join(joiner);
+	}
 
 	// instance variables
 	_initial: Required<ILoggerOptions>;
@@ -115,56 +125,65 @@ export class Logger {
 	// constructor
 	constructor(options: Partial<ILoggerOptions>) {
 		this._initial = Object.freeze(Object.assign({}, defaultLoggerOptions, options));
-		this.state = Object.assign({}, this._initial);
+		this.state = Object.assign({}, defaultLoggerOptions, this._initial);
 	}
 
 	// instance functions
 	trace = (msg: string, ...args: any[]): void => {
-		this._log(LogLevel.Trace, msg, ...args);
-	}
+		this._log(LogSeverity.Trace, msg, ...args);
+	};
 
 	debug = (msg: string, ...args: any[]): void => {
-		this._log(LogLevel.Debug, msg, ...args);
-	}
+		this._log(LogSeverity.Debug, msg, ...args);
+	};
 
 	log = (msg: string, ...args: any[]): void => {
-		this._log(LogLevel.Log, msg, ...args);
-	}
+		this._log(LogSeverity.Log, msg, ...args);
+	};
 
 	info = (msg: string, ...args: any[]): void => {
-		this._log(LogLevel.Info, msg, ...args);
-	}
+		this._log(LogSeverity.Info, msg, ...args);
+	};
 
 	warn = (msg: string, ...args: any[]): void => {
-		this._log(LogLevel.Warn, msg, ...args);
-	}
+		this._log(LogSeverity.Warn, msg, ...args);
+	};
 
 	error = (msg: string, ...args: any[]): void => {
-		this._log(LogLevel.Error, msg, ...args);
-	}
+		this._log(LogSeverity.Error, msg, ...args);
+	};
 
 	fatal = (msg: string, ...args: any[]): void => {
-		this._log(LogLevel.Fatal, msg, ...args);
-	}
+		this._log(LogSeverity.Fatal, msg, ...args);
+	};
 
 	indent(amount: number = 1): void {
 		this.state.initialRelativeIndent.value += amount;
-	}
+	};
 
 	unindent(amount: number = 1): void {
 		this.state.initialRelativeIndent.value -= amount;
-	}
+	};
 
-	subScope = (label?: string): Logger => {
-		return new Logger({
-			scopeLabel: `${this.state.scopeLabel}->${label || "subscope"}`, 
-			initialRelativeIndent: this.state.initialRelativeIndent, 
-			initialRelativeSeverity: this.state.initialRelativeSeverity, 
-			indentString: this.state.indentString
-		});
-	}
+	subScope = (options: Partial<ILoggerOptions>): Logger => {
 
-	private _log(level: LogLevel, msg: string, ...args: any[]): void {
+		if (options.scopeLabel !== undefined && options.scopeLabel.length > 0) {
+			options.scopeLabel = Logger.joinNonEmpty(":",
+				this.state.scopeLabel, 
+				options.scopeLabel
+			);
+		}
+		else {
+			options.scopeLabel = Logger.joinNonEmpty(":", this.state.scopeLabel, "subScope");
+		}
+
+		const mergedOptions = Object.assign({}, this.state, options);
+		return new Logger(mergedOptions);
+	};
+
+
+
+	private _log(level: LogSeverity, msg: string, ...args: any[]): void {
 		// short-circuit if the level is below the threshhold
 		if (level < this.state.initialRelativeSeverity) {
 			return;
@@ -175,29 +194,36 @@ export class Logger {
 		const indent = this.state.initialRelativeIndent || this._initial.initialRelativeIndent || defaultLoggerOptions.initialRelativeIndent;
 		const indentStr = this.state.indentString || this._initial.indentString || defaultLoggerOptions.indentString;
 
+		const consoleMessage = Logger.joinNonEmpty(":",
+			LogSeverity.toString(level), 
+			label, 
+			indentStr.repeat(indent.value), 
+			msg
+		);
+
 		switch (level) {
-			case LogLevel.Trace:
-				console.trace(`[${label}] ${indentStr.repeat(indent.value)} ${level}: ${msg}`, ...args);
+			case LogSeverity.Trace:
+				console.trace(consoleMessage, ...args);
 				break;
-			case LogLevel.Debug:
-				console.debug(`[${label}] ${indentStr.repeat(indent.value)} ${level}: ${msg}`, ...args);
+			case LogSeverity.Debug:
+				console.debug(consoleMessage, ...args);
 				break;
-			case LogLevel.Log:
-				console.log(`[${label}] ${indentStr.repeat(indent.value)} ${level}: ${msg}`, ...args);
+			case LogSeverity.Log:
+				console.log(consoleMessage, ...args);
 				break;
-			case LogLevel.Info:
-				console.info(`[${label}] ${indentStr.repeat(indent.value)} ${level}: ${msg}`, ...args);
+			case LogSeverity.Info:
+				console.info(consoleMessage, ...args);
 				break;
-			case LogLevel.Warn:
-				console.warn(`[${label}] ${indentStr.repeat(indent.value)} ${level}: ${msg}`, ...args);
+			case LogSeverity.Warn:
+				console.warn(consoleMessage, ...args);
 				break;
-			case LogLevel.Error:
-				console.error(`[${label}] ${indentStr.repeat(indent.value)} ${level}: ${msg}`, ...args);
+			case LogSeverity.Error:
+				console.error(consoleMessage, ...args);
 				// Strict error handling
-				throw new Error(`[${label}] ${indentStr.repeat(indent.value)} ${level}: ${msg}`);
+				throw new Error(consoleMessage);
 				break;
-			case LogLevel.Fatal:
-				console.error(`[${label}] ${indentStr.repeat(indent.value)} ${level}: ${msg}`, ...args);
+			case LogSeverity.Fatal:
+				console.error(consoleMessage, ...args);
 				// Strict error handling
 				process.exit(1);
 				break;

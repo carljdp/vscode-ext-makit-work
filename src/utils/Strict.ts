@@ -1,6 +1,6 @@
 // file: /src/utils/Strict.ts
 
-import { LogEntry, Logging } from './Log';
+import { StrictLoggerNS } from './Log';
 
 interface IStrictOptions {
 	maxAllowedInfo: number;
@@ -23,7 +23,7 @@ interface IStrictState {
 	warnCount: number;
 	errorCount: number;
 	fatalCount: number;
-	logBook: LogEntry[];
+	logBook: StrictLoggerNS.StrictLogEntry[];
 }
 
 abstract class Strict {
@@ -42,25 +42,25 @@ abstract class Strict {
 	private readonly _maxAllowedError: number = 0;
 	private readonly _maxAllowedFatal: number = 0;
 
-	private _logBook: LogEntry[] = [];
+	private _logBook: StrictLoggerNS.StrictLogEntry[] = [];
 
 	constructor(options: Partial<IStrictOptions>) {
 		this._initialOptions = Object.freeze(Object.assign({}, DefaultStrictOptions, options));
 		this._resetCounters();
 	}
 
-	private _printEntry(logEntry: LogEntry): void {
+	private _printEntry(logEntry: StrictLoggerNS.StrictLogEntry): void {
 		switch (logEntry.severity) {
-			case Logging.Severity.Info:
+			case StrictLoggerNS.StrictLogger.Severity.Info:
 				console.info(`[STRICT] Infor: ${logEntry.text}`);
 				break;
-			case Logging.Severity.Warn:
+			case StrictLoggerNS.StrictLogger.Severity.Warn:
 				console.warn(`[STRICT] Warni: ${logEntry.text}`);
 				break;
-			case Logging.Severity.Error:
+			case StrictLoggerNS.StrictLogger.Severity.Error:
 				console.error(`[STRICT] Error: ${logEntry.text}`);
 				break;
-			case Logging.Severity.Fatal:
+			case StrictLoggerNS.StrictLogger.Severity.Fatal:
 				console.error(`[STRICT] Fatal: ${logEntry.text}`);
 				break;
 			default:
@@ -68,26 +68,26 @@ abstract class Strict {
 		}
 	}
 
-	private _addEntry(logEntry: LogEntry): void {
+	private _addEntry(logEntry: StrictLoggerNS.StrictLogEntry): void {
 		this._logBook.push(logEntry);
 
 		switch (logEntry.severity) {
-			case Logging.Severity.Info:
+			case StrictLoggerNS.StrictLogger.Severity.Info:
 				if (++this._infoCount > this._maxAllowedInfo) {
 					this._flush();
 				}
 				break;
-			case Logging.Severity.Warn:
+			case StrictLoggerNS.StrictLogger.Severity.Warn:
 				if (++this._warnCount > this._maxAllowedWarn) {
 					this._flush();
 				}
 				break;
-			case Logging.Severity.Error:
+			case StrictLoggerNS.StrictLogger.Severity.Error:
 				if (++this._errorCount > this._maxAllowedError) {
 					this._flush();
 				}
 				break;
-			case Logging.Severity.Fatal:
+			case StrictLoggerNS.StrictLogger.Severity.Fatal:
 				if (++this._fatalCount > this._maxAllowedFatal) {
 					this._flush();
 				}
@@ -116,8 +116,8 @@ abstract class Strict {
 		this._fatalCount = 0;
 	}
 
-	protected log(severity?: Logging.Severity, message?: string, ...args: any[]): void {
-		this._addEntry( new LogEntry(severity || Logging.Severity.Error, message || "Fail!", ...args));
+	protected log(severity?: StrictLoggerNS.StrictLogger.Severity, message?: string, ...args: any[]): void {
+		this._addEntry( new StrictLoggerNS.StrictLogEntry(severity || StrictLoggerNS.StrictLogger.Severity.Error, message || "Fail!", ...args));
 	}
 
 }
@@ -146,32 +146,32 @@ export class ClampedInt extends Strict {
 		else {
 
 			if (value === undefined) {
-				this.log(Logging.Severity.Warn, "Value should not be undefined");
+				this.log(StrictLoggerNS.StrictLogger.Severity.Warn, "Value should not be undefined");
 			}
 	
 			if (value === null) {
-				this.log(Logging.Severity.Warn, "Value should not be null");
+				this.log(StrictLoggerNS.StrictLogger.Severity.Warn, "Value should not be null");
 			}
 
-			this.log(Logging.Severity.Warn, `Value should be a number, not a ${typeof value}`);
+			this.log(StrictLoggerNS.StrictLogger.Severity.Warn, `Value should be a number, not a ${typeof value}`);
 
 			
 			const maybeInt = parseInt(value);
 
 			if (!isNaN(maybeInt)) {
-				this.log(Logging.Severity.Info, `Was able to parse directly as integer`);
+				this.log(StrictLoggerNS.StrictLogger.Severity.Info, `Was able to parse directly as integer`);
 				return maybeInt; // int is "number"
 			}
 
 			const maybeFloat = parseFloat(value);
 			if (!isNaN(maybeFloat)) {
-				this.log(Logging.Severity.Info, `Parsed as float, but should be an integer`);
+				this.log(StrictLoggerNS.StrictLogger.Severity.Info, `Parsed as float, but should be an integer`);
 				return Math.round(maybeFloat); // float is "number"
 			}
 
 			const maybeOther = Number(value);
 			if (!isNaN(maybeOther)) {
-				this.log(Logging.Severity.Warn, `Parsed as number, but should be an integer`);
+				this.log(StrictLoggerNS.StrictLogger.Severity.Warn, `Parsed as number, but should be an integer`);
 				return maybeOther; // number
 			}
 
@@ -182,16 +182,16 @@ export class ClampedInt extends Strict {
 	private _clamp(value: number): number {
 		
 		if (value < -128 || value > 127) {
-			this.log(Logging.Severity.Warn, `Value should be in the range -128 to 127, not ${value}`);
+			this.log(StrictLoggerNS.StrictLogger.Severity.Warn, `Value should be in the range -128 to 127, not ${value}`);
 		}
 
 		if (value < -128) {
-			this.log(Logging.Severity.Info, `Clamping value to -128`);
+			this.log(StrictLoggerNS.StrictLogger.Severity.Info, `Clamping value to -128`);
 			value -128;
 		}
 
 		if (value > 127) {
-			this.log(Logging.Severity.Info, `Clamping value to 127`);
+			this.log(StrictLoggerNS.StrictLogger.Severity.Info, `Clamping value to 127`);
 			value = 127;
 		}
 
@@ -207,7 +207,7 @@ export class ClampedInt extends Strict {
 		const parsed = this._parse(value);
 		
 		if (parsed === null) {
-			this.log(Logging.Severity.Error, `Value could not be parsed`);
+			this.log(StrictLoggerNS.StrictLogger.Severity.Error, `Value could not be parsed`);
 		}
 		else {
 			const clamped = this._clamp(parsed);
