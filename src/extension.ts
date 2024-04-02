@@ -8,9 +8,38 @@ import * as path from 'path';
 import { Logger, LogSeverity } from './utils/Log';
 import { getContextName } from './utils/Meta';
 
+import { XVS } from './system/vscodeEnvFacade';
+
+import { FileHandler } from './utils/FileHandler';
+
+
+import { RegistryOfServices } from './services/index';
+import { Storage } from './services/StorageService';
+import { Service } from './common/Service';
+
+
+const registryOfServices = new RegistryOfServices();
+
+const storageServiceKey = registryOfServices.register((new Storage) as Storage & Service);
+
+const storageServiceInstance = registryOfServices.get<Storage & Service>(storageServiceKey);
+
+const storageServiceInstanceCwd = storageServiceInstance.cwd();
+
+
+
 const EXT_AUTH: Readonly<string> = `carljdp`;
 const EXT_NAME: Readonly<string> = `makit-work`;
 
+
+/** The top level file handler for the application. */
+const filehandler = FileHandler.initOnce({
+    lockFileOptions: {
+        // my arbitrary options '¯\_(ツ)_/¯'
+        retries: 5,
+        retryWait: 100
+    }
+});
 
 const root = new Logger({
     scopeLabel: "", // or "ROOT" 
@@ -35,13 +64,13 @@ async function readAndParseJSONC(extensionsJsonPath: fs.PathLike, encoding: Buff
             return null;
         }
 
-
-        const content = await fs.promises.readFile(extensionsJsonPath, encoding);
+        // NOT TESTED (new filehandler)
+        const content = await filehandler.cautiousReadFile(extensionsJsonPath.toString(), encoding);
 
         // error listener
         let errors: jsoncParser.ParseError[] = [];
 
-        const json = jsoncParser.parse(content, errors, { 
+        const json = jsoncParser.parse(content, errors, {
             disallowComments: false,
             allowTrailingComma: true,
             allowEmptyContent: true,
@@ -110,6 +139,9 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
             const local = this.log.subScope({});
             local.debug('--start--');
 
+            // example usage, not used yet
+            const vscodeUserDataGlobalStateJsonPath = await XVS.UserData.globalStateJson.resolved;
+
 
             const workspaceFolderPath = vscode.workspace.workspaceFolders?.[0].uri.fsPath || './';
             const extensionsJsonPath = path.join(workspaceFolderPath, '.vscode', 'extensions.json');
@@ -132,7 +164,7 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
                     .filter(ext => recommendations.includes(ext.id))
                     .map((ext) => {
                         let tag = '';
-    
+
                         if (recommendations.includes(ext.id)) {
                             tag = 'recommended';
                         } else if (unwantedRecommendations.includes(ext.id)) {
@@ -140,7 +172,7 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
                         } else {
                             tag = 'unknown';
                         }
-    
+
                         return new ExtensionItem(ext, tag);
                     });
             }
@@ -152,7 +184,7 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
                     .filter(ext => unwantedRecommendations.includes(ext.id))
                     .map((ext) => {
                         let tag = '';
-    
+
                         if (recommendations.includes(ext.id)) {
                             tag = 'recommended';
                         } else if (unwantedRecommendations.includes(ext.id)) {
@@ -160,7 +192,7 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
                         } else {
                             tag = 'unknown';
                         }
-    
+
                         return new ExtensionItem(ext, tag);
                     });
             }
@@ -173,7 +205,7 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
                     .filter(ext => !ext.packageJSON.isBuiltin)
                     .map((ext) => {
                         let tag = '';
-    
+
                         if (recommendations.includes(ext.id)) {
                             tag = 'recommended';
                         } else if (unwantedRecommendations.includes(ext.id)) {
@@ -181,7 +213,7 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
                         } else {
                             tag = 'unknown';
                         }
-    
+
                         return new ExtensionItem(ext, tag);
                     });
             }
@@ -253,6 +285,7 @@ export function activate(context: vscode.ExtensionContext) {
             _log.debug('--start--');
 
             // TODO: Enable the extension
+            _log.info('Enabling extension:', item.extension.id);
 
             _log.debug('---end---');
         }
@@ -265,13 +298,27 @@ export function activate(context: vscode.ExtensionContext) {
             _log.debug('--start--');
 
             // TODO: Disable the extension
+            _log.info('Enabling extension:', item.extension.id);
 
             _log.debug('---end---');
         }
     ));
 
+    // can export a public API here, available to other extensions
+    let publicApi = {
+        sum(a: number, b: number): number {
+            return a + b;
+        },
+        mul(a: number, b: number): number {
+            return a * b;
+        }
+    };
+
     log.unindent();
     log.debug('---end---');
+
+    // 'export' public api-surface
+    return publicApi;
 }
 
 // pseudo 'deinit'
