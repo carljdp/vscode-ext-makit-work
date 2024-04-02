@@ -8,7 +8,7 @@
     "email": "carljdp@gmail.com",
     "url": "https://linktr.ee/carljdp"
   },
-  "version": "0.0.1",
+    "icon": "icon.png",
   "engines": {
     "vscode": "^1.87.0"
   },
