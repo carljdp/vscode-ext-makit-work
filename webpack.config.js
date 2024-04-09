@@ -42,7 +42,7 @@ switch (_node_env_.replace(/['"]+/g, '').trim().toLowerCase()) {
   case 'development':
   case 'dev':
     _isDev_ = true;
-    _devtool_ = 'eval-source-map';
+    _devtool_ = 'source-map';
     break;
   default:
     _isDev_ = EnvDefault.isDev;
@@ -72,7 +72,7 @@ console.table({
   // _isDev_, 
   // _debug_, 
   // _isDebug_, 
-  // _devtool_, 
+  devtool: _devtool_, 
   NODE_ENV: process.env.NODE_ENV, 
   DEBUG: process.env.DEBUG
 });
@@ -123,7 +123,7 @@ const extensionConfig = {
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(_node_env_),
       'process.env.DEBUG': JSON.stringify(_debug_),
-  }),
+    }),
   ],
   devtool: _devtool_,
   infrastructureLogging: {

@@ -2,6 +2,7 @@
 
 import path from 'path';
 import fs from 'fs-extra';
+import crypto from 'crypto';
 
 import { IService, Service } from '../common/Service';
 
@@ -22,6 +23,8 @@ interface IStorageService extends IService {
 
 class StorageService extends Service implements IStorageService {
 
+    // static fileCache = new Map<string, Record<string, any>>();
+
     public constructor(key?: string) {
         super();
         this.instanceKey = Symbol.for(key || 'Storage');
@@ -31,15 +34,67 @@ class StorageService extends Service implements IStorageService {
         return process.cwd();
     }
 
-    public async readFile(location: string, name: string, buffer: Uint8Array): Promise<boolean> {
+    // static async memoizedReadFile(filePath: string): Promise<string> {
+    //     const currentHash = await StorageService.calculateFileHash(filePath);
+    
+    //     if (StorageService.fileCache.has(filePath) && StorageService.fileCache.get(filePath) === currentHash) {
+    //         console.log('File unchanged. Using cached data.');
+    //         return; // Assuming you store the file content somewhere or have another method to return cached content
+    //     }
+    
+    //     fs.readFile(filePath, 'utf8', (err, data) => {
+    //         if (err) {
+    //             console.error(err);
+    //             return;
+    //         }
+            
+    //         // Update the cache with the latest hash
+    //         fileCache.set(filePath, currentHash);
+            
+    //         // Here you would normally process the file data and possibly cache it as well
+            
+    //         console.log(data);
+    //     });
+    // }
+
+    // static async calculateFileHash(filePath: string): Promise<string> {
+    //     return new Promise((resolve, reject) => {
+    //         const hash = crypto.createHash('sha256');
+    //         const stream = fs.createReadStream(filePath);
+    
+    //         stream.on('data', (chunk) => {
+    //             hash.update(chunk);
+    //         });
+    
+    //         stream.on('end', () => {
+    //             resolve(hash.digest('hex'));
+    //         });
+    
+    //         stream.on('error', (err) => {
+    //             reject(err);
+    //         });
+    //     });
+    // }
+
+    public async fileSize(location: string, name: string, factor: number = 1, fallback: number = 4096): Promise<number> {
         try {
             const pathToFile = path.join(location, name);
-            const newData = await fs.readFile(pathToFile);
-            const combinedData = new Uint8Array(buffer.length + newData.length);
-            combinedData.set(buffer, 0);
-            combinedData.set(newData, buffer.length);
-            // replace the original data with the combined data
-            buffer.set(combinedData);
+            const stats = await fs.stat(pathToFile);
+            return stats.size;
+        } catch (error) {
+            this.instanceError('fileSize', 'get file size', error as Error);
+            return fallback;
+        }
+    }
+
+    public async readFile(location: string, name: string, byRefBuffer: Buffer, encoding: BufferEncoding = 'utf8'): Promise<boolean> {
+        try {
+            const pathToFile = path.join(location, name);
+            const fileData = await fs.readFile(pathToFile, {
+                encoding: encoding,
+                flag: 'r',
+            });
+            byRefBuffer.set(Buffer.from(fileData, 'utf8'));
             return true;
         } catch (error) {
             this.instanceError('readFile', 'read file', error as Error);
@@ -47,14 +102,13 @@ class StorageService extends Service implements IStorageService {
         }
     }
 
-    public async writeFile(location: string, name: string, buffer: Uint8Array): Promise<boolean> {
+    public async writeFile(location: string, name: string, byRefBuffer: Buffer, encoding: BufferEncoding = 'utf8'): Promise<boolean> {
         let result = false;
         try {
             const pathToFile = path.join(location, name);
-            await fs.writeFile(pathToFile, buffer, {
-                encoding: 'utf8', // default: 'utf8'
-                flag: 'w', // default: 'w'
-                mode: 0o666, // default: 0o666 (owner:rw-, group:rw-, others:rw-)
+            await fs.writeFile(pathToFile, byRefBuffer, {
+                encoding: encoding,
+                flag: 'w'
             });
             result = true;
         } catch (error) {

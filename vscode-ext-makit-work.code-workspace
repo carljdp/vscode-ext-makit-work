@@ -28,6 +28,9 @@
 		"files.autoSave": "onFocusChange",
 		"npm.packageManager": "pnpm",
 		"debug.console.collapseIdenticalLines": false,
+		"editor.formatOnPaste": true,
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
 		//
 	},
 	"extensions": {
