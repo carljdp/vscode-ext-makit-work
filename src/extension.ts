@@ -245,6 +245,41 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
 }
 
 
+// Define the function to return your webview content
+function getWebviewContent() {
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Custom Webview</title>
+    </head>
+    <body>
+      <h1>Hello, World!</h1>
+    </body>
+    </html>
+  `;
+}
+
+function showCustomWebView(context: vscode.ExtensionContext) {
+    const panel = vscode.window.createWebviewPanel(
+        'customWebView', // Identifies the type of the webview
+        'Custom Webview', // Title of the panel displayed to the user
+        vscode.ViewColumn.One, // Editor column to show the new webview panel in
+        {} // Webview options. More can be added here.
+    );
+
+    // Set the webview's HTML content
+    panel.webview.html = getWebviewContent();
+}
+
+function isWorkspaceStartup(document: vscode.TextDocument, context: vscode.ExtensionContext): boolean {
+    // Your logic to determine if the extension was just activated and if this is the workspace startup
+    // For instance, you might set a context globalState value when the webview is shown and check it here
+    return true; // Adjust with your own logic
+}
+
 // pseudo 'init'
 export function activate(context: vscode.ExtensionContext) {
     const log = root.subScope({ scopeLabel: getContextName() });
@@ -313,6 +348,34 @@ export function activate(context: vscode.ExtensionContext) {
             return a * b;
         }
     };
+
+
+    // ------------------------------------------------------------------------
+
+    showCustomWebView(context);
+
+    vscode.workspace.onDidOpenTextDocument((document) => {
+        // Perform any necessary checks on the document and decide whether to show the webview
+        // For example, check if this is the first document opened at startup
+        if (isWorkspaceStartup(document, context)) {
+            showCustomWebView(context);
+        }
+    });
+
+    context.subscriptions.push(vscode.commands.registerCommand('extension.showCustomWebView', () => {
+        // Create and show a new webview as an editor tab
+        const panel = vscode.window.createWebviewPanel(
+            'customWebView', // Identifies the type of the webview
+            'Custom Webview', // Title of the panel displayed to the user
+            vscode.ViewColumn.One, // Editor column to show the new webview panel in
+            {} // Webview options. More can be added here.
+        );
+
+        // Set the webview's HTML content
+        panel.webview.html = getWebviewContent();
+    }));
+
+    // ------------------------------------------------------------------------
 
     log.unindent();
     log.debug('---end---');
