@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"extensions": {
+		"recommendations": [
+			"mhutchie.git-graph"
+		],
+		"unwantedRecommendations": [
+			"ms-vscode-remote.remote-containers",
+		]
+	}
+}

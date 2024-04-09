@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        
+        "EditorConfig.EditorConfig",
+    ],
+    "unwantedRecommendations": [
+        "ms-vscode-remote.remote-wsl"
+    ]
+}
