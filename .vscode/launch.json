@@ -2,7 +2,29 @@
 {
 	"version": "0.2.0",
 	"configurations": [
-		
+		{
+			"name": "ts-node debug current file",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
+			"args": [
+				"${relativeFile}"
+			],
+			"env": {
+				"TS_NODE_COMPILER_OPTIONS": "{\"sourceMap\":true}"
+			},
+			"sourceMaps": true,
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**",
+				"**/dist/**"
+			],
+			"console": "internalConsole",
+			"stopOnEntry": false,
+			"restart": true,
+			"envFile": "${workspaceFolder}/.env"
+		},
 		{
 			"name": "Run/Debug",
 			"type": "extensionHost",

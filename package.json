@@ -119,6 +119,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "jsonc-parser": "^3.2.1"
+        "jsonc-parser": "^3.2.1",
+        "ts-node": "^10.9.2"
   }
 }
