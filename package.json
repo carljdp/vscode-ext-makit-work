@@ -1,13 +1,25 @@
 {
-  "name": "makit-work",
+    "name": "x10shine",
+    "displayName": "x10shine",
+    "description": "An experimental custom extension manager for vscode.",
   "publisher": "carljdp",
-  "displayName": "Makit Work",
-  "description": "An experimental extension to mimic built-in Profiles",
   "author": {
     "name": "Carl J du Preez",
     "email": "carljdp@gmail.com",
     "url": "https://linktr.ee/carljdp"
   },
+    "version": "0.0.1-dev+2024.03",
+    "license": "Proprietary",
+    "private": true,
+    "homepage": "https://github.com/carljdp/vscode-x10shine",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/carljdp/vscode-x10shine.git"
+    },
+    "bugs": {
+        "url": "https://github.com/carljdp/vscode-x10shine/issues"
+    },
+    "qna": "https://github.com/carljdp/vscode-x10shine/discussions/categories/q-a",
     "icon": "icon.png",
     "galleryBanner": {
         "color": "#1e415e",
