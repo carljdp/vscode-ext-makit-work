@@ -90,15 +90,15 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+        "vscode:prepublish": "npm run package",
+        "compile": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\webpack",
+        "watch": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\webpack --watch",
+        "package": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\webpack --mode production --devtool hidden-source-map",
+        "compile-tests": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\tsc -p . --outDir out",
+        "watch-tests": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\tsc -p . -w --outDir out",
+        "pretest": ".\\node_modules\\.bin\\env-cmd -f .\\.env npm run compile-tests && npm run compile && npm run lint",
+        "lint": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\eslint src --ext ts",
+        "test": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\vscode-test"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
@@ -109,6 +109,9 @@
     "@vscode/test-cli": "^0.0.6",
     "@vscode/test-electron": "^2.3.9",
     "clean-webpack-plugin": "^4.0.0",
+        "dotenv": "^16.4.5",
+        "dotenv-webpack": "^8.1.0",
+        "env-cmd": "^10.1.0",
     "eslint": "^8.56.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",

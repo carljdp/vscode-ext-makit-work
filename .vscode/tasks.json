@@ -1,8 +1,27 @@
-// See https://go.microsoft.com/fwlink/?LinkId=733558
-// for the documentation about the tasks.json format
+// tasks.json for PROJECT FOLDER
 {
 	"version": "2.0.0",
 	"tasks": [
+		{
+			"label": "run current file",
+			"type": "shell",
+			"command": "./node_modules/.bin/env-cmd",
+			"args": [
+				"--file",
+				"./.env",
+				"./node_modules/.bin/ts-node",
+				"${file}"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
+		},
 		{
 			"label": "npm: install",
 			"detail": "Install all dependencies for a project",

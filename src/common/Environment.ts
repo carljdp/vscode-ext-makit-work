@@ -4,7 +4,8 @@
 process.env.DEBUG = 'true';
 
 const _isDebug_ = ((env: NodeJS.ProcessEnv): boolean => {
-    return (Boolean(env.DEBUG) && (['true', '1'].includes(env.DEBUG!.toLowerCase())));
+    const value: string = JSON.stringify(env.DEBUG || '').replace(/['"]+/g, '').trim();
+    return ['true', 'yes', 'on', '1'].includes(value.toLowerCase());
 })(process.env);
 
 export { _isDebug_ };
