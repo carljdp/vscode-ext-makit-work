@@ -3,7 +3,6 @@
 
 import { _isDebug_ } from './Environment';
 
-import { IOrigin, Origin } from './Origin';
 import { ISingleton, Singleton } from './Singleton';
 
 
@@ -17,9 +16,9 @@ abstract class Service extends Singleton implements IService {
 
     // implementation common to all services
 
-    public constructor() {
+    public constructor(key?: string) {
         super();
-        this.instanceKey = Symbol.for(`AbstractService`);
+        this.instanceKey = Symbol.for(key || 'Service');
     }
 
 }

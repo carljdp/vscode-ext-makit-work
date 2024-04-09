@@ -13,18 +13,10 @@ import { XVS } from './system/vscodeEnvFacade';
 import { FileHandler } from './utils/FileHandler';
 
 
-import { RegistryOfServices } from './services/index';
-import { Storage } from './services/StorageService';
-import { Service } from './common/Service';
+import { storageService } from './services';
 
 
-const registryOfServices = new RegistryOfServices();
 
-const storageServiceKey = registryOfServices.register((new Storage) as Storage & Service);
-
-const storageServiceInstance = registryOfServices.get<Storage & Service>(storageServiceKey);
-
-const storageServiceInstanceCwd = storageServiceInstance.cwd();
 
 
 
@@ -64,13 +56,22 @@ async function readAndParseJSONC(extensionsJsonPath: fs.PathLike, encoding: Buff
             return null;
         }
 
-        // NOT TESTED (new filehandler)
-        const content = await filehandler.cautiousReadFile(extensionsJsonPath.toString(), encoding);
+        // RETURNS EMPTY CONTENT ???
+        const raw: Uint8Array = new Uint8Array(8 * 1024);
+        if (! await storageService.readFile(extensionsJsonPath as string, '', raw)) {
+            console.error('Error reading the JSONC file:', extensionsJsonPath);
+            return null;
+        }
+
+        let decodedString = new TextDecoder().decode(raw);
+
+        console.log('content raw:', raw);
+        console.log('content:', decodedString);
 
         // error listener
         let errors: jsoncParser.ParseError[] = [];
 
-        const json = jsoncParser.parse(content, errors, {
+        const json = jsoncParser.parse(decodedString, errors, {
             disallowComments: false,
             allowTrailingComma: true,
             allowEmptyContent: true,

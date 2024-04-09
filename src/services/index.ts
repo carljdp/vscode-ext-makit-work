@@ -1,18 +1,15 @@
 
 
-import { IService, Service } from '../common/Service';
-import { IRegistry, Registry } from '../common/Registry';
+import { Service } from '../common/Service';
+import { Registry } from '../common/Registry';
 
-class RegistryOfServices extends Registry<Service> implements IRegistry<IService> {
-
-    // implementation specific to SingletonRegistry
-
-    public constructor() {
-        super();
-        this.instanceKey = Symbol.for("RegistryOfServices");
-    }
+import { StorageService } from './StorageService';
 
 
-}
+const services = new Registry<Service>();
 
-export { RegistryOfServices };
+const storageServiceKey = services.register(new StorageService());
+
+export const storageService = services.getAs<StorageService>(storageServiceKey);
+
+

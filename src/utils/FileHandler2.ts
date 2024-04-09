@@ -4,6 +4,8 @@ import fs from 'fs-extra';
 
 import { _isDebug_ } from '../common/Environment';
 
+import { storageService } from '../services';
+
 // -rwxr--r-- 1 carljdp carljdp     4 Mar 30 11:23 ./code.lock
 // in %APPDATA%\Code
 
@@ -33,8 +35,7 @@ export interface FileHandler2Options {
 
  */
 export class FileHandler2 {
-    /** When true, returned errors include stack trace */
-    public static _debug: boolean = false;
+
 
 
 
@@ -64,13 +65,5 @@ export class FileHandler2 {
     //     }
     // }
 
-    private static error(duringOp: string, failedTo: string, error: Error): Error {
-        let message = `[FileHandler] Error: During ${duringOp} failed to ${failedTo}\n\tError: '${error.message}'`;
 
-        if (_isDebug_) {
-            message += `\n\tStack: ${error.stack}`;
-        }
-
-        return new Error(`[FileHandler] Error: During ${duringOp} failed to ${failedTo}\n\t'${error.message}'`);
-    }
 }

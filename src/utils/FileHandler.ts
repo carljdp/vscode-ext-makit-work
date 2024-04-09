@@ -5,6 +5,8 @@ import * as lockfile from 'lockfile';
 
 import { _isDebug_ } from '../common/Environment';
 
+import { storageService } from '../services';
+
 export interface FileHandlerOptions {
     lockFileOptions: lockfile.Options;
 }
