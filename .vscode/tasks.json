@@ -23,6 +23,19 @@
 			}
 		},
 		{
+			"label": "npm: lint",
+			"type": "npm",
+			"script": "lint",
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "test",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			}
+		},
+		{
 			"label": "npm: install",
 			"detail": "Install all dependencies for a project",
 			"type": "npm",

@@ -9,14 +9,37 @@
     "url": "https://linktr.ee/carljdp"
   },
     "icon": "icon.png",
+    "galleryBanner": {
+        "color": "#1e415e",
+        "theme": "dark"
+    },
   "engines": {
-    "vscode": "^1.87.0"
+        "vscode": "^1.88.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+    "activationEvents": [
+        "onLanguage:json",
+        "onLanguage:jsonc",
+        "workspaceContains:settings.json",
+        "workspaceContains:extensions.json",
+        "workspaceContains:keybindings.json",
+        "workspaceContains:tasks.json",
+        "workspaceContains:launch.json",
+        "workspaceContains:*.code-workspace"
+    ],
   "main": "./dist/extension.js",
+    "capabilities": {
+        "untrustedWorkspaces": {
+            "supported": "limited",
+            "description": "This extension required read and write access to unexposed vscode files."
+        },
+        "virtualWorkspaces": {
+            "supported": false,
+            "description": "This extension required read and write access to unexposed vscode files."
+        }
+    },
   "contributes": {
     "commands": [
       {
