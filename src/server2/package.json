@@ -1,17 +1,26 @@
 {
-    "name": "node-ts-swc-eslint-boilerplate",
+    "name": "node-ts-swc-eslint",
     "version": "0.0.1-dev",
-    "description": "A fresh new project",
     "author": "Carl J du Preez <https://linktr.ee/carljdp>",
-    "license": "MIT",
-    "keywords": [],
+    "license": "Proprietary",
+    "keywords": [
+        "node",
+        "typescript",
+        "swc",
+        "eslint"
+    ],
     "type": "module",
     "engines": {
-        "node": ">=21.0.0"
+        "node": "^21.7.3"
     },
     "main": "dist/index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "echo \"Error: no start script specified\" && exit 1",
+        "dev": "echo \"Error: no dev script specified\" && exit 1",
+        "build": "echo \"Error: no build script specified\" && exit 1",
+        "test": "echo \"Error: no test script specified\" && exit 1",
+        "lint": "echo \"Error: no lint script specified\" && exit 1",
+        "format": "echo \"Error: no format script specified\" && exit 1"
     },
     "devDependencies": {
         "@eslint/js": "^9.2.0",
