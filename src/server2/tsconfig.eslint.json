@@ -1,0 +1,22 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        // ensure that nobody can 
+        // accidentally use this 
+        // config for a build
+        "noEmit": true,
+        "rootDir": "./",
+    },
+    "include": [
+        "**/*.ts",
+        "**/*.cts",
+        "**/*.mts",
+        "**/*.d.ts",
+        "**/*.js",
+        "**/*.mjs",
+        "**/*.cjs",
+        "**/*.json",
+        "**/*.jsonc",
+        "**/*.json5"
+    ]
+}

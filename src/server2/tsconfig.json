@@ -1,0 +1,50 @@
+{
+    "extends": "@tsconfig/recommended/tsconfig.json",
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": [
+            "ES2022"
+        ],
+        "module": "ES2022",
+        "moduleResolution": "bundler",
+        //
+        "rootDir": "./src",
+        "outDir": "./dist",
+        //
+        "experimentalDecorators": true,
+        //
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "skipLibCheck": true,
+        //
+        "allowJs": true,
+        "checkJs": true
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.cts",
+        "src/**/*.mts",
+        "src/**/*.d.ts",
+        "src/**/*.js",
+        "src/**/*.mjs",
+        "src/**/*.cjs",
+        "src/**/*.json",
+        "src/**/*.jsonc",
+        "src/**/*.json5"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "build",
+        "out",
+        "output",
+        "target",
+        "tmp",
+        "temp",
+        "coverage",
+        "logs",
+        "log"
+    ],
+    "$schema": "https://json.schemastore.org/tsconfig"
+}
