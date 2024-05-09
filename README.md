@@ -1,57 +1,73 @@
 
 ## Conventions
 
+Conventions used in this 'mono-repo'
+
+### Package.json
+
+- As far as possible, to not use `"type": "module"` in `package.json`. This is because it is not yet supported by all tools and libraries. Instead, use `.mjs` extension for ES modules. Exceptions to the rule:
+  - Build scripts should place a `package.json` file in the `dist` directory with `"type"` set to `"module"` or `"commonjs"` as appropriate.
+
+
+### Configuration files
+
+- As far as possible, stick with using `.js` (or `.mjs`) configuration files instead of `.json` or `.yaml`. This allows us to dynamically generate configuration values using code.
+
 ### Directory Names
 
-Se below, the folder naming conventions used in this monorepo. The intention was to be flexible and aimed to capture commonly used directories:
+- no spaces in directory names.
+
+Preferably, but not mandatory:
+- use `kebab-case` for directory names
+- dotfiles / dotdirs should be used for configuration files only.
+
+The following directory names were chosen with the following conventions in mind:
+- all lowercase, no spaces, no special characters, no underscores, no camelCase
+- approximately 3-5 characters long, 4 characters preferred
+- use common abbreviations/terms where possible
+- less important:
+  - consider alphabetical order in the list of directories
+  - the directory name should be descriptive of the contents
+  - avoid using the same name as a common package or tool
+  - the meaning should be clear to someone who is not familiar with the project
+
+#### Root
 
 | Directory Name  | Description  |
 | --------------- | ------------ |
-| `apps`     | Top-level directory for application modules (Node.js, web, Electron). Each application module can have its own directory here. |
-| `docs`     | Documentation related to the entire monorepo or individual projects. |
-| `examples` | Example code snippets or applications for individual projects. |
+| `<root>/apps`          | Top-level directory for application modules. Each application module can have its own directory here. |
+
+
+#### Per Module
+
+To be committed to the repository.
 
 | Directory Name  | Description  |
 | --------------- | ------------ |
-| `config`   | Configuration files for the whole monorepo, such as `.eslintrc`, `.prettierrc`, etc. |
+| `<module>/devt` | Build, configuration & deployment scripts / tools. |
+| `<module>/docs` | Documentation. |
+| `<module>/libs` | Libraries to be published alongside the application. |
+| `<module>/src`  | Source code. |
+| `<module>/www`  | Public files. |
+
+
+#### Generated
+
+Generated files that should have no effect when deleted.
 
 | Directory Name  | Description  |
 | --------------- | ------------ |
-| `coverage` | Code coverage reports for individual projects. |
-| `packages` | Common node_modules directory for managing package dependencies shared across multiple projects. |
-| `tests`    | Centralized testing framework and shared test utilities across applications. |
+| `<module>/dist`  | Output directory for compiled files. |
+| `<module>/temp`  | Temporary files. |
+| `<module>/logs`  | Log files. |
+
+
+#### 3rd-party
+
+Local 'caching'
 
 | Directory Name  | Description  |
 | --------------- | ------------ |
-| `src`      | Source code for applications, libraries, or other modules. |
-| `typings`  | Type definitions for TypeScript projects. |
-| `assets`   | Images, fonts, and other static resources used across projects.|
-| `private`  | Private files for web applications. |
-| `public`   | Public files for web applications. |
-| `vendor` or `libs`   | Third-party libraries or dependencies that are included/published along with the project. |
+| `node_modules`  | Node.js dependencies for individual projects. |
+| `.vscode`       | Visual Studio Code configuration files. |
 
-## Build and Output Directories
-
-| Directory Name  | Description  |
-| --------------- | ------------ |
-| `dist`     | Output directory for compiled and bundled files, if relevant. |
-| `build`    | Build output directory for individual projects. |
-| `tmp` or `temp`      | Temporary files generated during the build or testing process. |
-| `out` or `output`      | Output directory for test related build artifacts. |
-| `logs`     | Log files for build/test operations. |
-
-
-## Dependencies 
-
-| Directory Name  | Description  |
-| --------------- | ------------ |
-| `node_modules` | Node.js dependencies for individual projects. |
-| `local_modules` | Internal modules that are not intended for external use. |
-
-# dev-time / build-time related directories
-
-| Directory Name  | Description  |
-| --------------- | ------------ |
-| `scripts`  | Build and deployment automation scripts. |
-| `utils`    | Utility scripts for build, test, or deployment operations. |
-| `tools`    | Developer tools for use across applications, like linters. |
