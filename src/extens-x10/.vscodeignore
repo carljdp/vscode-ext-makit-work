@@ -1,0 +1,53 @@
+
+
+
+# dev/build-time environment
+.env.*
+*.env
+# dev/build-time scratches
+/.scratch
+# dev/built-time mocks
+/.debug
+# dev/build-time docs
+**/*.md
+# dev/build-time source
+/dev
+/src
+**/*.*ts
+
+# dev/build-time artifacts
+/.vscode-test
+/node_modules
+/output
+/build
+/dist
+/temp
+/out
+/tmp
+**/*.map
+**/.vscode-test.*js*
+
+# IDE files
+
+# dev/build-time cconfigs
+/webpack.config.*js*
+/.eslintrc.*js*
+/tsconfig.*js*
+/.gitignore
+/.eslintrc
+/.yarnrc
+/.vscode
+**/*.code-workspace
+
+# TO KEEP FOR PUBLISHING
+!/dist
+!/icon.png
+!/LICENSE
+!/README.md
+!/CHANGELOG.md
+!/package.json
+# not sure about these? - theyy were not mentioned in the docs?
+!/package-lock.json
+!/pnpm-lock.yaml
+!/yarn.lock
+!/.npmrc
