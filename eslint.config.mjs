@@ -13,17 +13,21 @@ import EsLint_Ts from "typescript-eslint";
 import globals from "globals";
 
 
-// Docs for ESLint configuration >= 9.0.0
-// https://eslint.org/docs/latest/use/getting-started
+/**
+ * @typedef { typeof import("@eslint/js").configs.recommended } EsLintJsConfig
+ * @typedef { typeof import("typescript-eslint").configs.recommended[0] } EsLintTsConfig
+ * @typedef { EsLintJsConfig | EsLintTsConfig } EsLintConfig
+ * @typedef { EsLintConfig[] } EsLintConfigs
+ */
 
-/** @type {import("typescript-eslint").Config} */
+/** @type {EsLintConfigs} */
 const baseRecommendations = [
     EsLint_Js.configs.recommended,
     ...EsLint_Ts.configs.recommended
 ];
 
-/** @type {import("typescript-eslint").Config} */
-export default [
+/** @type {EsLintConfigs} */
+const rootConfig = [
     ...baseRecommendations,
     {
         languageOptions: {
@@ -47,3 +51,8 @@ export default [
     }
 
 ];
+
+export default rootConfig;
+export {
+    rootConfig
+};

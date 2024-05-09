@@ -36,9 +36,6 @@
 		// file systems
 		"forceConsistentCasingInFileNames": true,
 		//
-		// Force the use of 'type' for type-only imports
-		"verbatimModuleSyntax": true,
-		//
 		// Switche to the upcoming ECMA runtime behavior
 		// instead of TypeScript's original behavior.
 		"useDefineForClassFields": true,
@@ -59,24 +56,22 @@
 	//
 	// Files to include in the program, relative to the 
 	// directory containing the tsconfig.json file.
-	// - default is everything "**/*"
+	// - default is everything "**/*", excluding dot files
 	"include": [
-		"**/*",
-		"**/.*"
+		// Only from **this** dir and below
+		".*/**/*",
+		"*/**/*",
+		".*",
+		"*"
 	],
 	//
 	// An array of filenames or patterns that should be skipped
 	// when resolving 'include'.
 	"exclude": [
-		//
-		// node 
-		"<node_internals>/**/*",
-		"node_modules/**/*",
-		//
-		// generated
+		"**/<node_internals>/**/*",
+		"**/node_modules/**/*",
 		"**/*.map.*",
-		"dist",
-		"out"
+		"dist"
 	],
 	//
 	"$schema": "https://json.schemastore.org/tsconfig"
