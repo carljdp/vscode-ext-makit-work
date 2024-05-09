@@ -61,7 +61,8 @@
 	// directory containing the tsconfig.json file.
 	// - default is everything "**/*"
 	"include": [
-		"**/*"
+		"**/*",
+		"**/.*"
 	],
 	//
 	// An array of filenames or patterns that should be skipped
