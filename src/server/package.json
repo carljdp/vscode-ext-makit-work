@@ -1,0 +1,43 @@
+{
+    "name": "x10shine",
+    "displayName": "",
+    "description": "",
+    "version": "0.0.1",
+    "publisher": "carljdp",
+    "license": "Proprietary",
+    "private": true,
+    "author": {
+        "name": "Carl J du Preez",
+        "email": "carljdp@gmail.com",
+        "url": "https://linktr.ee/carljdp"
+    },
+    "main": "out/index.js",
+    "scripts": {
+        "lint": "eslint -c eslint.config.js",
+        "lint-watch": "eslint -c eslint.config.js --watch",
+        "typecheck": "tsc --project tsconfig.json --noEmit",
+        "typecheck-watch": "tsc --project tsconfig.json --noEmit --watch",
+        "compile": "swc src -d dist",
+        "compile-watch": "swc src -d dist --watch",
+        "dev": "concurrently \"npm run typecheck-watch\" \"npm run lint-watch\" \"npm run compile-watch\"",
+        "serve": "nodemon dist --exec node out/index.js",
+        "serve-watch": "nodemon --watch out --exec node out/index.js"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "@types/lodash": "^4.17.0",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "^18.19.31",
+        "@typescript-eslint/eslint-plugin": "^7.8.0",
+        "@typescript-eslint/parser": "^7.8.0",
+        "chai": "^5.1.0",
+        "concurrently": "^8.2.2",
+        "eslint": "^9.2.0",
+        "express": "^4.19.2",
+        "lodash": "^4.17.21",
+        "mocha": "^10.4.0",
+        "mocha-explorer-launcher-scripts": "^0.4.0",
+        "nodemon": "^3.1.0",
+        "typescript": "^5.3.3"
+    }
+}

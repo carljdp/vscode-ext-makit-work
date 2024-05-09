@@ -5,18 +5,7 @@
         // accidentally use this 
         // config for a build
         "noEmit": true,
-        "rootDir": "./",
+        "rootDir": "."
     },
-    "include": [
-        "**/*.ts",
-        "**/*.cts",
-        "**/*.mts",
-        "**/*.d.ts",
-        "**/*.js",
-        "**/*.mjs",
-        "**/*.cjs",
-        "**/*.json",
-        "**/*.jsonc",
-        "**/*.json5"
-    ]
+    "$schema": "https://json.schemastore.org/tsconfig"
 }

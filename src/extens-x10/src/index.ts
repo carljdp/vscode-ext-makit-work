@@ -1,4 +1,4 @@
-// file: /src/extension.ts
+
 
 import * as vscode from 'vscode';
 import * as fs from 'fs';
@@ -6,9 +6,11 @@ import * as jsoncParser from 'jsonc-parser';
 import * as path from 'path';
 
 import { Logger, LogSeverity } from './utils/Log';
+
 import { getContextName } from './utils/Meta';
 
 import { XVS } from './system/vscodeEnvFacade';
+
 
 import { FileHandler } from './utils/FileHandler';
 
@@ -16,12 +18,12 @@ import { FileHandler } from './utils/FileHandler';
 import { storageService } from './services';
 
 
-
+import { threejsWebviewActivate } from './webviewPanel';
 
 
 
 const EXT_AUTH: Readonly<string> = `carljdp`;
-const EXT_NAME: Readonly<string> = `makit-work`;
+const EXT_NAME: Readonly<string> = `x10shine`;
 
 
 /** The top level file handler for the application. */
@@ -47,7 +49,7 @@ root.debug('--start--');
  * @returns The parsed JSON object or null if there were parsing errors.
  * @throws NONE - Errors are logged and returned as null.
  */
-async function readAndParseJSONC(extensionsJsonPath: fs.PathLike, encoding: BufferEncoding = 'utf8'): Promise<any | null> {
+async function readAndParseJSONC<T extends object>(extensionsJsonPath: fs.PathLike, encoding: BufferEncoding = 'utf8'): Promise<T | null> {
     try {
 
         //  check if the file exists
@@ -59,11 +61,11 @@ async function readAndParseJSONC(extensionsJsonPath: fs.PathLike, encoding: Buff
         const existingFileSize = await storageService.fileSize(extensionsJsonPath as string, '');
         const utf8Buffer: Buffer = Buffer.alloc(existingFileSize);
 
-        if (! await storageService.readFile(extensionsJsonPath as string, '', utf8Buffer)) {
+        if (! await storageService.readFile(extensionsJsonPath as string, '', utf8Buffer, encoding)) {
             console.error('Error reading the JSONC file:', extensionsJsonPath);
             return null;
         }
-        let jsoncFileContent = new TextDecoder().decode(utf8Buffer);
+        const jsoncFileContent = new TextDecoder().decode(utf8Buffer);
 
         const jsoncParseErrors: jsoncParser.ParseError[] = [];
         const json = jsoncParser.parse(jsoncFileContent, jsoncParseErrors, {
@@ -74,7 +76,7 @@ async function readAndParseJSONC(extensionsJsonPath: fs.PathLike, encoding: Buff
 
         // Check if there were any errors during parsing
         if (jsoncParseErrors.length === 0) {
-            return json;
+            return json as T;
         } else {
             // Handle or log parsing errors
             console.error('JSONC parsing errors:', jsoncParseErrors);
@@ -143,7 +145,13 @@ class ExtensionViewProvider implements vscode.TreeDataProvider<ExtensionItem> {
             const extensionsJsonPath = path.join(workspaceFolderPath, '.vscode', 'extensions.json');
 
             local.log('extensionsJsonPath:\n    ', extensionsJsonPath);
-            const vscodeFolderExtensions = await readAndParseJSONC(extensionsJsonPath);
+
+            type ExtensionsJson = {
+                recommendations?: string[];
+                unwantedRecommendations?: string[];
+            };
+
+            const vscodeFolderExtensions = await readAndParseJSONC<ExtensionsJson>(extensionsJsonPath);
 
             const recommendations = vscodeFolderExtensions?.recommendations || [];
 
@@ -258,24 +266,6 @@ function getWebviewContent() {
   `;
 }
 
-function showCustomWebView(context: vscode.ExtensionContext) {
-    const panel = vscode.window.createWebviewPanel(
-        'customWebView', // Identifies the type of the webview
-        'Custom Webview', // Title of the panel displayed to the user
-        vscode.ViewColumn.One, // Editor column to show the new webview panel in
-        {} // Webview options. More can be added here.
-    );
-
-    // Set the webview's HTML content
-    panel.webview.html = getWebviewContent();
-}
-
-function isWorkspaceStartup(document: vscode.TextDocument, context: vscode.ExtensionContext): boolean {
-    // Your logic to determine if the extension was just activated and if this is the workspace startup
-    // For instance, you might set a context globalState value when the webview is shown and check it here
-    return true; // Adjust with your own logic
-}
-
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
 
 // pseudo 'init'
@@ -285,19 +275,19 @@ export function activate(context: vscode.ExtensionContext) {
     log.indent();
 
     context.subscriptions.push(vscode.window.registerTreeDataProvider(
-        'makit-work.extMan.view.wanted', new ExtensionViewProvider('wanted')));
+        `${EXT_NAME}.extMan.view.wanted`, new ExtensionViewProvider('wanted')));
 
     context.subscriptions.push(vscode.window.registerTreeDataProvider(
-        'makit-work.extMan.view.unwanted', new ExtensionViewProvider('unwanted')));
+        `${EXT_NAME}.extMan.view.unwanted`, new ExtensionViewProvider('unwanted')));
 
     context.subscriptions.push(vscode.window.registerTreeDataProvider(
-        'makit-work.extMan.view.dontCare', new ExtensionViewProvider('dontCare')));
+        `${EXT_NAME}.extMan.view.dontCare`, new ExtensionViewProvider('dontCare')));
 
     // In the activate function
     context.subscriptions.push(vscode.commands.registerCommand(
-        'makit-work.extMan.navigateToExtension',
+        `${EXT_NAME}.extMan.navigateToExtension`,
         (item: ExtensionItem) => {
-            const _log = log.subScope({ scopeLabel: 'makit-work.extMan.navigateToExtension' });
+            const _log = log.subScope({ scopeLabel: `${EXT_NAME}.extMan.navigateToExtension` });
             _log.debug('--start--');
 
             // fornow: view the extension info in the extension view
@@ -312,7 +302,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // In the activate function
     context.subscriptions.push(vscode.commands.registerCommand(
-        'makit-work.enableExtension',
+        `${EXT_NAME}.enableExtension`,
         (item: ExtensionItem) => {
             const _log = log.subScope({ scopeLabel: 'enableExtension' });
             _log.debug('--start--');
@@ -325,7 +315,7 @@ export function activate(context: vscode.ExtensionContext) {
     ));
 
     context.subscriptions.push(vscode.commands.registerCommand(
-        'makit-work.disableExtension',
+        `${EXT_NAME}.disableExtension`,
         (item: ExtensionItem) => {
             const _log = log.subScope({ scopeLabel: 'disableExtension' });
             _log.debug('--start--');
@@ -350,7 +340,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // ------------------------------------------------------------------------
 
-    context.subscriptions.push(vscode.commands.registerCommand('extension.showCustomWebView', () => {
+    context.subscriptions.push(vscode.commands.registerCommand('x10shine-webviewPanel1', () => {
         if (currentPanel) {
             // If we already have a panel, show it.
             currentPanel.reveal(vscode.ViewColumn.One);
@@ -382,7 +372,13 @@ export function activate(context: vscode.ExtensionContext) {
     }));
 
     // If your webview should open on workspace load, you can call the command directly here
-    vscode.commands.executeCommand('extension.showCustomWebView');
+    // vscode.commands.executeCommand('x10shine-webviewPanel1');
+
+    // ------------------------------------------------------------------------
+
+
+    threejsWebviewActivate(context);
+
 
     // ------------------------------------------------------------------------
 

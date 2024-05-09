@@ -3,7 +3,7 @@
 import fs from 'fs-extra';
 import * as lockfile from 'lockfile';
 
-import { _isDebug_ } from '../common/Environment';
+import { _isProd_, _isDev_, _isDebug_ } from '../../../dev/EnvConf.cjs';
 
 import { storageService } from '../services';
 

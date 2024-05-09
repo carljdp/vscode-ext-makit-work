@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import crypto from 'crypto';
 
-import { IService, Service } from '../common/Service';
+import { IService, Service } from '../../../common/Service';
 
 
 interface IStorageService extends IService {
@@ -36,23 +36,23 @@ class StorageService extends Service implements IStorageService {
 
     // static async memoizedReadFile(filePath: string): Promise<string> {
     //     const currentHash = await StorageService.calculateFileHash(filePath);
-    
+
     //     if (StorageService.fileCache.has(filePath) && StorageService.fileCache.get(filePath) === currentHash) {
     //         console.log('File unchanged. Using cached data.');
     //         return; // Assuming you store the file content somewhere or have another method to return cached content
     //     }
-    
+
     //     fs.readFile(filePath, 'utf8', (err, data) => {
     //         if (err) {
     //             console.error(err);
     //             return;
     //         }
-            
+
     //         // Update the cache with the latest hash
     //         fileCache.set(filePath, currentHash);
-            
+
     //         // Here you would normally process the file data and possibly cache it as well
-            
+
     //         console.log(data);
     //     });
     // }
@@ -61,15 +61,15 @@ class StorageService extends Service implements IStorageService {
     //     return new Promise((resolve, reject) => {
     //         const hash = crypto.createHash('sha256');
     //         const stream = fs.createReadStream(filePath);
-    
+
     //         stream.on('data', (chunk) => {
     //             hash.update(chunk);
     //         });
-    
+
     //         stream.on('end', () => {
     //             resolve(hash.digest('hex'));
     //         });
-    
+
     //         stream.on('error', (err) => {
     //             reject(err);
     //         });

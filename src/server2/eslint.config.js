@@ -18,9 +18,22 @@ export default [
                 ...globals.node
             },
             parserOptions: {
-                project: "./tsconfig.eslint.json",
+                project: ["./tsconfig.eslint.json"],
             },
-        }
+        },
+        // ignores: [
+        //     "node_modules/*",
+        //     "dist/*",
+        //     "build/*",
+        //     "out/*",
+        //     "output/*",
+        //     "target/*",
+        //     "tmp/*",
+        //     "temp/*",
+        //     "coverage/*",
+        //     "logs/*",
+        //     "log/*"
+        // ],
     },
 
 ];

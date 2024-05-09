@@ -1,7 +1,7 @@
 
 
-import { Service } from '../common/Service';
-import { Registry } from '../common/Registry';
+import { Service } from '../../../common/Service';
+import { Registry } from '../../../common/Registry';
 
 import { StorageService } from './StorageService';
 

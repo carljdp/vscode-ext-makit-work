@@ -8,7 +8,7 @@
         "module": "ES2022",
         "moduleResolution": "bundler",
         //
-        "rootDir": "./src",
+        "rootDir": "./",
         "outDir": "./dist",
         //
         "experimentalDecorators": true,
@@ -22,29 +22,20 @@
         "checkJs": true
     },
     "include": [
-        "src/**/*.ts",
-        "src/**/*.cts",
-        "src/**/*.mts",
-        "src/**/*.d.ts",
-        "src/**/*.js",
-        "src/**/*.mjs",
-        "src/**/*.cjs",
-        "src/**/*.json",
-        "src/**/*.jsonc",
-        "src/**/*.json5"
+        "src/**/*"
     ],
     "exclude": [
-        "node_modules",
-        "dist",
-        "build",
-        "out",
-        "output",
-        "target",
-        "tmp",
-        "temp",
-        "coverage",
-        "logs",
-        "log"
+        "node_modules/**/*",
+        "dist/**/*",
+        "build/**/*",
+        "out/**/*",
+        "output/**/*",
+        "target/**/*",
+        "tmp/**/*",
+        "temp/**/*",
+        "coverage/**/*",
+        "logs/**/*",
+        "log/**/*"
     ],
     "$schema": "https://json.schemastore.org/tsconfig"
 }
