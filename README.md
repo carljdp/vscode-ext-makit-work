@@ -1,71 +1,57 @@
-# makit-work README
 
-This is the README for your extension "makit-work". After writing up a brief description, we recommend including the following sections.
+## Conventions
 
-## Features
+### Directory Names
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Se below, the folder naming conventions used in this monorepo. The intention was to be flexible and aimed to capture commonly used directories:
 
-For example if there is an image subfolder under your extension project workspace:
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `apps`     | Top-level directory for application modules (Node.js, web, Electron). Each application module can have its own directory here. |
+| `docs`     | Documentation related to the entire monorepo or individual projects. |
+| `examples` | Example code snippets or applications for individual projects. |
 
-\!\[feature X\]\(images/feature-x.png\)
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `config`   | Configuration files for the whole monorepo, such as `.eslintrc`, `.prettierrc`, etc. |
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `coverage` | Code coverage reports for individual projects. |
+| `packages` | Common node_modules directory for managing package dependencies shared across multiple projects. |
+| `tests`    | Centralized testing framework and shared test utilities across applications. |
 
-## Requirements
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `src`      | Source code for applications, libraries, or other modules. |
+| `typings`  | Type definitions for TypeScript projects. |
+| `assets`   | Images, fonts, and other static resources used across projects.|
+| `private`  | Private files for web applications. |
+| `public`   | Public files for web applications. |
+| `vendor` or `libs`   | Third-party libraries or dependencies that are included/published along with the project. |
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Build and Output Directories
 
-## Extension Settings
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `dist`     | Output directory for compiled and bundled files, if relevant. |
+| `build`    | Build output directory for individual projects. |
+| `tmp` or `temp`      | Temporary files generated during the build or testing process. |
+| `out` or `output`      | Output directory for test related build artifacts. |
+| `logs`     | Log files for build/test operations. |
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
-For example:
+## Dependencies 
 
-This extension contributes the following settings:
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `node_modules` | Node.js dependencies for individual projects. |
+| `local_modules` | Internal modules that are not intended for external use. |
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+# dev-time / build-time related directories
 
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `scripts`  | Build and deployment automation scripts. |
+| `utils`    | Utility scripts for build, test, or deployment operations. |
+| `tools`    | Developer tools for use across applications, like linters. |
