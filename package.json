@@ -1,172 +1,22 @@
 {
-    "name": "x10shine",
-    "displayName": "x10shine",
-    "description": "An experimental custom extension manager for vscode.",
-    "publisher": "carljdp",
-    "author": {
-        "name": "Carl J du Preez",
-        "email": "carljdp@gmail.com",
-        "url": "https://linktr.ee/carljdp"
-    },
-    "version": "0.0.1-dev+2024.03",
+    "name": "vscode-ext-makit-work",
+    "version": "0.0.1-dev",
+    "description": "",
+    "author": "Carl J du Preez <https://linktr.ee/carljdp>",
     "license": "Proprietary",
-    "private": true,
-    "homepage": "https://github.com/carljdp/vscode-x10shine",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/carljdp/vscode-x10shine.git"
-    },
-    "bugs": {
-        "url": "https://github.com/carljdp/vscode-x10shine/issues"
-    },
-    "qna": "https://github.com/carljdp/vscode-x10shine/discussions/categories/q-a",
-    "icon": "icon.png",
-    "galleryBanner": {
-        "color": "#1e415e",
-        "theme": "dark"
-    },
-    "engines": {
-        "vscode": "^1.88.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "*",
-        "onStartupFinished",
-        "onLanguage:json",
-        "onLanguage:jsonc",
-        "workspaceContains:settings.json",
-        "workspaceContains:extensions.json",
-        "workspaceContains:keybindings.json",
-        "workspaceContains:tasks.json",
-        "workspaceContains:launch.json",
-        "workspaceContains:*.code-workspace"
-    ],
-    "main": "./dist/extension.js",
-    "capabilities": {
-        "untrustedWorkspaces": {
-            "supported": "limited",
-            "description": "This extension required read and write access to unexposed vscode files."
-        },
-        "virtualWorkspaces": {
-            "supported": false,
-            "description": "This extension required read and write access to unexposed vscode files."
-        }
-    },
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.showCustomWebView",
-                "title": "Show Custom Webview"
-            },
-            {
-                "command": "makit-work.enableExtension",
-                "title": "makit-work.enableExtension"
-            },
-            {
-                "command": "makit-work.disableExtension",
-                "title": "makit-work.disableExtension"
-            },
-            {
-                "command": "makit-work.extMan.navigateToExtension",
-                "title": "Show Extension in Extension Manager"
-            }
-        ],
-        "configuration": {
-            "title": "Makit Work",
-            "properties": {
-                "makit-work.enable": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable/Disable this extension."
-                },
-                "makit-work.wantedExtensions": {
-                    "type": "array",
-                    "default": [],
-                    "description": "List of wanted extensions"
-                },
-                "makit-work.unwantedExtensions": {
-                    "type": "array",
-                    "default": [],
-                    "description": "List of unwanted extensions"
-                }
-            }
-        },
-        "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "makit-work-extensionManager",
-                    "title": "Makit Work Manager",
-                    "icon": "$(extensions-view-icon)"
-                }
-            ]
-        },
-        "views": {
-            "makit-work-extensionManager": [
-                {
-                    "id": "makit-work.extMan.view.wanted",
-                    "name": "Wanted"
-                },
-                {
-                    "id": "makit-work.extMan.view.unwanted",
-                    "name": "Unwanted"
-                },
-                {
-                    "id": "makit-work.extMan.view.dontCare",
-                    "name": "Dont care"
-                }
-            ]
-        },
-        "colors": [
-            {
-                "id": "disabledForeground",
-                "description": "Foreground color for disabled extensions in the list.",
-                "defaults": {
-                    "dark": "#555",
-                    "light": "#AAA",
-                    "highContrast": "#FFF"
-                }
-            }
-        ]
-    },
     "scripts": {
-        "vscode:prepublish": "npm run package",
-        "compile": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\webpack",
-        "watch": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\webpack --watch",
-        "package": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\webpack --mode production --devtool hidden-source-map",
-        "compile-tests": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\tsc -p . --outDir out",
-        "watch-tests": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\tsc -p . -w --outDir out",
-        "pretest": ".\\node_modules\\.bin\\env-cmd -f .\\.env npm run compile-tests && npm run compile && npm run lint",
-        "lint": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\eslint src --ext ts",
-        "test": ".\\node_modules\\.bin\\env-cmd -f .\\.env .\\node_modules\\.bin\\vscode-test"
+        "start": "echo 'Carl J du Preez <https://linktr.ee/carljdp>'"
     },
     "devDependencies": {
-        "@types/fs-extra": "^11.0.4",
-        "@types/lockfile": "^1.0.4",
-        "@types/lodash": "^4.17.0",
-        "@types/mocha": "^10.0.6",
-        "@types/node": "18.x",
-        "@types/vscode": "^1.87.0",
-        "@typescript-eslint/eslint-plugin": "^7.0.2",
-        "@typescript-eslint/parser": "^7.0.2",
-        "@vscode/test-cli": "^0.0.6",
-        "@vscode/test-electron": "^2.3.9",
-        "clean-webpack-plugin": "^4.0.0",
-        "dotenv": "^16.4.5",
-        "dotenv-webpack": "^8.1.0",
-        "env-cmd": "^10.1.0",
-        "eslint": "^8.56.0",
-        "ts-loader": "^9.5.1",
-        "typescript": "^5.3.3",
-        "webpack": "^5.90.3",
-        "webpack-cli": "^5.1.4"
+        "@eslint/js": "^9.2.0",
+        "@types/eslint": "^8.56.10",
+        "@types/eslint__js": "^8.42.3",
+        "eslint": "^9.2.0",
+        "globals": "^15.1.0",
+        "typescript-eslint": "^7.8.0"
     },
-    "dependencies": {
-        "fs-extra": "^11.2.0",
-        "jsonc-parser": "^3.2.1",
-        "lockfile": "^1.0.4",
-        "lodash": "^4.17.21",
-        "ts-node": "^10.9.2"
+    "engines": {
+        "vscode": "^1.89.0",
+        "node": "^21.7.3"
     }
 }

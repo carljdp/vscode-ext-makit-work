@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        //
+        // ensure that nobody can accidentally use this config
+        // to compile the project
+        "noEmit": true,
+        //
+        "rootDir": "."
+    },
+    "$schema": "https://json.schemastore.org/tsconfig"
+}
