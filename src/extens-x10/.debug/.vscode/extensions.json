@@ -1,6 +1,6 @@
+// extensions.json for WORKSPACE FOLDER
 {
     "recommendations": [
-        
         "EditorConfig.EditorConfig",
     ],
     "unwantedRecommendations": [

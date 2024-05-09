@@ -1,0 +1,248 @@
+// tasks.json for WORKSPACE FOLDER
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "npm:install",
+			"type": "npm",
+			"script": "install",
+			"problemMatcher": [],
+			"presentation": {
+				"panel": "shared",
+				"group": "install",
+				"reveal": "silent"
+			},
+			"group": "none"
+		},
+		{
+			"label": "Debug current file",
+			"type": "shell",
+			"command": "./node_modules/.bin/env-cmd",
+			"args": [
+				"--file",
+				"./.env.dev",
+				"./node_modules/.bin/ts-node",
+				"${file}"
+			],
+			"problemMatcher": [],
+			"presentation": {
+				"group": "debug",
+				"panel": "new",
+				"reveal": "always",
+				"echo": true
+			},
+			"group": "none"
+		},
+		{
+			"label": "npm:src:lint-only",
+			"type": "npm",
+			"script": "src:lint-only",
+			"problemMatcher": [
+				"$eslint-stylish",
+				"$ts-checker-eslint-webpack"
+			],
+			"presentation": {
+				"panel": "shared",
+				"group": "lint",
+				"reveal": "silent",
+				"echo": true
+			},
+			"group": "none"
+		},
+		{
+			"label": "npm:src:lint-fix",
+			"type": "npm",
+			"script": "src:lint-fix",
+			"problemMatcher": [
+				"$eslint-stylish",
+				"$ts-checker-eslint-webpack"
+			],
+			"presentation": {
+				"panel": "shared",
+				"group": "lint",
+				"reveal": "silent",
+				"echo": true
+			},
+			"group": "none"
+		},
+		{
+			"label": "npm:src:compile-prod",
+			"type": "npm",
+			"script": "src:compile-prod",
+			"problemMatcher": [
+				"$ts-webpack-watch",
+				"$tsc-watch"
+			],
+			"presentation": {
+				"group": "npm",
+				"panel": "dedicated",
+				"reveal": "always",
+			},
+			"group": "build",
+		},
+		{
+			"label": "npm:src:compile-watch",
+			"type": "npm",
+			"script": "src:compile-watch",
+			"problemMatcher": [
+				"$ts-webpack-watch",
+				"$tsc-watch"
+			],
+			"presentation": {
+				"group": "npm",
+				"panel": "dedicated",
+				"reveal": "always",
+			},
+			"group": "build",
+			"isBackground": true
+		},
+		{
+			"label": "npm:start:server-watch",
+			"type": "npm",
+			"script": "start:server-watch",
+			"problemMatcher": {
+				"owner": "external",
+				"pattern": {
+					"regexp": "^.*(ELIFECYCLE|Command fail|Process exit).*code \\d+.*$"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "Executing task",
+					"endsPattern": "^Server.*(started|running|listening).*$",
+				}
+			},
+			"presentation": {
+				"group": "npm",
+				"panel": "dedicated",
+				"reveal": "always",
+			},
+			"group": "build",
+			"isBackground": true,
+			"dependsOn": [
+				"npm:src:compile-watch"
+			]
+		},
+		{
+			"label": "npm:start:server-prod",
+			"type": "npm",
+			"script": "start:server-prod",
+			"problemMatcher": {
+				"owner": "external",
+				"pattern": {
+					"regexp": "^.*(ELIFECYCLE|Command fail|Process exit).*code \\d+.*$"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "Executing task",
+					"endsPattern": "^Server.*(started|running|listening).*$",
+				}
+			},
+			"presentation": {
+				"group": "npm",
+				"panel": "dedicated",
+				"reveal": "always",
+			},
+			"group": "build",
+			"dependsOn": [
+				"npm:src:compile-prod"
+			]
+		},
+		{
+			"label": "npm:tests:compile-watch",
+			"type": "npm",
+			"script": "tests:compile-watch",
+			"problemMatcher": "$tsc-watch",
+			"presentation": {
+				"panel": "shared",
+				"group": "watch",
+				"reveal": "silent"
+			},
+			"group": "build",
+			"isBackground": true
+		},
+		{
+			"label": "npm:tests:compile-prod",
+			"type": "npm",
+			"script": "tests:compile-prod",
+			"problemMatcher": "$tsc-watch",
+			"presentation": {
+				"panel": "shared",
+				"group": "watch",
+				"reveal": "silent"
+			},
+			"group": "build",
+		},
+		{
+			"label": "compile-watch & tests",
+			"dependsOrder": "parallel",
+			"dependsOn": [
+				"npm:src:compile-watch",
+				"npm:tests:compile-watch"
+			],
+			"problemMatcher": [],
+			"presentation": {
+				"panel": "shared",
+				"group": "compound",
+				"reveal": "silent"
+			},
+			"group": "test"
+		},
+		{
+			"label": "compile-watch & server",
+			"type": "shell",
+			"dependsOrder": "parallel",
+			"dependsOn": [
+				"npm:src:compile-watch",
+				"npm:start:server-watch",
+			],
+			"command": "echo 'Started: compile-watch && server-watch'",
+			"problemMatcher": {
+				"owner": "external",
+				"pattern": {
+					"regexp": "^.*(ELIFECYCLE|Command fail|Process exit).*code \\d+.*$"
+				}
+			},
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "always",
+				"group": "build",
+				"clear": true,
+				"echo": false,
+				"focus": false,
+				"showReuseMessage": false,
+				"revealProblems": "always",
+			}
+		},
+		{
+			"label": "task:watch:jsdoc",
+			"type": "shell",
+			"command": "./node_modules/.bin/nodemon",
+			"args": [
+				"--watch",
+				"src",
+				"--exec",
+				"swagger-jsdoc",
+				"-d",
+				".swagger.conf.js",
+				"-o",
+				"swagger.json"
+			],
+			"problemMatcher": [],
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "always",
+				"group": "docs",
+				"clear": true,
+				"echo": true,
+				"focus": false,
+				"showReuseMessage": false,
+				"revealProblems": "always",
+			},
+			"group": {
+				"kind": "none",
+				"isDefault": true
+			},
+			"isBackground": true
+		},
+	]
+}
