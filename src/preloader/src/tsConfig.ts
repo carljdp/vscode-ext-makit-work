@@ -76,7 +76,7 @@ const _tsConfig = {
             forceConsistentCasingInFileNames: true,
             // isolatedModules: undefined, 
             // preserveSymlinks: undefined,
-            // verbatimModuleSyntax: undefined,
+            // verbatimModuleSyntax: undefined, // prevents import type syntax
         },
         BackwardsCompat: {
             // charset: undefined, 

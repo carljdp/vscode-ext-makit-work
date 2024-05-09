@@ -1,4 +1,4 @@
-// src-file: ./preloader/src/index.ts
+// src-file: ./src/preloader/src/index.ts
 
 import { inspect } from 'node:util';
 import { register as tsNodeRegister } from 'ts-node';

@@ -1,6 +1,6 @@
 
-
-dist/**/*.js.map
+# build artefacts
+dist
 
 # generated files
 .swcrc.*.json
