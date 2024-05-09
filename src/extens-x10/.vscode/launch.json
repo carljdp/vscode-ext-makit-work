@@ -1,0 +1,152 @@
+// launch.json for WORKSPACE FOLDER
+{
+	"version": "0.2.0",
+	"configurations": [
+		// First (top) configuration is the default one
+		{
+			"name": "extens & server: watch (workspace & profile)",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--profile=vscode-ext-dev-debug",
+				"${workspaceFolder}/.debug/debug.code-workspace"
+			],
+			"outFiles": [
+				// TODO: Hardcoded - bad
+				"${workspaceFolder}/dist/**/*.js"
+			],
+			"preLaunchTask": "compile-watch & server",
+			// TODO: Hardcoded - bad
+			"envFile": "${workspaceFolder}/.env.dev"
+		},
+		{
+			"name": "extens & server: watch (empty)",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+			],
+			"outFiles": [
+				// TODO: Hardcoded - bad
+				"${workspaceFolder}/dist/**/*.js"
+			],
+			"preLaunchTask": "compile-watch & server",
+			// TODO: Hardcoded - bad
+			"envFile": "${workspaceFolder}/.env.dev"
+		},
+		{
+			"name": "extens & tests: watch",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index",
+			],
+			"outFiles": [
+				// TODO: Hardcoded - bad
+				"${workspaceFolder}/dist/**/*.js"
+			],
+			"preLaunchTask": "compile-watch & tests",
+			// TODO: Hardcoded - bad
+			"envFile": "${workspaceFolder}/.env.dev"
+		},
+		//
+		//
+		//
+		// =====================================================================
+		//
+		//
+		//
+		{
+			"name": "Debug TS current-file",
+			"request": "launch",
+			"type": "node",
+			"cwd": "${workspaceFolder}",
+			"nodeVersionHint": 18,
+			"runtimeExecutable": "node",
+			"runtimeArgs": [
+				"--require",
+				"../preloader/dist/cjs/index.js",
+			],
+			"args": [
+				"${relativeFile}",
+				// "--preloader-args={\"log\":\"verbose\"}",
+				"--preloader-args={\"dotenv\":\".env.dev\"}",
+			],
+			"sourceMaps": true,
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**",
+			],
+			"console": "internalConsole",
+		},
+		{
+			"name": "Debug JS current-file",
+			"request": "launch",
+			"type": "node",
+			"cwd": "${workspaceFolder}",
+			"nodeVersionHint": 18,
+			"runtimeExecutable": "node",
+			"runtimeArgs": [],
+			"args": [
+				"${relativeFile}",
+			],
+			"sourceMaps": true,
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**",
+			],
+			"console": "internalConsole",
+			"envFile": "${workspaceFolder}/.env.dev",
+		},
+		//
+		//
+		//
+		// =====================================================================
+		//
+		//
+		//
+		// {
+		// 	"name": "Debug TS current-file (with tests)",
+		// 	"request": "launch",
+		// 	"type": "node",
+		// 	"cwd": "${workspaceFolder}",
+		// 	"nodeVersionHint": 18,
+		// 	"runtimeExecutable": "node",
+		// 	"runtimeArgs": [
+		// 		// "--trace-warnings",
+		// 		// "--trace-deprecation",
+		// 		// "--trace-uncaught",
+		// 		// "--abort-on-uncaught-exception",
+		// 		"--require",
+		// 		"./preloader/dist/cjs/index.js",
+		// 	],
+		// 	"args": [
+		// 		"${workspaceFolder}/node_modules/.bin/_mocha",
+		// 		"--timeout",
+		// 		"999999",
+		// 		"--colors",
+		// 		"${relativeFile}",
+		// 	],
+		// 	"sourceMaps": true,
+		// 	"skipFiles": [
+		// 		"<node_internals>/**",
+		// 		"**/node_modules/**",
+		// 	],
+		// 	"console": "internalConsole",
+		// 	"envFile": "${workspaceFolder}/.env.dev",
+		// 	"presentation": {
+		// 		"clear": false,
+		// 		"echo": true,
+		// 		"hidden": false,
+		// 		"reveal": "always",
+		// 		"showReuseMessage": false,
+		// 		"focus": true,
+		// 		"order": 1,
+		// 		"group": "debug",
+		// 		"panel": "decicated"
+		// 	},
+		// },
+	]
+}
