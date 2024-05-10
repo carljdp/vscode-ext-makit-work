@@ -1,0 +1,13 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        //
+        // ensure that nobody can accidentally use this config
+        // to compile the project
+        "noEmit": true,
+        //
+        "module": "node16", // === "nodenext"
+        "moduleResolution": "node16"
+    },
+    "$schema": "https://json.schemastore.org/tsconfig"
+}

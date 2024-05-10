@@ -1,0 +1,16 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        //
+        // ensure that nobody can accidentally use this config
+        // to compile the project
+        "noEmit": true,
+        //
+        "module": "es2022", // === "esnext"
+        // allow more lax import checking 
+        // - allow importing from 3rd party modules that might
+        //   not be included in the bundle.
+        "moduleResolution": "bundler"
+    },
+    "$schema": "https://json.schemastore.org/tsconfig"
+}

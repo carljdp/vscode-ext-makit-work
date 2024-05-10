@@ -1,71 +1,73 @@
-# makit-work README
 
-This is the README for your extension "makit-work". After writing up a brief description, we recommend including the following sections.
+## Conventions
 
-## Features
+Conventions used in this 'mono-repo'
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Package.json
 
-For example if there is an image subfolder under your extension project workspace:
+- As far as possible, to not use `"type": "module"` in `package.json`. This is because it is not yet supported by all tools and libraries. Instead, use `.mjs` extension for ES modules. Exceptions to the rule:
+  - Build scripts should place a `package.json` file in the `dist` directory with `"type"` set to `"module"` or `"commonjs"` as appropriate.
 
-\!\[feature X\]\(images/feature-x.png\)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Configuration files
 
-## Requirements
+- As far as possible, stick with using `.js` (or `.mjs`) configuration files instead of `.json` or `.yaml`. This allows us to dynamically generate configuration values using code.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+### Directory Names
 
-## Extension Settings
+- no spaces in directory names.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Preferably, but not mandatory:
+- use `kebab-case` for directory names
+- dotfiles / dotdirs should be used for configuration files only.
 
-For example:
+The following directory names were chosen with the following conventions in mind:
+- all lowercase, no spaces, no special characters, no underscores, no camelCase
+- approximately 3-5 characters long, 4 characters preferred
+- use common abbreviations/terms where possible
+- less important:
+  - consider alphabetical order in the list of directories
+  - the directory name should be descriptive of the contents
+  - avoid using the same name as a common package or tool
+  - the meaning should be clear to someone who is not familiar with the project
 
-This extension contributes the following settings:
+#### Root
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `<root>/apps`          | Top-level directory for application modules. Each application module can have its own directory here. |
 
-## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+#### Per Module
 
-## Release Notes
+To be committed to the repository.
 
-Users appreciate release notes as you update your extension.
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `<module>/devt` | Build, configuration & deployment scripts / tools. |
+| `<module>/docs` | Documentation. |
+| `<module>/libs` | Libraries to be published alongside the application. |
+| `<module>/src`  | Source code. |
+| `<module>/www`  | Public files. |
 
-### 1.0.0
 
-Initial release of ...
+#### Generated
 
-### 1.0.1
+Generated files that should have no effect when deleted.
 
-Fixed issue #.
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `<module>/dist`  | Output directory for compiled files. |
+| `<module>/temp`  | Temporary files. |
+| `<module>/logs`  | Log files. |
 
-### 1.1.0
 
-Added features X, Y, and Z.
+#### 3rd-party
 
----
+Local 'caching'
 
-## Following extension guidelines
+| Directory Name  | Description  |
+| --------------- | ------------ |
+| `node_modules`  | Node.js dependencies for individual projects. |
+| `.vscode`       | Visual Studio Code configuration files. |
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**

@@ -1,0 +1,22 @@
+// file: tsconfig.webapp.json
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"module": "ES2015",
+		"lib": [
+			"ES2015",
+			"DOM"
+		],
+		"baseUrl": ".",
+		"rootDir": "src",
+		"outDir": "dist",
+		"declaration": true,
+		"sourceMap": true,
+		"allowJs": true,
+		"checkJs": true,
+		//
+	},
+	"include": [
+		"src/**/*"
+	]
+}

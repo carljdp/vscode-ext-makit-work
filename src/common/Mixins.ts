@@ -1,14 +1,13 @@
 // file: src/common/Mixins.ts
 
-import _, * as lodash from 'lodash';
+import { intersection, difference, union, each } from 'lodash';
 
 
 interface IConstructable<T> {
     new(...args: any[]): T;
 }
 
-import { _isDebug_ } from './Environment';
-import { start } from 'repl';
+import { _isProd_, _isDev_, _isDebug_ } from '../../dev/EnvConf.cjs';
 
 
 
@@ -761,19 +760,19 @@ function anyToString(value: any): string {
 
 function prettyPrintDiff(listA: Array<string | symbol>, listB: Array<string | symbol>) {
 
-    const inAandB = lodash.intersection(listA, listB);
+    const inAandB = intersection(listA, listB);
 
-    const onlyInA = lodash.difference(listA, listB);
-    const onlyInB = lodash.difference(listB, listA);
+    const onlyInA = difference(listA, listB);
+    const onlyInB = difference(listB, listA);
 
-    const union = lodash.union(Array.from(listA), Array.from(listB));
+    const combined = union(Array.from(listA), Array.from(listB));
 
     const lineNrColWidth = 3;
     const typeColWidth = 9;
 
     // Find the longest string to pad the columns
     let colWidth = 0;
-    [union].forEach((arr) => {
+    [combined].forEach((arr) => {
         arr.forEach((item) => {
             const len = anyToString(item).length;
             if (len > colWidth) {
@@ -819,7 +818,7 @@ function prettyPrintDiff(listA: Array<string | symbol>, listB: Array<string | sy
     let lineNr = 0;
 
     // for each item in the union
-    lodash.each(union, (item) => {
+    each(combined, (item) => {
 
         lineNr += 1;
 

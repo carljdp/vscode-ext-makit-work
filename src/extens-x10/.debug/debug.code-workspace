@@ -1,0 +1,35 @@
+// debug WORKSPACE CONFIG
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		//
+		"files.autoSave": "onFocusChange",
+		"editor.formatOnPaste": true,
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+		//
+		"debug.console.collapseIdenticalLines": false,
+		//
+		"git.enabled": true,
+		"git.autofetch": true,
+		"git.confirmSync": false,
+		//
+		// tracing vscode network timeouts
+		"http.proxySupport": "off",
+		"http.systemCertificates": false,
+		"http.trace": "verbose"
+		//
+	},
+	"extensions": {
+		"recommendations": [
+			"mhutchie.git-graph"
+		],
+		"unwantedRecommendations": [
+			"ms-vscode-remote.remote-containers",
+		]
+	}
+}

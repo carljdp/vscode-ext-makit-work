@@ -1,0 +1,16 @@
+
+# build artefacts
+dist
+
+# generated files
+.swcrc.*.json
+.swc.cli.*.json
+
+
+node_modules
+
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+

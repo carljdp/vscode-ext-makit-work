@@ -1,0 +1,9 @@
+// extensions.json for WORKSPACE FOLDER
+{
+    "recommendations": [
+        "EditorConfig.EditorConfig",
+    ],
+    "unwantedRecommendations": [
+        "ms-vscode-remote.remote-wsl"
+    ]
+}

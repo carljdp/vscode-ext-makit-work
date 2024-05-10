@@ -1,0 +1,21 @@
+{
+    "outDir": "dist",
+    "stripLeadingPaths": true,
+    "extensions": [
+        ".js",
+        ".cjs",
+        ".mjs",
+        ".ts",
+        ".cts",
+        ".mts",
+        ".json",
+        ".jsonc",
+        ".json5"
+    ],
+    "copyFiles": true,
+    "includeDotfiles": true,
+    "deleteDirOnStart": true,
+    "sourceMaps": true,
+    "swcrc": true,
+    "configFile": ".swcrc"
+}

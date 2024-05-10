@@ -1,0 +1,201 @@
+{
+    "name": "x10shine",
+    "displayName": "x10shine",
+    "description": "An experimental custom extension manager for vscode.",
+    "version": "0.0.1-dev+2024.03",
+    "publisher": "carljdp",
+    "license": "Proprietary",
+    "private": true,
+    "author": {
+        "name": "Carl J du Preez",
+        "email": "carljdp@gmail.com",
+        "url": "https://linktr.ee/carljdp"
+    },
+    "homepage": "https://github.com/carljdp/vscode-x10shine",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/carljdp/vscode-x10shine.git"
+    },
+    "bugs": {
+        "url": "https://github.com/carljdp/vscode-x10shine/issues"
+    },
+    "qna": "https://github.com/carljdp/vscode-x10shine/discussions/categories/q-a",
+    "icon": "icon.png",
+    "galleryBanner": {
+        "color": "#1e415e",
+        "theme": "dark"
+    },
+    "categories": [
+        "Other"
+    ],
+    "main": "./dist/extens/index.js",
+    "engines": {
+        "vscode": "^1.89.0"
+    },
+    "scripts": {
+        "eslint:lint-only": "eslint -c .eslintrc.cjs src --ext ts",
+        "eslint:lint-fix": "eslint -c .eslintrc.cjs src  --ext ts --fix",
+        "webpack:config:check": "env-cmd -f \".env.dev\" --use-shell \"webpack configtest\"",
+        "webpack:compile:prod": "env-cmd -f \".env.prod\" --use-shell \"webpack --progress --stats-error-details\"",
+        "webpack:compile:dev:watch": "env-cmd -f \".env.dev\" --use-shell \"webpack --watch\"",
+        "webpack:clean": "rimraf dist",
+        "tests:compile:prod": "env-cmd -f \".env.prod\" --use-shell \"tsc -p . --outDir out\"",
+        "tests:compile:dev:watch": "env-cmd -f \".env.dev\" --use-shell \"tsc -p . -w --outDir out\"",
+        "tests:clean": "rimraf out",
+        "vscode:package": "npx @vscode/vsce package",
+        "vscode:install": "npm run vscode:package && code --install-extension *.vsix",
+        "vscode:pretest": "npm run tests:compile:prod && npm run webpack:compile:prod && npm run eslint:lint-only",
+        "vscode:test": "npm run vscode:pretest && vscode-test",
+        "vscode:prepublish": "npm run webpack:compile:prod",
+        "vscode:publish": "npx vsce publish"
+    },
+    "devDependencies": {
+        "@swc/core": "^1.4.17",
+        "@swc/helpers": "^0.5.11",
+        "@types/dotenv-webpack": "^7.0.7",
+        "@types/fs-extra": "^11.0.4",
+        "@types/lockfile": "^1.0.4",
+        "@types/lodash": "^4.17.0",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "^18.19.31",
+        "@types/three": "^0.163.0",
+        "@types/vscode": "^1.87.0",
+        "@types/vscode-webview": "^1.57.5",
+        "@typescript-eslint/eslint-plugin": "^7.0.2",
+        "@typescript-eslint/parser": "^7.0.2",
+        "@vscode/test-cli": "^0.0.6",
+        "@vscode/test-electron": "^2.3.9",
+        "chai": "^5.1.0",
+        "copy-webpack-plugin": "^12.0.2",
+        "env-cmd": "^10.1.0",
+        "eslint": "^8.56.0",
+        "fs-extra": "^11.2.0",
+        "html-loader": "^5.0.0",
+        "html-webpack-plugin": "^5.6.0",
+        "jsdoc": "^4.0.2",
+        "jsonc-parser": "^3.2.1",
+        "lockfile": "^1.0.4",
+        "lodash": "^4.17.21",
+        "mocha": "^10.4.0",
+        "mocha-explorer-launcher-scripts": "^0.4.0",
+        "nodemon": "^3.1.0",
+        "rimraf": "^5.0.5",
+        "swagger-jsdoc": "^6.2.8",
+        "template-ejs-loader": "^0.9.4",
+        "terser-webpack-plugin": "^5.3.10",
+        "three": "^0.163.0",
+        "ts-loader": "^9.5.1",
+        "ts-node": "^10.9.2",
+        "tslib": "^2.6.2",
+        "typescript": "^5.3.3",
+        "webpack": "^5.90.3",
+        "webpack-cli": "^5.1.4"
+    },
+    "activationEvents": [
+        "onWebviewPanel:webviewPanel3",
+        "onStartupFinished",
+        "onLanguage:json",
+        "onLanguage:jsonc",
+        "workspaceContains:settings.json",
+        "workspaceContains:extensions.json",
+        "workspaceContains:keybindings.json",
+        "workspaceContains:tasks.json",
+        "workspaceContains:launch.json",
+        "workspaceContains:*.code-workspace"
+    ],
+    "capabilities": {
+        "untrustedWorkspaces": {
+            "supported": "limited",
+            "description": "This extension required read and write access to unexposed vscode files."
+        },
+        "virtualWorkspaces": {
+            "supported": false,
+            "description": "This extension required read and write access to unexposed vscode files."
+        }
+    },
+    "contributes": {
+        "commands": [
+            {
+                "command": "x10shine-webviewPanel1",
+                "title": "x10shine webviewPanel1",
+                "category": "x10shine.webviewPanel"
+            },
+            {
+                "command": "x10shine-webviewPanel3",
+                "title": "x10shine webviewPanel3",
+                "category": "x10shine.webviewPanel"
+            },
+            {
+                "command": "x10shine.extMan.enableExtension",
+                "title": "x10shine.enableExtension",
+                "category": "x10shine.extMan"
+            },
+            {
+                "command": "x10shine.extMan.disableExtension",
+                "title": "x10shine.disableExtension",
+                "category": "x10shine.extMan"
+            },
+            {
+                "command": "x10shine.extMan.navigateToExtension",
+                "title": "Show Extension in Extension Manager",
+                "category": "x10shine.extMan"
+            }
+        ],
+        "configuration": {
+            "title": "x10shine",
+            "properties": {
+                "x10shine.extMan.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable/Disable this extension."
+                },
+                "x10shine.extMan.extensions.wanted": {
+                    "type": "array",
+                    "default": [],
+                    "description": "List of wanted extensions"
+                },
+                "x10shine.extMan.extensions.unwanted": {
+                    "type": "array",
+                    "default": [],
+                    "description": "List of unwanted extensions"
+                }
+            }
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "x10shine-extMan-extensionManager",
+                    "title": "x10shine extensionManager",
+                    "icon": "$(extensions-view-icon)"
+                }
+            ]
+        },
+        "views": {
+            "x10shine-extMan-extensionManager": [
+                {
+                    "id": "x10shine.extMan.view.wanted",
+                    "name": "Wanted"
+                },
+                {
+                    "id": "x10shine.extMan.view.unwanted",
+                    "name": "Unwanted"
+                },
+                {
+                    "id": "x10shine.extMan.view.dontCare",
+                    "name": "Dont care"
+                }
+            ]
+        },
+        "colors": [
+            {
+                "id": "disabledForeground",
+                "description": "Foreground color for disabled extensions in the list.",
+                "defaults": {
+                    "dark": "#555",
+                    "light": "#AAA",
+                    "highContrast": "#FFF"
+                }
+            }
+        ]
+    }
+}
