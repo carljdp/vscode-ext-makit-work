@@ -1,25 +1,12 @@
 
-
+# environment files
 .env.*
 !.env.example
-
 *.env
 !.env.example
 
-
-.scratch
-
-
-node_modules
-
-
+# generated files
 dist
-output
-out
-build
-builds
-bin
-test
-tests
-tmp
-temp
+
+# node files
+node_modules

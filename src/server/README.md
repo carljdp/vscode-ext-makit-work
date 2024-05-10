@@ -1,4 +1,4 @@
-# carljdp/vscode-ext-makit-work/src/server2
+# carljdp/vscode-ext-makit-work/src/server
 
 The intent of this project/package is just as a fresh start for a Node + TypeScript project. It is not intended to be a full-fledged project template, but rather a starting point for a new project.
 
@@ -40,7 +40,7 @@ The intent of this project/package is just as a fresh start for a Node + TypeScr
 
 ```bash
 git clone https://github.com/carljdp/vscode-ext-makit-work.git
-cd vscode-ext-makit-work/src/server2
+cd vscode-ext-makit-work/src/server
 pnpm install
 ```
 

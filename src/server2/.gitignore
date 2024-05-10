@@ -1,20 +1,12 @@
 
-.scratch
+# environment files
+.env.*
+!.env.example
+*.env
+!.env.example
 
-vendor
-libs
-lib
-
-output
-build
+# generated files
 dist
-out
 
-temp
-tmp
-
-tests
-test
-spec
-
+# node files
 node_modules
