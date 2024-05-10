@@ -5,7 +5,7 @@
     "author": "Carl J du Preez <https://linktr.ee/carljdp>",
     "license": "Proprietary",
     "scripts": {
-        "start": "echo 'Carl J du Preez <https://linktr.ee/carljdp>'"
+        "start": "echo \"Nothing here. Look in /apps/*.\""
     },
     "devDependencies": {
         "@eslint/js": "^9.2.0",
