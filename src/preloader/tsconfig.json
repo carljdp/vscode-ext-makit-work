@@ -1,18 +1,16 @@
 {
+    "extends": "../../tsconfig.node.json",
     "compilerOptions": {
-        "target": "ES2015",
-        "strict": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node",
-        "baseUrl": "."
+        // Rescope to `./*` (this dir contents and below)
+        "rootDir": "./",
+        "baseUrl": "./"
     },
     "include": [
-        "src/**/*.ts"
+        // Rescope to `./*` (this dir contents and below)
+        ".*/**/*",
+        "*/**/*",
+        ".*",
+        "*"
     ],
-    "exclude": [
-        "dist/**/*",
-        "**/node_modules",
-        "**/*.spec.ts"
-    ]
+    "$schema": "https://json.schemastore.org/tsconfig"
 }

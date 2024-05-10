@@ -9,7 +9,10 @@ import { fileURLToPath } from 'url';
 // but bot necessary if you're not planning to include source maps in the commited code
 
 
-// this filter function is an afterthought, but it's a good idea to have one
+/** 
+ * @type {(filePath: string) => boolean}
+ * @todo this filter function is an afterthought, but it's a good idea to have one
+ */
 const filePathFilter = (filePath) => {
     return path.basename(filePath) === 'index.jsx';
 };
@@ -50,7 +53,7 @@ const thisFileParentDirHref = thisFileParentDirUrl.href;
 const thisFileParentDirPath = fileURLToPath(thisFileParentDirUrl);
 
 
-
+/** @type {(pathToCheck: string) => Promise<boolean>} */
 async function pathExists(pathToCheck) {
     try {
         await fs.access(pathToCheck, fs.constants.F_OK);
@@ -60,7 +63,7 @@ async function pathExists(pathToCheck) {
     }
 }
 
-
+/** @type {(packageName: string, scriptsDir: string, outputDir: string) => Promise<string>} */
 const getOutputDirIfContextCorrect = async (packageName, scriptsDir, outputDir) => {
 
     const thisFileDirName = path.basename(thisFileDirPath);
@@ -158,6 +161,7 @@ async function renameExtensions(directory, oldExt, newExt, dryRun = true) {
     }
 }
 
+/** @type {(args: { packageName: string, scriptsDir: string, outputDir: string, dryRun: boolean }) => Promise<void>} */
 async function run({ packageName, scriptsDir, outputDir, dryRun = true }) {
 
     console.log(`[${logTag}] ${dryRun ? "Running in dry-run mode (not live):" : "Running in live mode (not dry-run):"}`);
@@ -189,7 +193,7 @@ async function run({ packageName, scriptsDir, outputDir, dryRun = true }) {
         }));
 
         // Optional: Do something with results if needed
-        console.log(`[${logTag}] Finished output file-extention renaming.`);
+        console.log(`[${logTag}] Finished output file-extention renaming.`, results);
 
     } catch (error) {
         console.error(`[${logTag}] Failed to complete output file-extention renaming:`, error);
