@@ -125,20 +125,21 @@ const { cloneDeep, merge } = lodash;
 
 
 /**
+ * @typedef {{ "_NOTE_": "This file is generated - changes will be overwritten." }} GeneratedJsonFileNote
  * 
- * @typedef {cliCommonOpts & (cliOutFile|cliOutDir)} SwcCliConfig
+ * @typedef {cliCommonOpts & (cliOutFile|cliOutDir) & GeneratedJsonFileNote } SwcCliConfig
  * - the contents of a json file passed via `--cli-config-file`
  * - types manually derived from source code
  * 
  * 
  * @typedef { import('@swc/types').Config } SwcRcConfigBase
- * - the contents of a json file passed via `--config-file`
+ * - the (base) contents of a json file passed via `--config-file`
  * - types imported from source code
  * 
  * 
- * @typedef { import('@swc/types').Options & { $schema: "https://swc.rs/schema.json" } } SwcRcConfigExtended
- * Contains properties that might only be populated at runtime by the CLI, e.g:
- * - `filename` the file currently being compiled
+ * @typedef { import('@swc/types').Options & { $schema: "https://swc.rs/schema.json" } & GeneratedJsonFileNote } SwcRcConfigExtended
+ * - the (extended) contents of a json file passed via `--config-file`
+ * - Contains properties that might only be populated at runtime by the CLI, e.g `filename` the file currently being compiled
  * - extends {@linkcode SwcRcConfigBase}
  * - published schema: https://swc.rs/schema.json
  * 
@@ -169,17 +170,18 @@ const { cloneDeep, merge } = lodash;
  * 
  * 
  * @typedef { ( buildTarget: BuildTargetDetails ) => void } ConfigFileWriter
- * Compose/generate and then write the swc config file for the specified build target
+ * Compose/generate and then write a config file for the specified build target
  * 
  */
 
 
 
 /** 
- * @type {SwcRcConfigBase}
+ * @type {SwcRcConfigBase & GeneratedJsonFileNote}
  * An empty base object to build upon
  */
 const rcConfigBaseEmpty = {
+    _NOTE_: "This file is generated - changes will be overwritten.",
     env: undefined,
     jsc: undefined,
     module: undefined,
@@ -196,6 +198,7 @@ const rcConfigBaseEmpty = {
  */
 const rcConfigExtendedEmpty = {
     ...rcConfigBaseEmpty,
+    _NOTE_: "This file is generated - changes will be overwritten.",
 
     envName: undefined,
     script: undefined,
@@ -222,15 +225,16 @@ const rcConfigExtendedEmpty = {
     },
 
     // for completeness, but not documented
-    $schema: "https://swc.rs/schema.json"
+    $schema: "https://swc.rs/schema.json",
 };
 
 /** 
- * @type {SwcRcConfigBase}
+ * @type {SwcRcConfigBase & GeneratedJsonFileNote}
  * The default options for composing a .swcrc config json file
  */
 const factoryRcConfigBase = {
     ...rcConfigBaseEmpty,
+    _NOTE_: "This file is generated - changes will be overwritten.",
 
     // $schema: "https://json.schemastore.org/swcrc",
     // defaults: https://swc.rs/docs/configuration/swcrc#compilation
@@ -342,6 +346,7 @@ const factoryRcConfigBase = {
 const factoryRcConfigExtended = {
     ...rcConfigExtendedEmpty,
     ...factoryRcConfigBase,
+    _NOTE_: "This file is generated - changes will be overwritten.",
 
     envName: undefined, // fallback to `SWC_ENV || NODE_ENV || "development"`
 
@@ -370,10 +375,11 @@ const factoryRcConfigExtended = {
 };
 
 /** 
- * @type {cliCommonOpts}
+ * @type {cliCommonOpts & GeneratedJsonFileNote}
  * An empty base object to build upon
  */
 const factoryCliConfigEmpty = {
+    _NOTE_: "This file is generated - changes will be overwritten.",
     extensions: undefined,
     envName: undefined,
     swcrc: undefined,
@@ -401,11 +407,12 @@ const factoryCliConfigEmpty = {
 };
 
 /** 
- * @type {cliCommonOpts}
+ * @type {cliCommonOpts & GeneratedJsonFileNote}
  * The default options for composing a swc cli config json file
  */
 const factoryCliConfig = {
     ...factoryCliConfigEmpty,
+    _NOTE_: "This file is generated - changes will be overwritten.",
 
     extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx", ".cts", ".mts"],
     envName: 'development',
@@ -444,22 +451,16 @@ const factoryCliConfig = {
 };
 
 
-
 /** @type {SwcRcConfigBase} */
-const sourceSharedOptions = {
+const sharedAcrossTargets = {
     jsc: {
         parser: {
             syntax: 'typescript',
             decorators: true,
         },
     },
-}
-
-/** @type {SwcRcConfigBase} */
-const compileSharedDev = {
     sourceMaps: true,
 }
-
 
 /** @type {SwcRcConfigExtendedFileFactory} */
 const compileSharedTarget = (buildTarget) => {
@@ -480,8 +481,7 @@ const compileSharedTarget = (buildTarget) => {
 const composeRcConfigFileObj = (buildTarget) => {
     return merge(
         cloneDeep(factoryRcConfigExtended),
-        sourceSharedOptions,
-        compileSharedDev,
+        sharedAcrossTargets,
         compileSharedTarget(buildTarget)
     );
 }
