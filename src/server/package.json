@@ -15,13 +15,13 @@
         "swc",
         "eslint"
     ],
-    "main": "dist/index.js",
+    "main": "dist/esm/index.js",
     "scripts": {
         "lint": "eslint -c eslint.config.mjs",
         "lint-watch": "nodemon --watch dist --exec eslint -c eslint.config.mjs",
         "typecheck": "tsc --project tsconfig.json --noEmit",
         "typecheck-watch": "tsc --project tsconfig.json --noEmit --watch",
-        "compile:cjs": "swc --cli-config-file .swc.cli.esm.json src",
+        "compile:esm": "swc --cli-config-file .swc.cli.esm.json src",
         "compile-watch": "swc --cli-config-file .swc.cli.esm.json src --watch",
         "dev": "concurrently \"npm run typecheck-watch\" \"npm run lint-watch\" \"npm run compile-watch\"",
         "serve": "node dist/esm/index.js",
