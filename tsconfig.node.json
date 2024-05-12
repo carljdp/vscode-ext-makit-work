@@ -1,5 +1,9 @@
 {
     "extends": "./tsconfig.json",
+    //
+    // This serves as a base for apps to be built as multiple files
+    // - like with libraries
+    //
     "compilerOptions": {
         //
         // ensure that nobody can accidentally use this config

@@ -1,5 +1,9 @@
 {
     "extends": "./tsconfig.json",
+    //
+    // This serves as a base for apps to be bundled into a single file
+    // - like with webapps
+    //
     "compilerOptions": {
         //
         // ensure that nobody can accidentally use this config
