@@ -1,0 +1,12 @@
+
+# environment files
+.env.*
+!.env.example
+*.env
+!.env.example
+
+# generated files
+dist
+
+# node files
+node_modules

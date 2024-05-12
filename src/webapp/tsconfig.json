@@ -1,0 +1,17 @@
+{
+	"extends": "../../tsconfig.bundle.json",
+	"compilerOptions": {
+		"lib": [
+			"ES2022",
+			"DOM"
+		]
+	},
+	"include": [
+		// Only from **this** dir and below
+		".*/**/*",
+		"*/**/*",
+		".*",
+		"*"
+	],
+	"$schema": "https://json.schemastore.org/tsconfig"
+}
