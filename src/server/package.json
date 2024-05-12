@@ -15,38 +15,39 @@
         "swc",
         "eslint"
     ],
-    "engines": {
-        "node": "^21.7.3"
-    },
     "main": "dist/index.js",
     "scripts": {
         "lint": "eslint -c eslint.config.mjs",
-        "lint-watch": "eslint -c eslint.config.mjs --watch",
+        "lint-watch": "nodemon --watch dist --exec eslint -c eslint.config.mjs",
         "typecheck": "tsc --project tsconfig.json --noEmit",
         "typecheck-watch": "tsc --project tsconfig.json --noEmit --watch",
-        "compile": "swc --cli-config-file .swc.cli.json src",
-        "compile-watch": "swc --cli-config-file .swc.cli.json src --watch",
+        "compile:cjs": "swc --cli-config-file .swc.cli.esm.json src",
+        "compile-watch": "swc --cli-config-file .swc.cli.esm.json src --watch",
         "dev": "concurrently \"npm run typecheck-watch\" \"npm run lint-watch\" \"npm run compile-watch\"",
-        "serve": "nodemon dist --exec node dist/index.js",
-        "serve-watch": "nodemon --watch dist --exec node dist/index.js"
+        "serve": "node dist/esm/index.js",
+        "serve-watch": "nodemon --watch dist --exec node dist/esm/index.js"
     },
     "devDependencies": {
         "@eslint/js": "^9.2.0",
         "@swc-node/register": "^1.9.1",
         "@swc/cli": "^0.3.12",
         "@swc/core": "^1.5.5",
+        "@swc/helpers": "^0.5.11",
+        "@swc/types": "^0.1.6",
         "@types/eslint__js": "^8.42.3",
         "@types/express": "^4.17.21",
         "@types/node": "^20.12.11",
         "concurrently": "^8.2.2",
-        "eslint": "^9.2.0",
-        "express": "^4.19.2",
-        "globals": "^15.2.0",
         "nodemon": "^3.1.0",
+        "globals": "^15.2.0",
+        "eslint": "^9.2.0",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.8.0"
     },
     "dependencies": {
         "express": "^4.19.2"
+    },
+    "engines": {
+        "node": ">=21.7.3"
     }
 }
