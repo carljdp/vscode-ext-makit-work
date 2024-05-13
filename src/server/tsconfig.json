@@ -1,7 +1,12 @@
 {
 	"extends": "../../tsconfig.node.json",
+	"compilerOptions": {
+		// Rescope to `./*` (this dir contents and below)
+		"rootDir": "./",
+		"baseUrl": "./"
+	},
 	"include": [
-		// Only from **this** dir and below
+		// Rescope to `./*` (this dir contents and below)
 		".*/**/*",
 		"*/**/*",
 		".*",
