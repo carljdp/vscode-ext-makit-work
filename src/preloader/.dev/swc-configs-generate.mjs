@@ -22,6 +22,8 @@ const sharedAcrossTargets = {
         },
     },
     sourceMaps: true,
+
+    isModule: true,
 }
 
 /** 
@@ -72,7 +74,6 @@ const writeRcConfigFile = (buildTargetDetails) => {
 const composeCliConfigFileObj = (buildTargetDetails) => {
     /** @type {SwcCliConfig} */
     const overrides = {
-        ...SwcConfigs._cliBaseDefaults,
 
         configFile: `.swcrc.${buildTargetDetails.key}.json`,
         outDir: `dist/${buildTargetDetails.key}`,
@@ -82,6 +83,7 @@ const composeCliConfigFileObj = (buildTargetDetails) => {
         copyFiles: true,
         includeDotfiles: true,
         sourceMaps: true,
+
     }
     return merge(
         cloneDeep(SwcConfigs._cliBaseDefaults),
