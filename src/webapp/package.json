@@ -24,7 +24,8 @@
         "typecheck-watch": "tsc --project tsconfig.json --noEmit --watch",
         "compile:esm": "swc --cli-config-file .swc.cli.esm.json src",
         "compile-watch": "swc --cli-config-file .swc.cli.esm.json src --watch",
-        "dev": "concurrently \"npm run typecheck-watch\" \"npm run lint-watch\" \"npm run compile-watch\""
+        "dev": "concurrently \"npm run typecheck-watch\" \"npm run lint-watch\" \"npm run compile-watch\"",
+        "serve:built": "node ../server/dist/esm/cli.js --cli-server-args={\\\"path\\\":\\\"./dist/esm\\\",\\\"port\\\":\\\"5001\\\"}"
     },
     "devDependencies": {
         "@eslint/js": "^9.2.0",

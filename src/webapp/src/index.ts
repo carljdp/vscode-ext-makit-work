@@ -5,9 +5,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
-console.log('###### Hello from webapp/index.ts ######');
-
-
 let SCREEN_WIDTH = window.innerWidth;
 let SCREEN_HEIGHT = window.innerHeight;
 let aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
@@ -21,8 +18,6 @@ let ambientLight: THREE.AmbientLight, directionalLight: THREE.DirectionalLight;
 
 init();
 animate();
-
-
 
 
 function addPixelGrid(scene: { add: (arg0: THREE.InstancedMesh<THREE.BoxGeometry, THREE.MeshBasicMaterial, THREE.InstancedMeshEventMap>) => void; }, gridSizeX: number, gridSizeY: number, spacing: number) {
