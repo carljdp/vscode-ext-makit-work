@@ -10,7 +10,8 @@
                 "--import=./preloader.mjs",
             ],
             "args": [
-                "${relativeFile}"
+                "${relativeFile}",
+                "--cli-server-args={\\\"path\\\":\\\"./dist/esm\\\",\\\"port\\\":\\\"3000\\\",\\\"filesAsHtml\\\":\\\"false\\\"}"
             ],
             "console": "integratedTerminal",
             "skipFiles": [

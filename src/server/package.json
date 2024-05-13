@@ -24,6 +24,8 @@
         "compile:esm": "swc --cli-config-file .swc.cli.esm.json src",
         "compile-watch": "swc --cli-config-file .swc.cli.esm.json src --watch",
         "dev": "concurrently \"npm run typecheck-watch\" \"npm run lint-watch\" \"npm run compile-watch\"",
+        "serve:cli:live": "node dist/esm/cli.js --cli-server-args={\\\"path\\\":\\\"./dist/esm\\\",\\\"port\\\":\\\"3001\\\"}",
+        "serve:cli:text": "node dist/esm/cli.js --cli-server-args={\\\"filesAsHtml\\\":\\\"true\\\",\\\"port\\\":\\\"3002\\\"}",
         "serve": "node dist/esm/index.js",
         "serve-watch": "nodemon --watch dist --exec node dist/esm/index.js"
     },
@@ -36,16 +38,21 @@
         "@swc/types": "^0.1.6",
         "@types/eslint__js": "^8.42.3",
         "@types/express": "^4.17.21",
+        "@types/lodash": "^4.17.1",
         "@types/node": "^20.12.11",
+        "@types/prismjs": "^1.26.4",
         "concurrently": "^8.2.2",
-        "nodemon": "^3.1.0",
-        "globals": "^15.2.0",
         "eslint": "^9.2.0",
+        "globals": "^15.2.0",
+        "nodemon": "^3.1.0",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.8.0"
     },
     "dependencies": {
-        "express": "^4.19.2"
+        "express": "^4.19.2",
+        "lodash": "^4.17.21",
+        "prismjs": "^1.29.0",
+        "sharp": "^0.33.3"
     },
     "engines": {
         "node": ">=21.7.3"
