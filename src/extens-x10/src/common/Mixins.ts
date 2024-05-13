@@ -7,7 +7,7 @@ interface IConstructable<T> {
     new(...args: any[]): T;
 }
 
-import { _isProd_, _isDev_, _isDebug_ } from '../../dev/EnvConf.cjs';
+import { _isProd_, _isDev_, _isDebug_ } from '../dev/EnvConf.js';
 
 
 

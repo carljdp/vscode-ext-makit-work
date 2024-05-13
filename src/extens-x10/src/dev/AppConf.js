@@ -1,4 +1,4 @@
-// file: src/common/AppConf.cjs
+// file: src/common/AppConf.js
 /**
  * -------------------------------------------------------------------------- *
  * NOTE: This file is intentionally a plain JavaScript file, so that it can   *
@@ -12,7 +12,7 @@
  */
 
 
-/** @type {import('./AppConf.d.cts').IAppConf} */
+/** @type {import('./AppConf').IAppConf} */
 const AppConf = {
     PROJ_ROOT_ABS_PATH: String(process.env.PROJ_ROOT_ABS_PATH || ''),
     APP_PUBL: String(process.env.APP_PUBL || ''),

@@ -7,9 +7,11 @@
 /** @typedef {import('webpack').PathData} PathData **/
 /** @typedef {import('webpack').AssetInfo} AssetInfo **/
 
-import EnvConf from '../dev/EnvConf.cjs';
+import { _isProd_, _isDev_, _isDebug_ } from './src/dev/EnvConf.js';
 
-import AppConf from '../dev/AppConf.cjs';
+
+import EnvConf from './src/dev/EnvConf.js';
+import AppConf from './src/dev/AppConf.js';
 
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join, basename } from 'node:path';

@@ -1,4 +1,4 @@
-// file: dev/EnvConf.cjs
+// file: dev/EnvConf.js
 /**
  * -------------------------------------------------------------------------- *
  * NOTE: This file is intentionally a plain JavaScript file, so that it can   *
@@ -53,7 +53,7 @@ const _isProd_ = (/** @type {EnvParseFn} */(env) => {
 
 // Quick polyfill for NodeJS assert module
 const assert = {
-    ok: (value, message) => {
+    ok: (/** @type {any} */ value, /** @type {string | undefined} */ message) => {
         if (!value) {
             throw new Error(message);
         }

@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import crypto from 'crypto';
 
-import { IService, Service } from '../../../common/Service';
+import { IService, Service } from '../common/Service';
 
 
 interface IStorageService extends IService {

@@ -4,8 +4,10 @@ import crypto from 'node:crypto';
 
 import { join, basename, sep, relative, resolve } from 'node:path';
 
-import { _isProd_, _isDev_, _isDebug_ } from '../../dev/EnvConf.cjs';
-import AppConf from '../../dev/AppConf.cjs';
+import { _isProd_, _isDev_, _isDebug_ } from './dev/EnvConf.js';
+
+
+import AppConf from './dev/AppConf.js';
 import assert from 'node:assert';
 
 const __extensionId = `${AppConf.APP_PUBL}.${AppConf.APP_NAME}`;

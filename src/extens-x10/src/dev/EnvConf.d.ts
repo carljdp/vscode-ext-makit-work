@@ -1,7 +1,7 @@
 // file: dev/EnvConf.d.cts
 
 /** 
- * @fileoverview Type definitions for EnvConf.cjs 
+ * @fileoverview Type definitions for EnvConf.js 
  */
 
 /** 

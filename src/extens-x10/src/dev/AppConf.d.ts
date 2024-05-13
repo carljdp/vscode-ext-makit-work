@@ -1,7 +1,7 @@
 // file: src/common/AppConf.d.cts
 
 /**
- * @fileoverview Type definitions for AppConf.cjs 
+ * @fileoverview Type definitions for AppConf.js 
  */
 
 

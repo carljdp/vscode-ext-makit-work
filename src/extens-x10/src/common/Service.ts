@@ -1,7 +1,7 @@
 
 
 
-import { _isProd_, _isDev_, _isDebug_ } from '../../dev/EnvConf.cjs';
+import { _isProd_, _isDev_, _isDebug_ } from '../dev/EnvConf.js';
 
 import { ISingleton, Singleton } from './Singleton';
 
