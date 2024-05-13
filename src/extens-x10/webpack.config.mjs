@@ -189,6 +189,7 @@ function logIfShould(config) {
  * @param {AssetInfo} [assetInfo] - Optional asset information.
  * @returns {string} The resulting string.
  */
+// @ts-ignore
 function getPathToFileFromChunkInfo(pathData, assetInfo) {
 
     if ((pathData.chunk === undefined) || pathData.chunk.name !== undefined) {
@@ -657,7 +658,7 @@ const webappConfig = {
 
 
 
-
+// @ts-ignore
 export default function arrayOfConfigs(env, argv) {
 
     if (ECHO_ARGS) {

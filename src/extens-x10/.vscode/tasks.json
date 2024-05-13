@@ -15,25 +15,6 @@
 			"group": "none"
 		},
 		{
-			"label": "Debug current file",
-			"type": "shell",
-			"command": "./node_modules/.bin/env-cmd",
-			"args": [
-				"--file",
-				"./.env.dev",
-				"./node_modules/.bin/ts-node",
-				"${file}"
-			],
-			"problemMatcher": [],
-			"presentation": {
-				"group": "debug",
-				"panel": "new",
-				"reveal": "always",
-				"echo": true
-			},
-			"group": "none"
-		},
-		{
 			"label": "npm:src:lint-only",
 			"type": "npm",
 			"script": "src:lint-only",
@@ -81,13 +62,20 @@
 			"group": "build",
 		},
 		{
-			"label": "npm:src:compile-watch",
+			"label": "npm:compile-watch",
 			"type": "npm",
-			"script": "src:compile-watch",
-			"problemMatcher": [
-				"$ts-webpack-watch",
-				"$tsc-watch"
-			],
+			"script": "compile-watch",
+			"problemMatcher": {
+				"owner": "external",
+				"pattern": {
+					"regexp": "^.*(ELIFECYCLE|Command fail|Process exit).*code \\d+.*$"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^$",
+					"endsPattern": "^Watching for file changes.*$",
+				}
+			},
 			"presentation": {
 				"group": "npm",
 				"panel": "dedicated",
@@ -97,9 +85,9 @@
 			"isBackground": true
 		},
 		{
-			"label": "npm:start:server-watch",
+			"label": "npm:serve:built",
 			"type": "npm",
-			"script": "start:server-watch",
+			"script": "serve:built",
 			"problemMatcher": {
 				"owner": "external",
 				"pattern": {
@@ -107,8 +95,8 @@
 				},
 				"background": {
 					"activeOnStart": true,
-					"beginsPattern": "Executing task",
-					"endsPattern": "^Server.*(started|running|listening).*$",
+					"beginsPattern": "^$",
+					"endsPattern": "^\\[cli-server\\] link:.*$",
 				}
 			},
 			"presentation": {
@@ -118,9 +106,6 @@
 			},
 			"group": "build",
 			"isBackground": true,
-			"dependsOn": [
-				"npm:src:compile-watch"
-			]
 		},
 		{
 			"label": "npm:start:server-prod",
@@ -176,7 +161,7 @@
 			"label": "compile-watch & tests",
 			"dependsOrder": "parallel",
 			"dependsOn": [
-				"npm:src:compile-watch",
+				"npm:compile-watch",
 				"npm:tests:compile-watch"
 			],
 			"problemMatcher": [],
@@ -192,8 +177,8 @@
 			"type": "shell",
 			"dependsOrder": "parallel",
 			"dependsOn": [
-				"npm:src:compile-watch",
-				"npm:start:server-watch",
+				"npm:compile-watch",
+				"npm:serve:built",
 			],
 			"command": "echo 'Started: compile-watch && server-watch'",
 			"problemMatcher": {
