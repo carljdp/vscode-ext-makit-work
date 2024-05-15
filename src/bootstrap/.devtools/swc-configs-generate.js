@@ -5,7 +5,7 @@ import fs from 'fs';
 import lodash from 'lodash';
 const { merge, cloneDeep } = lodash;
 
-import { SwcConfigs, SwcPresets } from './swc-configs-defaults.mjs';
+import { SwcConfigs, SwcPresets } from './swc-configs-defaults.js';
 
 /**
  * @typedef {typeof SwcConfigs._rcExtendedDefaults} SwcRcConfig

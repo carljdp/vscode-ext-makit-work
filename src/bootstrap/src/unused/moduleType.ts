@@ -1,4 +1,8 @@
-// src-file: ./preloader/src/moduleType.ts
+
+
+// I dont think this file is used at the moment, but keeping it for reference
+
+
 
 function detectModuleType() {
     let isESM = false;

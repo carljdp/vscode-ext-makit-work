@@ -10,7 +10,7 @@
 import { register } from 'node:module';
 import { pathToFileURL } from 'node:url';
 
-const logTag = 'preloader';
+const logTag = 'bootstrap';
 
 /** @type {RegisterOptions} */
 const baseOptions = {

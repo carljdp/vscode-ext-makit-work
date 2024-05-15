@@ -1,4 +1,7 @@
-// src-file: ./preloader/src/tsConfig.ts
+
+
+// I dont think this file is used at the moment, but keeping it for reference
+
 
 import { RegisterOptions } from "ts-node";
 

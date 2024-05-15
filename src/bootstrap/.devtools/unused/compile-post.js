@@ -2,12 +2,16 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { pathExistsAsync } from '.devtools/common/fs-utils.js';
 
-// TODO: if you plan to include source maps in the commited code, you should also:
-// - also rename .js.map files to .cjs.map and .mjs.map
-// - also update the sourceMappingURL inside the index.cjs and index.mjs files
-// but bot necessary if you're not planning to include source maps in the commited code
-
+/**
+ * @fileoverview
+ * - This script was originally created to rename the file extensions of compiled output files.
+ * - It was created to be run after the compilation step.
+ * - It would check that it is being run in the correct context/directory.
+ * - It would place a package.json file in the output directories, depending on the output format.
+ *   - so that when imported, the package.json tell the importing module that it is an ESM or CJS module.
+ */
 
 /** 
  * @type {(filePath: string) => boolean}
@@ -19,7 +23,7 @@ const filePathFilter = (filePath) => {
 
 
 const fallbackArgs = {
-    packageName: 'preloader',
+    packageName: 'bootstrap',
     scriptsDir: 'scripts',
     outputDir: 'dist',
     dryRun: false // <-- Set to true if you dont like living on the edge
@@ -53,16 +57,6 @@ const thisFileParentDirHref = thisFileParentDirUrl.href;
 const thisFileParentDirPath = fileURLToPath(thisFileParentDirUrl);
 
 
-/** @type {(pathToCheck: string) => Promise<boolean>} */
-async function pathExists(pathToCheck) {
-    try {
-        await fs.access(pathToCheck, fs.constants.F_OK);
-        return true;
-    } catch (_) {
-        return false;
-    }
-}
-
 /** @type {(packageName: string, scriptsDir: string, outputDir: string) => Promise<string>} */
 const getOutputDirIfContextCorrect = async (packageName, scriptsDir, outputDir) => {
 
@@ -72,12 +66,12 @@ const getOutputDirIfContextCorrect = async (packageName, scriptsDir, outputDir) 
     }
 
     const expectedPackageRoot = thisFileParentDirPath;
-    if (!await pathExists(expectedPackageRoot)) {
+    if (!await pathExistsAsync(expectedPackageRoot)) {
         throw new Error(`[${logTag}] Expected to find the package root directory`);
     }
 
     const expectedPackageJson = path.join(expectedPackageRoot, 'package.json');
-    if (!await pathExists(expectedPackageJson)) {
+    if (!await pathExistsAsync(expectedPackageJson)) {
         throw new Error(`[${logTag}] Expected to find a package.json file in the package root`);
     }
 
@@ -93,7 +87,7 @@ const getOutputDirIfContextCorrect = async (packageName, scriptsDir, outputDir) 
     }
 
     const expectedOutputDir = path.join(expectedPackageRoot, outputDir);
-    if (!await pathExists(expectedOutputDir)) {
+    if (!await pathExistsAsync(expectedOutputDir)) {
         throw new Error(`[${logTag}] Expected to find an "${outputDir}" directory in the package root`);
     }
 
@@ -142,6 +136,7 @@ async function renameExtensions(directory, oldExt, newExt, dryRun = true) {
                 await renameExtensions(entryPath, oldExt, newExt, dryRun);
             } else if (path.extname(entry.name) === oldExt) {
 
+                // Skip if the file does not pass the filter function
                 if (filePathFilter(entryPath)) {
                     const newFilePath = entryPath.replace(oldExt, newExt);
                     if (dryRun) {
@@ -184,7 +179,7 @@ async function run({ packageName, scriptsDir, outputDir, dryRun = true }) {
 
         // Use map to create an array of promises
         const results = await Promise.all(renameTasks.map(async task => {
-            if (await pathExists(task.directory)) {
+            if (await pathExistsAsync(task.directory)) {
                 return renameExtensions(task.directory, task.oldExt, task.newExt, dryRun);
             } else {
                 console.log(`[${logTag}] Directory not found: ${task.directory}`);

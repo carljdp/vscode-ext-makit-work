@@ -1,26 +1,36 @@
-// src-file: ./src/preloader/src/index.ts
+// src-file: ./src/bootstrap/src/index.ts
+
+/**
+ * @fileoverview
+ * - Register SWC's ESM loader with Node.js (to support loading TypeScript files)
+ * - Load environment variables from a `.env` file
+ */
 
 
+// Imports
 
-// import { inspect } from 'node:util';
-// import { register as tsNodeRegister } from 'ts-node';
-// import { tsConfig } from './tsConfig.js';
+
+import { register } from 'node:module';
+import { pathToFileURL } from 'node:url';
 
 import lodash from 'lodash';
 const { merge } = lodash;
 
 import { config } from 'dotenv';
 
-const logTag = `preloader`
 
-import { register } from 'node:module';
-import { pathToFileURL } from 'node:url';
+// Types
 
 interface RegisterOptions {
     parentURL: string | URL;
     data: any | undefined;
     transferList: any[] | undefined;
 };
+
+
+// Constants
+
+const logTag = `bootstrap`
 
 const baseOptions: RegisterOptions = {
     parentURL: pathToFileURL('./'),
@@ -37,9 +47,12 @@ const modulesToRegister: Map<string, RegisterOptions> = new Map([
     }],
 ]);
 
+
+// Parse CLI arguments
+
 const cliArgsRaw = process.argv
     .slice(2)
-    .filter(arg => arg.startsWith('--preloader-args='))
+    .filter(arg => arg.startsWith('--bootstrap-args='))
     .map(arg => arg.split('=')[1]);
 
 const cliArgsParsed = cliArgsRaw
@@ -57,22 +70,22 @@ const cliArgsParsedFlat = cliArgsParsed
 const LOG_VERBOSE = cliArgsParsedFlat.log === 'verbose';
 const DOTENV_FILE = cliArgsParsedFlat.dotenv || '.env';
 
+
+// dotenv
+
 const dotenvResult = config({ path: DOTENV_FILE });
+
+// log configuration
 
 console.log(``);
 if (LOG_VERBOSE) {
-    console.log(`[${logTag}] --preloader-args=\n${JSON.stringify(cliArgsParsedFlat, null, 4)}`);
+    console.log(`[${logTag}] --bootstrap-args=\n${JSON.stringify(cliArgsParsedFlat, null, 4)}`);
     console.log(`[${logTag}] dotenv: ${JSON.stringify(dotenvResult, null, 4)}`);
 }
 
-console.log(`[${logTag}] Registering modules with Node.js ..`);
+// Register modules
 
-// const serivce = tsNodeRegister(tsConfig);
-// if (LOG_VERBOSE) {
-//     console.log(`[${logTag}] Module 'ts-node' ${serivce.enabled()}`);
-//     console.log(`[${logTag}]  - enabled ? ${serivce.enabled()}`);
-//     console.log(`[${logTag}]  - options ? ${inspect(serivce.options)}`);
-// }
+console.log(`[${logTag}] Registering modules with Node.js ..`);
 
 modulesToRegister.forEach((options, specifier) => {
     console.log(`[${logTag}] -> ${specifier}`);
@@ -81,4 +94,3 @@ modulesToRegister.forEach((options, specifier) => {
 
 console.log(`[${logTag}] Done.`);
 console.log(``);
-

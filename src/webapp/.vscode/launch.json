@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "Launch Current TS File",
             "runtimeArgs": [
-                "--import=../preloader/dist/esm/index.js",
+                "--import=../bootstrap/dist/esm/index.js",
             ],
             "args": [
                 "${relativeFile}"

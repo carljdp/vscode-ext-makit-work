@@ -49,7 +49,7 @@ pnpm install
 - `tsconfig.json` - TypeScript configuration file
 - `tsconfig.eslint.json` - TypeScript configuration with ES Lint specific settings
 - `eslint.config.mjs` - ESLint 'flat' configuration file
-- `preloader.js` - SWC TypeScript loader registration
+- `bootstrap.js` - SWC TypeScript loader registration
 - `.swcrc` - SWC configuration file
 - `.swc.cli.json` - SWC CLI configuration file
 
@@ -67,7 +67,7 @@ pnpm run dev
 
 ## Debugging
 
-`--import=./preloader.js` launch configuration option is used to register the @swc typescript loader with Node. 
+`--import=./bootstrap.js` launch configuration option is used to register the @swc typescript loader with Node. 
 
 Issues were noted with Node 20.9.0 which were resolved by upgrading to Node 22.1.0. The exact problematic version is unclear, but compatibility improved with Node 21.7.3 onwards.
 

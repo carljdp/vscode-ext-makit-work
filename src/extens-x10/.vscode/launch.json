@@ -60,12 +60,12 @@
 			"nodeVersionHint": 18,
 			"runtimeExecutable": "node",
 			"runtimeArgs": [
-				"--import=../preloader/dist/esm/index.js",
+				"--import=../bootstrap/dist/esm/index.js",
 			],
 			"args": [
 				"${relativeFile}",
-				"--preloader-args={\"log\":\"verbose\"}",
-				"--preloader-args={\"dotenv\":\".env.dev\"}",
+				"--bootstrap-args={\"log\":\"verbose\"}",
+				"--bootstrap-args={\"dotenv\":\".env.dev\"}",
 			],
 			"sourceMaps": true,
 			"skipFiles": [
@@ -113,7 +113,7 @@
 		// 		// "--trace-uncaught",
 		// 		// "--abort-on-uncaught-exception",
 		// 		"--require",
-		// 		"./preloader/dist/cjs/index.js",
+		// 		"./bootstrap/dist/cjs/index.js",
 		// 	],
 		// 	"args": [
 		// 		"${workspaceFolder}/node_modules/.bin/_mocha",
