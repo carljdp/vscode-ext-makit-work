@@ -1,4 +1,6 @@
 {
+    "$schema": "file:///Git/carljdp/vscode-ext-makit-work/.offline/json.schemastore.org/package.json",
+    "$id": "file:///Git/carljdp/vscode-ext-makit-work/package.json",
     "name": "vscode-ext-makit-work",
     "version": "0.0.1-dev",
     "description": "",
