@@ -1,0 +1,290 @@
+{
+	"extends": [],
+	"compilerOptions": {
+		//
+		// ensure that nobody can accidentally use this config
+		// to compile the project
+		"noEmit": true,
+		//
+		// Keep generic/loose at the root level
+		"module": "Preserve",
+		"moduleResolution": "Bundler",
+		//
+		// Ensure closer alignment with the ECMAScript standard
+		// regarding namespace and default imports.
+		"esModuleInterop": true,
+		//
+		// The JavaScript language version to target
+		// - currently common denominator is ES2022
+		//   as used by VSCode extensions.
+		"target": "ES2022",
+		"lib": [
+			"ES2022"
+			// e.g. add "DOM" if targeting the browser
+		],
+		//
+		// Opt-in to using non-standard decorators
+		"experimentalDecorators": true,
+		//
+		// Opt-in to all strict type-checking options
+		"strict": true,
+		//
+		// Ensure files are parsed in the ECMAScript strict 
+		// mode and emit "use strict" for each source file
+		"alwaysStrict": true,
+		//
+		// Ensure better interoperability between different 
+		// file systems
+		"forceConsistentCasingInFileNames": true,
+		//
+		// Switche to the upcoming ECMA runtime behavior
+		// instead of TypeScript's original behavior.
+		"useDefineForClassFields": true,
+		//
+		// Also allow and type-check JavaScript files
+		// in addition to TypeScript files
+		"allowJs": true,
+		"checkJs": true,
+		//
+		// from where to start looking for source files
+		// - default: './'
+		"rootDir": "./",
+		//
+		// base directory from which to resolve bare specifier
+		// module names.
+		// - default: './'
+		"baseUrl": "./",
+		//
+	},
+	//
+	"include": [
+		// NOTE: this 'include' section does not support
+		// - glob expansion like {/,}
+		// - extened globs like @(t|j)s
+		//
+		// If the last path segment in a pattern does not
+		// contain a file extension or wildcard character,
+		// then it is treated as a directory
+		//
+		// Unfortunatly, there is no single pattern that
+		// includes all files and directories including
+		// hidden ones. So we have to list them all:
+		// - hidden & visible files in this root dir
+		// "*",
+		"*.ts", 
+		"*.js", 
+		"*.mts", 
+		"*.mjs", 
+		"*.cts", 
+		"*.cjs", 
+		"*.d.ts", 
+		// ".*",
+		".*.ts",
+		".*.js",
+		".*.mts",
+		".*.mjs",
+		".*.cts",
+		".*.cjs",
+		".*.d.ts",
+		// - hidden & visible files in all visible subdirs
+		// "**/*/**/*",
+		"**/*/**/*.ts",
+		"**/*/**/*.js",
+		"**/*/**/*.mts",
+		"**/*/**/*.mjs",
+		"**/*/**/*.cts",
+		"**/*/**/*.cjs",
+		"**/*/**/*.d.ts",
+		// "**/*/**/.*",
+		"**/*/**/.*.ts",
+		"**/*/**/.*.js",
+		"**/*/**/.*.mts",
+		"**/*/**/.*.mjs",
+		"**/*/**/.*.cts",
+		"**/*/**/.*.cjs",
+		"**/*/**/.*.d.ts",
+		// - hidden & visible files in all hidden subdirs
+		// "**/.*/**/*",
+		"**/.*/**/*.ts",
+		"**/.*/**/*.js",
+		"**/.*/**/*.mts",
+		"**/.*/**/*.mjs",
+		"**/.*/**/*.cts",
+		"**/.*/**/*.cjs",
+		"**/.*/**/*.d.ts",
+		// "**/.*/**/.*",
+		"**/.*/**/.*.ts",
+		"**/.*/**/.*.js",
+		"**/.*/**/.*.mts",
+		"**/.*/**/.*.mjs",
+		"**/.*/**/.*.cts",
+		"**/.*/**/.*.cjs",
+		"**/.*/**/.*.d.ts",
+		//
+		// Next, we re-included the default excludes:
+		// - node_modules
+		// "*/**/node_modules/**/*",
+		"*/**/node_modules/**/*.ts",
+		"*/**/node_modules/**/*.js",
+		"*/**/node_modules/**/*.mts",
+		"*/**/node_modules/**/*.mjs",
+		"*/**/node_modules/**/*.cts",
+		"*/**/node_modules/**/*.cjs",
+		"*/**/node_modules/**/*.d.ts",
+		// "*/**/node_modules/**/.*",
+		"*/**/node_modules/**/.*.ts",
+		"*/**/node_modules/**/.*.js",
+		"*/**/node_modules/**/.*.mts",
+		"*/**/node_modules/**/.*.mjs",
+		"*/**/node_modules/**/.*.cts",
+		"*/**/node_modules/**/.*.cjs",
+		"*/**/node_modules/**/.*.d.ts",
+		// ".*/**/node_modules/**/*",
+		".*/**/node_modules/**/*.ts",
+		".*/**/node_modules/**/*.js",
+		".*/**/node_modules/**/*.mts",
+		".*/**/node_modules/**/*.mjs",
+		".*/**/node_modules/**/*.cts",
+		".*/**/node_modules/**/*.cjs",
+		".*/**/node_modules/**/*.d.ts",
+		// ".*/**/node_modules/**/.*",
+		".*/**/node_modules/**/.*.ts",
+		".*/**/node_modules/**/.*.js",
+		".*/**/node_modules/**/.*.mts",
+		".*/**/node_modules/**/.*.mjs",
+		".*/**/node_modules/**/.*.cts",
+		".*/**/node_modules/**/.*.cjs",
+		".*/**/node_modules/**/.*.d.ts",
+		// - bower_components
+		// "*/**/bower_componets/**/*",
+		"*/**/bower_componets/**/*.ts",
+		"*/**/bower_componets/**/*.js",
+		"*/**/bower_componets/**/*.mts",
+		"*/**/bower_componets/**/*.mjs",
+		"*/**/bower_componets/**/*.cts",
+		"*/**/bower_componets/**/*.cjs",
+		"*/**/bower_componets/**/*.d.ts",
+		// "*/**/bower_componets/**/.*",
+		"*/**/bower_componets/**/.*.ts",
+		"*/**/bower_componets/**/.*.js",
+		"*/**/bower_componets/**/.*.mts",
+		"*/**/bower_componets/**/.*.mjs",
+		"*/**/bower_componets/**/.*.cts",
+		"*/**/bower_componets/**/.*.cjs",
+		"*/**/bower_componets/**/.*.d.ts",
+		// ".*/**/bower_componets/**/*",
+		".*/**/bower_componets/**/*.ts",
+		".*/**/bower_componets/**/*.js",
+		".*/**/bower_componets/**/*.mts",
+		".*/**/bower_componets/**/*.mjs",
+		".*/**/bower_componets/**/*.cts",
+		".*/**/bower_componets/**/*.cjs",
+		".*/**/bower_componets/**/*.d.ts",
+		// ".*/**/bower_componets/**/.*",
+		".*/**/bower_componets/**/.*.ts",
+		".*/**/bower_componets/**/.*.js",
+		".*/**/bower_componets/**/.*.mts",
+		".*/**/bower_componets/**/.*.mjs",
+		".*/**/bower_componets/**/.*.cts",
+		".*/**/bower_componets/**/.*.cjs",
+		".*/**/bower_componets/**/.*.d.ts",
+		// - jspm_packages
+		// "*/**/jspm_packages/**/*",
+		"*/**/jspm_packages/**/*.ts",
+		"*/**/jspm_packages/**/*.js",
+		"*/**/jspm_packages/**/*.mts",
+		"*/**/jspm_packages/**/*.mjs",
+		"*/**/jspm_packages/**/*.cts",
+		"*/**/jspm_packages/**/*.cjs",
+		"*/**/jspm_packages/**/*.d.ts",
+		// "*/**/jspm_packages/**/.*",
+		"*/**/jspm_packages/**/.*.ts",
+		"*/**/jspm_packages/**/.*.js",
+		"*/**/jspm_packages/**/.*.mts",
+		"*/**/jspm_packages/**/.*.mjs",
+		"*/**/jspm_packages/**/.*.cts",
+		"*/**/jspm_packages/**/.*.cjs",
+		"*/**/jspm_packages/**/.*.d.ts",
+		// ".*/**/jspm_packages/**/*",
+		".*/**/jspm_packages/**/*.ts",
+		".*/**/jspm_packages/**/*.js",
+		".*/**/jspm_packages/**/*.mts",
+		".*/**/jspm_packages/**/*.mjs",
+		".*/**/jspm_packages/**/*.cts",
+		".*/**/jspm_packages/**/*.cjs",
+		".*/**/jspm_packages/**/*.d.ts",
+		// ".*/**/jspm_packages/**/.*",
+		".*/**/jspm_packages/**/.*.ts",
+		".*/**/jspm_packages/**/.*.js",
+		".*/**/jspm_packages/**/.*.mts",
+		".*/**/jspm_packages/**/.*.mjs",
+		".*/**/jspm_packages/**/.*.cts",
+		".*/**/jspm_packages/**/.*.cjs",
+		".*/**/jspm_packages/**/.*.d.ts",
+		// - <outDir>
+		// "*/**/dist/**/*",
+		"*/**/dist/**/*.ts",
+		"*/**/dist/**/*.js",
+		"*/**/dist/**/*.mts",
+		"*/**/dist/**/*.mjs",
+		"*/**/dist/**/*.cts",
+		"*/**/dist/**/*.cjs",
+		"*/**/dist/**/*.d.ts",
+		// "*/**/dist/**/.*",
+		"*/**/dist/**/.*.ts",
+		"*/**/dist/**/.*.js",
+		"*/**/dist/**/.*.mts",
+		"*/**/dist/**/.*.mjs",
+		"*/**/dist/**/.*.cts",
+		"*/**/dist/**/.*.cjs",
+		"*/**/dist/**/.*.d.ts",
+		// ".*/**/dist/**/*",
+		".*/**/dist/**/*.ts",
+		".*/**/dist/**/*.js",
+		".*/**/dist/**/*.mts",
+		".*/**/dist/**/*.mjs",
+		".*/**/dist/**/*.cts",
+		".*/**/dist/**/*.cjs",
+		".*/**/dist/**/*.d.ts",
+		// ".*/**/dist/**/.*",
+		".*/**/dist/**/.*.ts",
+		".*/**/dist/**/.*.js",
+		".*/**/dist/**/.*.mts",
+		".*/**/dist/**/.*.mjs",
+		".*/**/dist/**/.*.cts",
+		".*/**/dist/**/.*.cjs",
+		".*/**/dist/**/.*.d.ts",
+	],
+	//
+	// An array of filenames or patterns that should be skipped
+	// when resolving <include> paths.
+	"exclude": [
+		//
+		// generated by tools
+        "**/coverage/**", // // mocha related
+        "**/.nyc_output/**", // // mocha related
+        "**/.vscode-test/**", // vscode extensions testing
+        "**/.history/**",  // vscode history extension
+        "**/.cache/**",  // eslint cache
+		//
+		// Other optional default excludes you may want to consider:
+        // "**/build/**",
+        // "**/dist/**",
+        // "**/output/**",
+        // "**/out/**",
+        // "**/tests/**",
+        // "**/test/**",
+        // "**/temp/**",
+        // "**/tmp/**",
+        // "**/logs/**",
+        // "**/log/**",
+		//
+		// the usual suspects
+		"**/<node_internals>/**",
+		"**/node_modules/**",
+		"**/.git/**",
+		//
+	],
+	//
+	"$schema": "https://json.schemastore.org/tsconfig"
+}

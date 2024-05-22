@@ -1,24 +1,56 @@
 {
-    "$schema": "file:///Git/carljdp/vscode-ext-makit-work/.offline/json.schemastore.org/package.json",
-    "$id": "file:///Git/carljdp/vscode-ext-makit-work/package.json",
     "name": "vscode-ext-makit-work",
     "version": "0.0.1-dev",
     "description": "",
     "author": "Carl J du Preez <https://linktr.ee/carljdp>",
     "license": "Proprietary",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
     "scripts": {
-        "start": "echo \"Nothing here. Look in /apps/*.\""
+        "reinstall": "npx pnpm install --loglevel error",
+        "startx-cjs": "startx-cjs",
+        "startx-esm": "startx-esm",
+        "check-conf:eslint": "npx @eslint/config-inspector",
+        "check-conf:tsconf": "npx tsc -p tsconfig.cjs.json --showConfig && npx tsc -p tsconfig.esm.json --showConfig",
+        "lint:report": "eslint --config eslint.config.mjs --cache --cache-location .cache",
+        "lint:report-watch": "node package/startx/devt/eslint-watch.mjs --config eslint.config.mjs --cache --cache-location .cache",
+        "lint:fix-dry": "eslint --config eslint.config.mjs --cache --cache-location .cache --fix-dry-run",
+        "lint:fix": "eslint --config eslint.config.mjs --cache --cache-location .cache --fix",
+        "test": "mocha --config .mocharc.cjs"
     },
     "devDependencies": {
+        "@eslint/config-inspector": "^0.4.8",
         "@eslint/js": "^9.2.0",
+        "@swc-node/register": "^1.9.1",
+        "@swc/cli": "^0.3.12",
+        "@swc/core": "^1.5.7",
+        "@types/chai": "^4.3.16",
         "@types/eslint": "^8.56.10",
         "@types/eslint__js": "^8.42.3",
+        "@types/lodash": "^4.17.4",
+        "@types/mocha": "^10.0.6",
+        "@vscode/test-cli": "^0.0.9",
+        "bundle-require": "^4.1.0",
+        "chai": "^5.1.1",
+        "chokidar": "^3.6.0",
+        "esbuild": "^0.21.3",
         "eslint": "^9.2.0",
+        "glob": "^10.3.16",
         "globals": "^15.1.0",
+        "lodash": "^4.17.21",
+        "minimatch": "^9.0.4",
+        "mocha": "^10.4.0",
+        "nyc": "^15.1.0",
+        "startx": "workspace:./packages/startx/dist",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.5",
         "typescript-eslint": "^7.8.0"
     },
     "engines": {
         "vscode": "^1.89.0",
         "node": "^21.7.3"
-    }
+    },
+    "$schema": "https://json.schemastore.org/package.json"
 }

@@ -1,5 +1,5 @@
 {
-    "extends": "./tsconfig.json",
+    "extends": "./tsconfig.reset.json",
     //
     // This serves as a base for apps to be built as multiple files
     // - like with libraries
@@ -10,7 +10,9 @@
         // to compile the project
         "noEmit": true,
         //
-        "module": "node16", // === "nodenext"
+        "module": "node16", // node16 === nodenext
+        // stricter import checking, compared to "bundler"
+        // - since the it's our 'home' environment
         "moduleResolution": "node16"
     },
     "$schema": "https://json.schemastore.org/tsconfig"

@@ -7,3 +7,9 @@
 
 # node files
 node_modules
+
+# vscode extensions files
+.cache
+.history
+.nyc_output
+coverage

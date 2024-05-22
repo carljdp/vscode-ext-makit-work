@@ -1,0 +1,87 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			// "**/.history": true,
+			// "**/.cache": true,
+			// "**/.nyc_output": true,
+			// "**/node_modules": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true,
+			// "**/pnpm-lock.yaml": true,
+		},
+		//
+		"explorer.compactFolders": false,
+		"debug.console.collapseIdenticalLines": false,
+		"git.confirmSync": false,
+		//
+		"json.schemaDownload.enable": true,
+		"json.schemas": [
+			{
+				"url": "https://json.schemastore.org/package.json",
+				"fileMatch": [
+					"**/?(.*|*)**/package.json{c,5,}"
+				],
+			},
+			{
+				"url": "https://json.schemastore.org/tsconfig.json",
+				"fileMatch": [
+					"**/?(.*|*)**/{.,}tsconfig{.*,}.json{c,5,}",
+				],
+			},
+			{
+				"url": "https://json.schemastore.org/swcrc",
+				"fileMatch": [
+					"**/?(.*|*)**/.swcrc",
+					"**/?(.*|*)**/{.,}swcrc{.*,}.json{c,5,}",
+				],
+			},
+		],
+		//
+		"testExplorer.useNativeTesting": true,
+		//
+		"eslint.packageManager": "pnpm",
+		"eslint.enable": true,
+		"eslint.run": "onType",
+		// "eslint.debug": false,
+		"eslint.experimental.useFlatConfig": true,
+		"eslint.format.enable": true,
+		"eslint.lintTask.enable": true,
+		// "eslint.lintTask.options": "-c eslint.config.mjs",
+		// "eslint.onIgnoredFiles": "warn",
+		"eslint.useESLintClass": true,
+		"eslint.validate": [
+			"javascript",
+			"typescript",
+			"json",
+			"yaml",
+		],
+		"eslint.workingDirectories": [
+			"${workspaceFolder}",
+		],
+		//
+	},
+	"extensions": {
+		"recommendations": [
+			"dbaeumer.vscode-eslint",
+			"ryu1kn.partial-diff",
+			"koalamer.workspace-in-status-bar",
+			"mikestead.dotenv",
+			"compulim.vscode-clock",
+			"hbenl.vscode-test-explorer",
+			"ms-vscode.test-adapter-converter",
+			"hbenl.vscode-mocha-test-adapter",
+			"connorshea.vscode-test-explorer-status-bar",
+			"maty.vscode-mocha-sidebar",
+			"spmeesseman.vscode-taskexplorer",
+			"microhobby.vscode-tasks-label",
+			"gruntfuggly.todo-tree"
+		]
+	},
+	
+}

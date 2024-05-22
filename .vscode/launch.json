@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug current file",
+            "type": "node",
+            "request": "launch",
+            "runtimeArgs": [
+                "--enable-source-maps",
+                "--env-file",
+                "./.env.experiments",
+                // "--import",
+                // "./packages/startx/dist/esm/index.js",
+                // "--require",
+                // "./packages/startx/dist/cjs/index.js",
+            ],
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**",
+                ".history/**",
+                ".git/**",
+            ],
+            "program": "${workspaceFolder}/${relativeFile}",
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"json.schemaDownload.enable": true,
+		"mocha.path": "node_modules/mocha",
+		"mocha.showErrorPopup": false,
+		"mocha.files.glob": "**/*.test.js",
+		"mocha.files.ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/out/**",
+			"**/output/**",
+			"**/build/**",
+			"**/tmp/**",
+			"**/temp/**",
+			"**/.history/**",
+			"**/.cache/**"
+		],
+		"eslint.enable": false,
+		"typescript.validate.enable": false
+	},
+	"extensions": {
+		"recommendations": [
+			"github.copilot",
+			"github.copilot-chat"
+		]
+	}
+}

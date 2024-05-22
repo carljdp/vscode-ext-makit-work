@@ -45,6 +45,138 @@
 
 import { basename } from "node:path";
 
+
+const DEBUG = false;
+
+
+class LocationInfo {
+    /**
+     * The identifier of the location.
+     * @type {string}
+     */
+    identifier;
+
+    /**
+     * The file path of the location.
+     * @type {string}
+     */
+    filePath;
+
+    /**
+     * The line number of the location.
+     * @type {number}
+     */
+    lineNumber;
+
+    /**
+     * The column number of the location.
+     * @type {number}
+     */
+    columnNumber;
+
+    constructor(identifier, filePath, lineNumber, columnNumber) {
+        this.identifier = identifier;
+        this.filePath = filePath;
+        this.lineNumber = lineNumber;
+        this.columnNumber = columnNumber;
+    }
+
+
+    get dirPath() {
+        return Path.dirname(this.filePath);
+    }
+
+    get fileLine() {
+        return this.lineNumber;
+    }
+
+    get fileColumn() {
+        return this.columnNumber;
+    }
+
+    toString() {
+        return `${this.identifier} (${this.filePath}:${this.lineNumber}:${this.columnNumber})`;
+    }
+
+    valueOf() {
+        return this.toString();
+    }
+    
+    get [Symbol.toPrimitive]() {
+        return (hint) => {
+            switch (hint) {
+                case 'number':
+                    return Number(Boolean(this.filePath && this.filePath.length > 0));
+                case 'string':
+                default:
+                    return this.toString();
+            }
+        }
+    }
+
+    get [Symbol.toStringTag]() {
+        return 'LocationInfo';
+    }
+}
+
+class Location {
+
+    /**
+     * An array of file location hits.
+     * @type { LocationInfo[] }
+     * @private
+     */
+    static _hits = [];
+
+    /**
+     * Get the file location hits.
+     * @type { LocationInfo[] }
+     */
+    static get hits() {
+        return Location._hits;
+    }
+
+    /**
+     * Get the file location of the calling function.
+     * @param {number} [stackOffset=0] 
+     * @returns {LocationInfo}
+     */
+    static getThisLocation = (stackOffset = 0) => {
+        return _fileLocationFromStackFrame(stackOffset + 1);
+    }
+
+    /**
+     * Print the file location hits to the console.
+     */
+    static report = () => {
+        console.log(`<static> Location.hits:`);
+        console.table(Location.hits);
+    }
+
+    /**
+     * Add the file location of the calling function to the hits array.
+     * @param {number} [stackOffset=0]
+     * @returns {void}
+     */
+    static logThisLocation = (stackOffset = 0) => {
+        Location._hits.push(new Location(stackOffset + 1).location);
+    }
+
+    constructor(stackOffset = 0) {
+        this._location = Location.getThisLocation(stackOffset + 1);
+    };
+
+    /**
+     * The location of where the instance was created.
+     * @type { LocationInfo }
+     */
+    _location;
+    get location() {
+        return this._location;
+    }
+}
+
+
 /** 
  * A utility function to get matches and their indices from a string based on a regular expression
  * @type { (str: string, regex: RegExp) => { match: string, start: number, end: number }[] }
@@ -70,15 +202,15 @@ const _getRegexMatchesWithIndices = (str, regex) => {
 
 /** 
  * Parses a single stack trace line to extract the file path, line number, and column number.
- * @type { (line: string) => { identifier: string, filePath: string, lineNumber: number, columnNumber: number } }
+ * @type { (line: string) => LocationInfo }
  */
 const _parseStackLine = (line) => {
     let stackLine = line.replace(/^\s*at /, "").trim();
 
     let identifier = "";
     let filePath = "";
-    let lineNumber = 0;
-    let columnNumber = 0;
+    let lineNumber = "0";
+    let columnNumber = "0";
 
     let numberParts = _getRegexMatchesWithIndices(stackLine, /:\d+/g);
     if (numberParts.length === 0) {
@@ -122,18 +254,17 @@ const _parseStackLine = (line) => {
 
     identifier = stackLine === "" ? "<root>" : stackLine;
 
-    return {
-        identifier,
-        filePath,
-        lineNumber,
-        columnNumber,
-    };
+    return new LocationInfo(
+        identifier, 
+        filePath, 
+        parseInt(lineNumber), 
+        parseInt(columnNumber));
 }
 
 /** 
  * Extracts the stack frame location information based on an offset.
  * @param {number} [stackOffset=0]
- * @returns { { identifier: string, filePath: string, lineNumber: number, columnNumber: number } }
+ * @returns { LocationInfo }
  */
 const _fileLocationFromStackFrame = (stackOffset = 0) => {
     if (stackOffset === undefined || stackOffset === null || typeof stackOffset !== 'number') {
@@ -142,7 +273,12 @@ const _fileLocationFromStackFrame = (stackOffset = 0) => {
     const parsedLines = new Error().stack.split('\n')
         .slice(stackOffset + 2, stackOffset + 3)
         .map(_parseStackLine);
-    return parsedLines[0];
+    return new LocationInfo(
+        parsedLines[0].identifier, 
+        parsedLines[0].filePath, 
+        parsedLines[0].lineNumber, 
+        parsedLines[0].columnNumber
+    );
 }
 
 /**
@@ -153,63 +289,11 @@ const getLogTag = (stackOffset = 0) => {
     return basename(_fileLocationFromStackFrame(stackOffset + 1).filePath)
 };
 
-
 const logTag = getLogTag();
-if (process.env.DEBUG) {
+if (DEBUG && process.env.DEBUG) {
     console.log(`DEBUG: File: ${logTag}`);
 }
 
-
-class Location {
-
-    /**
-     * An array of file location hits.
-     * @type { { identifier: string, filePath: string, lineNumber: number, columnNumber: number }[] }
-     */
-    static _hits = [];
-    static get hits() {
-        return Location._hits;
-    }
-
-    /**
-     * Get the file location of the calling function.
-     * @param {number} [stackOffset=0] 
-     * @returns {{ identifier: string, filePath: string, lineNumber: number, columnNumber: number }}
-     */
-    static getThisLocation = (stackOffset = 0) => {
-        return _fileLocationFromStackFrame(stackOffset + 1);
-    }
-
-    /**
-     * Print the file location hits to the console.
-     */
-    static report = () => {
-        console.log(`<static> Location.hits:`);
-        console.table(Location.hits);
-    }
-
-    /**
-     * Add the file location of the calling function to the hits array.
-     * @param {number} [stackOffset=0]
-     * @returns {void}
-     */
-    static logThisLocation = (stackOffset = 0) => {
-        Location._hits.push(new Location(stackOffset + 1).location);
-    }
-
-    constructor(stackOffset = 0) {
-        this._location = Location.getThisLocation(stackOffset + 1);
-    };
-
-    /**
-     * The location of where the instance was created.
-     * @type { { identifier: string, filePath: string, lineNumber: number, columnNumber: number } }
-     */
-    _location;
-    get location() {
-        return this._location;
-    }
-}
 
 export default void 0;
 export { 

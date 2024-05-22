@@ -1,0 +1,3 @@
+packages:
+  - 'packages/*/package.json'      # local packages src
+  - 'packages/*/dist/package.json' # local packages dist

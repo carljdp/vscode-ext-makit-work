@@ -4,6 +4,16 @@
         "ryu1kn.partial-diff",
         "koalamer.workspace-in-status-bar",
         "mikestead.dotenv",
-        "compulim.vscode-clock"
+        "compulim.vscode-clock",
+        "hbenl.vscode-test-explorer",
+        "ms-vscode.test-adapter-converter",
+        "hbenl.vscode-mocha-test-adapter",
+        "connorshea.vscode-test-explorer-status-bar",
+        "maty.vscode-mocha-sidebar",
+        "spmeesseman.vscode-taskexplorer",
+        "microhobby.vscode-tasks-label",
+        "gruntfuggly.todo-tree",
+        "github.copilot",
+        "github.copilot-chat"
     ]
 }

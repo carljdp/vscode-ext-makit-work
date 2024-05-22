@@ -1,5 +1,5 @@
 {
-    "extends": "./tsconfig.json",
+    "extends": "./tsconfig.reset.json",
     //
     // This serves as a base for apps to be bundled into a single file
     // - like with webapps
@@ -10,7 +10,7 @@
         // to compile the project
         "noEmit": true,
         //
-        "module": "es2022", // === "esnext"
+        "module": "es2022", // es2022 === esnext
         // allow more lax import checking 
         // - allow importing from 3rd party modules that might
         //   not be included in the bundle.
