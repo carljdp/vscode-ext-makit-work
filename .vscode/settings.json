@@ -1,5 +1,10 @@
 {
     //
+    "workbench.settings.useSplitJSON": true,
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "debug.console.collapseIdenticalLines": false,
+    //
+    //
     "json.schemaDownload.enable": true,
     "json.schemas": [
         {
@@ -25,7 +30,6 @@
     //
     "testExplorer.useNativeTesting": true,
     //
-    "eslint.packageManager": "pnpm",
     "eslint.enable": true,
     "eslint.run": "onType",
     // "eslint.debug": false,

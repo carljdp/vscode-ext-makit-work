@@ -1,11 +1,21 @@
 // file: <package-root>/.dev/swc-configs-generate.mjs
 "use strict";
 
-import fs from 'fs';
-import lodash from 'lodash';
-const { merge, cloneDeep } = lodash;
+import Fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+import Lodash from 'lodash';
+const { merge, cloneDeep } = Lodash;
 
 import { SwcConfigs, SwcPresets } from './swc-configs-defaults.js';
+
+
+
+
+
 
 /**
  * @typedef {typeof SwcConfigs._rcExtendedDefaults} SwcRcConfig
@@ -61,7 +71,7 @@ const composeRcConfigFileObj = (buildTargetDetails) => {
  * @returns {void}
  */
 const writeRcConfigFile = (buildTargetDetails) => {
-    fs.writeFileSync(
+    Fs.writeFileSync(
         `./.swcrc.${buildTargetDetails.key}.json`,
         JSON.stringify(composeRcConfigFileObj(buildTargetDetails), null, 4)
     );
@@ -96,7 +106,7 @@ const composeCliConfigFileObj = (buildTargetDetails) => {
  * @returns {void}
  */
 const writeCliConfigFile = (buildTargetDetails) => {
-    fs.writeFileSync(
+    Fs.writeFileSync(
         `./.swc.cli.${buildTargetDetails.key}.json`,
         JSON.stringify(composeCliConfigFileObj(buildTargetDetails), null, 4));
 }

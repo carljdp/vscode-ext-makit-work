@@ -1,7 +1,7 @@
 {
-    "name": "bootstrap-devtools",
+    "name": "startx-devt",
     "version": "0.0.1-dev",
     "description": "Dev-time plain JavaScript tools & scripts that can be run as-is without requiring compilation.",
     "type": "module",
-    "main": "index.js"
+    "module": "index.js"
 }

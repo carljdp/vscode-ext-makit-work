@@ -1,36 +1,42 @@
-// src-file: ./src/bootstrap/src/index.ts
 
 /**
- * @fileoverview
+ * @fileoverview A Node.js script to bootstrap a Node.js application with common configurations.
+ * 
  * - Register SWC's ESM loader with Node.js (to support loading TypeScript files)
  * - Load environment variables from a `.env` file
  */
 
 
-// Imports
-
-
 import { register } from 'node:module';
 import { pathToFileURL } from 'node:url';
 
-import lodash from 'lodash';
-const { merge } = lodash;
-
 import { config } from 'dotenv';
 
+import Lodash from 'lodash';
+const { merge } = Lodash;
 
-// Types
+import { getLogTag } from '../devt/common/locations.js';
+const logTag = getLogTag();
+
+
+// CONSTANTS
+
+
+const DEBUG = false;
+
+
+// IMPLEMENTATION
+
+if (DEBUG && process.env.DEBUG) { 
+    console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
+}
+
 
 interface RegisterOptions {
     parentURL: string | URL;
     data: any | undefined;
     transferList: any[] | undefined;
 };
-
-
-// Constants
-
-const logTag = `bootstrap`
 
 const baseOptions: RegisterOptions = {
     parentURL: pathToFileURL('./'),
@@ -52,7 +58,7 @@ const modulesToRegister: Map<string, RegisterOptions> = new Map([
 
 const cliArgsRaw = process.argv
     .slice(2)
-    .filter(arg => arg.startsWith('--bootstrap-args='))
+    .filter(arg => arg.startsWith('--startx-args='))
     .map(arg => arg.split('=')[1]);
 
 const cliArgsParsed = cliArgsRaw
@@ -79,7 +85,7 @@ const dotenvResult = config({ path: DOTENV_FILE });
 
 console.log(``);
 if (LOG_VERBOSE) {
-    console.log(`[${logTag}] --bootstrap-args=\n${JSON.stringify(cliArgsParsedFlat, null, 4)}`);
+    console.log(`[${logTag}] --startx-args=\n${JSON.stringify(cliArgsParsedFlat, null, 4)}`);
     console.log(`[${logTag}] dotenv: ${JSON.stringify(dotenvResult, null, 4)}`);
 }
 
@@ -94,3 +100,8 @@ modulesToRegister.forEach((options, specifier) => {
 
 console.log(`[${logTag}] Done.`);
 console.log(``);
+
+
+if (DEBUG && process.env.DEBUG) { 
+    console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
+}
