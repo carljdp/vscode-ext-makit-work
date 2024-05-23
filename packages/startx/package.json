@@ -1,0 +1,54 @@
+{
+    "name": "startx",
+    "version": "0.0.1-dev",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "scripts": {
+        "check-conf:eslint": "npx @eslint/config-inspector",
+        "check-conf:tsconf": "npx tsc -p tsconfig.esm.json -p tsconfig.esm.json --showConfig",
+        "lint:cjs": "eslint -c eslint.config.mjs src",
+        "lint:esm": "eslint -c eslint.config.mjs src",
+        "lint+fix": "eslint -c eslint.config.mjs src --fix",
+        "typecheck": "tsc --project tsconfig.json --noEmit",
+        "compile:pre": "node ../startx/devt/swc-configs-generate.js",
+        "compile:cjs": "swc --cli-config-file .swc.cli.cjs.json src",
+        "compile:esm": "swc --cli-config-file .swc.cli.esm.json src",
+        "compile:post": "node ../startx/devt/copy-package-json.mjs",
+        "compile": "npx pnpm run compile:pre && npx pnpm run compile:cjs && npx pnpm run compile:esm && npx pnpm run compile:post"
+    },
+    "devDependencies": {
+        "@swc/cli": "^0.3.12",
+        "@swc/core": "^1.5.5",
+        "@swc/helpers": "^0.5.11",
+        "@swc/types": "^0.1.6",
+        "@types/chai": "^4.3.16",
+        "@types/lodash": "^4.17.1",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "^20.12.12",
+        "@vscode/test-cli": "^0.0.9",
+        "bundle-require": "^4.1.0",
+        "chai": "^5.1.1",
+        "chokidar": "^3.6.0",
+        "concurrently": "^8.2.2",
+        "esbuild": "^0.21.3",
+        "eslint": "^9.2.0",
+        "globals": "^15.2.0",
+        "json5": "^2.2.3",
+        "jsonc-parser": "^3.2.1",
+        "mocha": "^10.4.0",
+        "nyc": "^15.1.0",
+        "rimraf": "^5.0.5",
+        "ts-node": "^10.9.2",
+        "type-fest": "^4.18.2",
+        "typescript": "^5.4.5",
+        "typescript-eslint": "^7.8.0"
+    },
+    "dependencies": {
+        "@swc-node/register": "^1.9.1",
+        "dotenv": "^16.4.5",
+        "lodash": "^4.17.21"
+    },
+    "engines": {
+        "node": ">=21.7.3"
+    }
+}

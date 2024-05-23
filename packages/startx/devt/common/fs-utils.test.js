@@ -1,6 +1,5 @@
 
 import Path from 'node:path';
-import Utils from 'node:util';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
@@ -8,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 import Lodash from 'lodash';
-const { cloneDeep, forIn, pick } = Lodash;
+const { cloneDeep, forIn } = Lodash;
 
 import { JsonFile } from './fs-utils.js';
 

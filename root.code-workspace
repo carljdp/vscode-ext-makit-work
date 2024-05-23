@@ -16,8 +16,10 @@
 			// "**/pnpm-lock.yaml": true,
 		},
 		//
-		"explorer.compactFolders": false,
+		"workbench.settings.useSplitJSON": true,
+		"terminal.integrated.defaultProfile.windows": "Git Bash",
 		"debug.console.collapseIdenticalLines": false,
+		"explorer.compactFolders": false,
 		"git.confirmSync": false,
 		//
 		"json.schemaDownload.enable": true,

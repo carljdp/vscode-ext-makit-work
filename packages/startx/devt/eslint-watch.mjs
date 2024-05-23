@@ -1,12 +1,7 @@
-// eslint-watch.mjs
-import { exec } from 'child_process';
-import Chokidar from 'chokidar';
-import Path, { dirname, resolve } from 'path';
-import FsAsync from 'fs/promises';
-import { fileURLToPath } from 'url';
-import { bundleRequire } from 'bundle-require';
 
 /**
+ * @file ESLint Watcher (CLI Script)
+ * 
  * @todo
  * - [ ] gracefully handle if the 'changed' file was deleted/renamed/moved/not found
  * - [ ] if the 'changed' file is a directory, then lint all files in that directory
@@ -17,13 +12,17 @@ import { bundleRequire } from 'bundle-require';
  */
 
 
-// TODO: (general interest) investigate how this `require` usage in a module is normally used, and when.
-// import { createRequire } from 'module';
-// const require = createRequire(import.meta.url);
-// const eslintConfigPath = path.resolve(process.cwd(), 'eslint.config.mjs');
-
+import { exec } from 'child_process';
+import Chokidar from 'chokidar';
+import Path, { dirname, resolve } from 'path';
+import FsAsync from 'fs/promises';
+import { bundleRequire } from 'bundle-require';
 import { getLogTag } from './common/locations.js';
 const logTag = getLogTag();
+
+
+// CONSTANTS
+
 
 const DEBUG = true;
 const DRY_RUN = false;
@@ -38,6 +37,11 @@ const ESLINT_CONFIG_FILE = 'eslint.config.mjs';
 
 const ESLINT_CACHE_FILE = '.cache/eslint';
 const ESLINT_CACHE_CLEAN_ON_START = true;
+
+
+// IMPLEMENTATION
+
+
 
 
 
@@ -73,9 +77,6 @@ class LogUtil{
 //     return configs;
 // }
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 // Function to resolve the ESLint configuration path
 async function resolveConfigFilePath(cwd) {

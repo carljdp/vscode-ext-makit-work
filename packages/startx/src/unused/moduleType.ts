@@ -11,14 +11,14 @@ function detectModuleType() {
     // Check for ESM compatibility
     try {
         isESM = new Function('return typeof import.meta.url === "string"')();
-    } catch (error) {
+    } catch {
         isESM = false;
     }
 
     // Check for CommonJS compatibility
     try {
         isCJS = typeof module === 'object' && module.exports;
-    } catch (error) {
+    } catch {
         isCJS = false;
     }
 

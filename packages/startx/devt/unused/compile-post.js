@@ -1,8 +1,10 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
-import { pathExistsAsync } from '.devtools/common/fs-utils.js';
+// Update:
+// - This script is no longer used.
+// - It was replaced by the 'copy-package-json.js' script.
+// - though this script had a slightly different purpose of renaming file extensions.
+//   - but ext renaiming was no longer needed after the migration to swc.
+
 
 /**
  * @fileoverview
@@ -13,13 +15,21 @@ import { pathExistsAsync } from '.devtools/common/fs-utils.js';
  *   - so that when imported, the package.json tell the importing module that it is an ESM or CJS module.
  */
 
-/** 
- * @type {(filePath: string) => boolean}
- * @todo this filter function is an afterthought, but it's a good idea to have one
- */
-const filePathFilter = (filePath) => {
-    return path.basename(filePath) === 'index.jsx';
-};
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { pathExistsAsync } from './devt/common/fs-utils.js';
+import { getLogTag } from '../common/locations.js';
+const _logTag = getLogTag();
+
+
+// CONSTANTS
+
+
+const DEBUG = false;
+
+
+// CLI ARGUMENTS
 
 
 const fallbackArgs = {
@@ -36,10 +46,26 @@ const combinedArgs = {
     dryRun: Boolean(process.argv[5] || fallbackArgs.dryRun)
 };
 
-const logTag = combinedArgs.dryRun
-    ? `compile-suf (dry-run)`
-    : `compile-suf`;
 
+// IMPLEMENTATION
+
+
+const logTag = combinedArgs.dryRun
+    ? `${_logTag} (dry-run)`
+    : `${_logTag}`;
+
+if (DEBUG && process.env.DEBUG) { 
+    console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
+}
+
+
+/** 
+ * @type {(filePath: string) => boolean}
+ * @todo this filter function is an afterthought, but it's a good idea to have one
+ */
+const filePathFilter = (filePath) => {
+    return path.basename(filePath) === 'index.jsx';
+};
 
 const importMetaFile = import.meta.url;
 const importMetaDir = path.dirname(importMetaFile);
@@ -198,3 +224,7 @@ async function run({ packageName, scriptsDir, outputDir, dryRun = true }) {
 
 
 run(combinedArgs);
+
+if (DEBUG && process.env.DEBUG) { 
+    console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
+}

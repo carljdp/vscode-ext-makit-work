@@ -1,6 +1,0 @@
-{
-    "name": "bootstrap",
-    "version": "0.0.1-dev",
-    "main": "index.js",
-    "type": "module"
-}
