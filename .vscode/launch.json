@@ -8,8 +8,10 @@
             "name": "Debug current file",
             "type": "node",
             "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "node",
             "runtimeArgs": [
-                "--enable-source-maps",
+                // "--enable-source-maps",
                 "--env-file",
                 "./.env.experiments",
                 // "--import",
@@ -23,7 +25,7 @@
                 ".history/**",
                 ".git/**",
             ],
-            "program": "${workspaceFolder}/${relativeFile}",
+            "program": "${relativeFile}",
         }
     ]
 }

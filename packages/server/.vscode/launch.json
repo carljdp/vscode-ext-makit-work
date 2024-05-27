@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug current file",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "node",
+            "runtimeArgs": [
+                // "--enable-source-maps",
+                "--env-file",
+                "../../.env.experiments",
+                // "--import",
+                // "./packages/startx/dist/esm/index.js",
+                // "--require",
+                // "./packages/startx/dist/cjs/index.js",
+            ],
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**",
+                ".history/**",
+                ".git/**",
+            ],
+            "program": "${relativeFile}",
+        },
+        // {
+        //     "type": "node",
+        //     "request": "launch",
+        //     "name": "Launch Current TS File",
+        //     "runtimeArgs": [
+        //         // "--import=../startx/dist/esm/index.js",
+        //         "--import=./bootstrap.mjs",
+        //     ],
+        //     "args": [
+        //         "${relativeFile}",
+        //         "--cli-server-args={\\\"path\\\":\\\"./dist/esm\\\",\\\"port\\\":\\\"3000\\\",\\\"filesAsHtml\\\":\\\"false\\\"}"
+        //     ],
+        //     "console": "integratedTerminal",
+        //     "skipFiles": [
+        //         "<node_internals>/**",
+        //         "node_modules/**"
+        //     ],
+        //     "internalConsoleOptions": "openOnSessionStart"
+        // }
+    ]
+}

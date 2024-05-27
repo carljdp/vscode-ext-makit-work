@@ -7,20 +7,28 @@
 	"settings": {
 		"files.exclude": {
 			"**/.git": true,
-			// "**/.history": true,
-			// "**/.cache": true,
-			// "**/.nyc_output": true,
-			// "**/node_modules": true,
+			"**/.history": true,
+			"**/.cache": true,
+			"**/.nyc_output": true,
+			"**/node_modules": true,
 			"**/.DS_Store": true,
 			"**/Thumbs.db": true,
 			// "**/pnpm-lock.yaml": true,
+		},
+		"search.exclude": {
+		// 	".cache": true,
+			".history": true,
+		// 	"build": true,
+		// 	"dist": true,
+		// 	"out": true,
+		// 	"output": true,
+		// 	"tmp": true
 		},
 		//
 		"workbench.settings.useSplitJSON": true,
 		"terminal.integrated.defaultProfile.windows": "Git Bash",
 		"debug.console.collapseIdenticalLines": false,
 		"explorer.compactFolders": false,
-		"git.confirmSync": false,
 		//
 		"json.schemaDownload.enable": true,
 		"json.schemas": [
@@ -47,12 +55,18 @@
 		//
 		"testExplorer.useNativeTesting": true,
 		//
-		"eslint.enable": true,
+		// Experimental: turn off builtin eslint/typescript
+		//
+		"typescript.validate.enable": false,
+		"typescript.format.enable": false,
+		//
+		"eslint.enable": false,
+		"eslint.lintTask.enable": false,
+		"eslint.format.enable": false,
+		//
 		"eslint.run": "onType",
 		// "eslint.debug": false,
 		"eslint.experimental.useFlatConfig": true,
-		"eslint.format.enable": true,
-		"eslint.lintTask.enable": true,
 		// "eslint.lintTask.options": "-c eslint.config.mjs",
 		// "eslint.onIgnoredFiles": "warn",
 		"eslint.useESLintClass": true,

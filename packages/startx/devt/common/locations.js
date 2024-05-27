@@ -504,11 +504,22 @@ const _fileLocationFromStackFrame = (stackOffset = 0) => {
 
 /**
  * Utility function that returns the filename where the function is invoked.
- * @param {number} [stackOffset=0] - The stack offset.
+ * 
  * @returns {string} The file name.
  */
-const getLogTag = (stackOffset = 0) => {
-    return Path.basename(_fileLocationFromStackFrame(stackOffset + 1)._fullFilePath);
+const getLogTag = (options = {filebase: true, dirbase: true, stackOffset: 0}) => {
+    const opts = {
+        filebase: options.filebase === undefined ? true : Boolean(options.filebase),
+        dirbase: options.dirbase === undefined ? true : Boolean(options.dirbase),
+        stackOffset: options.stackOffset === undefined ? 0 : Number(options.stackOffset)
+    };
+    const fullFilePath = _fileLocationFromStackFrame(opts.stackOffset + 1)._fullFilePath;
+    const parts = [
+        opts.dirbase ? Path.basename(Path.dirname(fullFilePath)) : "",
+        opts.filebase ? Path.basename(fullFilePath) : "",
+    ]
+
+    return parts.filter(Boolean).join('/');
 };
 
 
