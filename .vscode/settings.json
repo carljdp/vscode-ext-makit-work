@@ -24,8 +24,7 @@
     "debug.console.collapseIdenticalLines": false,
     "explorer.compactFolders": false,
     //
-    //
-    "json.schemaDownload.enable": true,
+    "json.schemaDownload.enable": false, // in an attempt to fix the "schema not found" error
     "json.schemas": [
         {
             "url": "https://json.schemastore.org/package.json",

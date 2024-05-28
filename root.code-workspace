@@ -25,12 +25,12 @@
 		// 	"tmp": true
 		},
 		//
-		"workbench.settings.useSplitJSON": true,
+		"workbench.settings.useSplitJSON": true, 
 		"terminal.integrated.defaultProfile.windows": "Git Bash",
 		"debug.console.collapseIdenticalLines": false,
 		"explorer.compactFolders": false,
 		//
-		"json.schemaDownload.enable": true,
+		"json.schemaDownload.enable": false,  // in an attempt to fix the "schema not found" error
 		"json.schemas": [
 			{
 				"url": "https://json.schemastore.org/package.json",
@@ -78,6 +78,36 @@
 		],
 		"eslint.workingDirectories": [
 			"${workspaceFolder}",
+		],
+		//
+		//
+		"mocha.path": "node_modules/mocha",
+		"mocha.showErrorPopup": false,
+		"mocha.files.glob": "**/*.test.js",
+		"mocha.files.ignore": [
+				"**/node_modules/**",
+				"**/dist/**",
+				"**/out/**",
+				"**/output/**",
+				"**/build/**",
+				"**/tmp/**",
+				"**/temp/**",
+				"**/.history/**",
+				"**/.cache/**",
+			],
+		//
+		"mochaExplorer.logpanel": true,
+		"mochaExplorer.files": "**/*.test.js",
+		"mochaExplorer.ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/out/**",
+			"**/output/**",
+			"**/build/**",
+			"**/tmp/**",
+			"**/temp/**",
+			"**/.history/**",
+			"**/.cache/**",
 		],
 		//
 	},
