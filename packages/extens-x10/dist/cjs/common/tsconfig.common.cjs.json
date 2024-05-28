@@ -1,0 +1,17 @@
+// file: tsconfig.common.cjs.json
+{
+	"extends": "./tsconfig.json",
+	// "compilerOptions": {
+	// 	"module": "CommonJS",
+	// 	// TODO: Hardcoded - bad
+	// 	"outDir": "./dist/common/cjs",
+	// 	"declaration": true,
+	// 	"sourceMap": true,
+	// 	"allowJs": true,
+	// 	"checkJs": true,
+	// },
+	// "include": [
+	// 	// TODO: Hardcoded - bad
+	// 	"./src/common/cjs/**/*"
+	// ],
+}
