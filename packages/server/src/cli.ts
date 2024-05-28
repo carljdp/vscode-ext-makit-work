@@ -185,7 +185,7 @@ app.get('/favicon.ico', (req: express.Request, res: express.Response) => {
 app.get('*', (req: express.Request, res: express.Response) => {
     console.log(`[${logTag}] GET: ${req.url}`);
 
-    let decodedUrl = req.url;
+    const decodedUrl = req.url;
 
     if (decodedUrl.match(/(\.\.|\\\\|\/\/)/)) {
         console.warn(`[${logTag}] Suspicious route: ${decodedUrl}`);
@@ -294,12 +294,12 @@ function dirListingAsHtmlStr(config: ServerConfig, path: string): string | Error
         .filter(item => !item.isDir)
         .sort((a, b) => a.name.localeCompare(b.name));
 
-    let htmlListItems = [...sortedDirs, ...sortedFiles]
+    const htmlListItems = [...sortedDirs, ...sortedFiles]
         .map(item => {
             return `<li><a href="${item.url}">${item.name}</a></li>`;
         }).join('\n')
 
-    let htmlTemplate = `
+    const htmlTemplate = `
 <!DOCTYPE html>
 <html lang="en">
 <head>

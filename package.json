@@ -2,23 +2,33 @@
     "name": "vscode-ext-makit-work",
     "version": "0.0.1-dev",
     "description": "",
-    "author": "Carl J du Preez <https://linktr.ee/carljdp>",
+    "author": {
+        "name": "Carl J du Preez",
+        "email": "carljdp@gmail.com",
+        "url": "https://linktr.ee/carljdp"
+    },
+    "publisher": "carljdp",
     "license": "Proprietary",
     "private": true,
-    "workspaces": [
-        "packages/*"
-    ],
+    "type": "module",
+    "module": "src/index.ts",
     "scripts": {
         "reinstall": "npx pnpm install --loglevel error",
-        "startx-cjs": "startx-cjs",
-        "startx-esm": "startx-esm",
-        "check-conf:eslint": "npx @eslint/config-inspector",
-        "check-conf:tsconf": "npx tsc -p tsconfig.cjs.json --showConfig && npx tsc -p tsconfig.esm.json --showConfig",
-        "lint:report": "eslint --config eslint.config.mjs --cache --cache-location .cache",
-        "lint:report-watch": "node package/startx/devt/eslint-watch.mjs --config eslint.config.mjs --cache --cache-location .cache",
-        "lint:fix-dry": "eslint --config eslint.config.mjs --cache --cache-location .cache --fix-dry-run",
-        "lint:fix": "eslint --config eslint.config.mjs --cache --cache-location .cache --fix",
-        "test": "mocha --config .mocharc.cjs"
+        "check-eslint": "npx @eslint/config-inspector",
+        "check-tsconf": "npx tsc -p tsconfig.cjs.json --showConfig && npx tsc -p tsconfig.esm.json --showConfig",
+        "lint-once": "eslint --config eslint.config.mjs --cache --cache-location .cache",
+        "lint-watch": "node ./packages/startx/devt/eslint-watch.mjs --config eslint.config.mjs --cache --cache-location .cache",
+        "lint-fix:dry": "eslint --config eslint.config.mjs --cache --cache-location .cache --fix-dry-run",
+        "lint-fix:do": "eslint --config eslint.config.mjs --cache --cache-location .cache --fix",
+        "lint-typecheck": "tsc --project tsconfig.json --noEmit",
+        "build-run:pre": "node ./packages/startx/devt/swc-configs-generate.js",
+        "build-swc:cjs": "swc --cli-config-file .swc.cli.cjs.json src",
+        "build-swc:esm": "swc --cli-config-file .swc.cli.esm.json src",
+        "build-run:post": "node ./packages/startx/devt/copy-package-json.mjs",
+        "build-all": "npm run build-run:pre && npm run build-swc:cjs && npm run build-swc:esm && npm run build-run:post",
+        "test": "mocha --config .mocharc.cjs",
+        "bin-startx:dist:cjs": "startx-cjs",
+        "bin-startx:dist:esm": "startx-esm"
     },
     "devDependencies": {
         "@eslint/config-inspector": "^0.4.8",
@@ -27,30 +37,37 @@
         "@swc/cli": "^0.3.12",
         "@swc/core": "^1.5.7",
         "@types/chai": "^4.3.16",
+        "@swc/helpers": "^0.5.11",
+        "@swc/types": "^0.1.6",
         "@types/eslint": "^8.56.10",
         "@types/eslint__js": "^8.42.3",
         "@types/lodash": "^4.17.4",
         "@types/mocha": "^10.0.6",
-        "@vscode/test-cli": "^0.0.9",
-        "bundle-require": "^4.1.0",
-        "chai": "^5.1.1",
-        "chokidar": "^3.6.0",
+        "@types/node": "^20.12.11",
         "esbuild": "^0.21.3",
         "eslint": "^9.3.0",
-        "glob": "^10.3.16",
-        "globals": "^15.1.0",
+        "globals": "^15.3.0",
         "lodash": "^4.17.21",
-        "minimatch": "^9.0.4",
+        "chai": "^5.1.1",
         "mocha": "^10.4.0",
         "nyc": "^15.1.0",
         "startx": "workspace:./packages/startx/dist",
         "ts-node": "^10.9.2",
         "typescript": "^5.4.5",
-        "typescript-eslint": "^7.10.0"
+        "typescript-eslint": "^7.10.0",
+        "bundle-require": "^4.1.0",
+        "chokidar": "^3.6.0",
+        "glob": "^10.3.16",
+        "minimatch": "^9.0.4"
+    },
+    "dependencies": {
     },
     "engines": {
-        "vscode": "^1.89.0",
-        "node": "^21.7.3"
+        "node": "^21.7.3",
+        "vscode": "^1.89.0"
     },
+    "workspaces": [
+        "packages/*"
+    ],
     "$schema": "https://json.schemastore.org/package.json"
 }

@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"path": "."
-		}
+		},
 	],
 	"settings": {
 		"files.exclude": {
@@ -13,7 +13,11 @@
 			"**/node_modules": true,
 			"**/.DS_Store": true,
 			"**/Thumbs.db": true,
-			// "**/pnpm-lock.yaml": true,
+			//
+			// lockfiles
+			"**/pnpm-lock.yaml": true,
+			"**/yarn.lock": true,
+			"**/package-lock.json": true,
 		},
 		"search.exclude": {
 		// 	".cache": true,
@@ -35,7 +39,7 @@
 			{
 				"url": "https://json.schemastore.org/package.json",
 				"fileMatch": [
-					"**/?(.*|*)**/package.json{c,5,}"
+					"**/?(.*|*)**/package.json{c,5,}",
 				],
 			},
 			{
@@ -53,8 +57,6 @@
 			},
 		],
 		//
-		"testExplorer.useNativeTesting": true,
-		//
 		// Experimental: turn off builtin eslint/typescript
 		//
 		"typescript.validate.enable": false,
@@ -65,67 +67,99 @@
 		"eslint.format.enable": false,
 		//
 		"eslint.run": "onType",
-		// "eslint.debug": false,
 		"eslint.experimental.useFlatConfig": true,
-		// "eslint.lintTask.options": "-c eslint.config.mjs",
-		// "eslint.onIgnoredFiles": "warn",
 		"eslint.useESLintClass": true,
-		"eslint.validate": [
-			"javascript",
-			"typescript",
-			"json",
-			"yaml",
-		],
 		"eslint.workingDirectories": [
-			"${workspaceFolder}",
+			"./",
+			"./packages/*",
 		],
 		//
-		//
-		"mocha.path": "node_modules/mocha",
-		"mocha.showErrorPopup": false,
-		"mocha.files.glob": "**/*.test.js",
-		"mocha.files.ignore": [
-				"**/node_modules/**",
-				"**/dist/**",
-				"**/out/**",
-				"**/output/**",
-				"**/build/**",
-				"**/tmp/**",
-				"**/temp/**",
-				"**/.history/**",
-				"**/.cache/**",
-			],
-		//
-		"mochaExplorer.logpanel": true,
-		"mochaExplorer.files": "**/*.test.js",
-		"mochaExplorer.ignore": [
-			"**/node_modules/**",
-			"**/dist/**",
-			"**/out/**",
-			"**/output/**",
-			"**/build/**",
-			"**/tmp/**",
-			"**/temp/**",
-			"**/.history/**",
-			"**/.cache/**",
-		],
+		// //
+		// "testExplorer.useNativeTesting": true,
+		// //
+		// "mocha.path": "node_modules/mocha",
+		// "mocha.showErrorPopup": false,
+		// "mocha.files.glob": "**/*.test.js",
+		// "mocha.files.ignore": [
+		// 		"**/node_modules/**",
+		// 		"**/dist/**",
+		// 		"**/out/**",
+		// 		"**/output/**",
+		// 		"**/build/**",
+		// 		"**/tmp/**",
+		// 		"**/temp/**",
+		// 		"**/.history/**",
+		// 		"**/.cache/**",
+		// 	],
+		// //
+		// "mochaExplorer.logpanel": true,
+		// "mochaExplorer.files": "**/*.test.js",
+		// "mochaExplorer.ignore": [
+		// 	"**/node_modules/**",
+		// 	"**/dist/**",
+		// 	"**/out/**",
+		// 	"**/output/**",
+		// 	"**/build/**",
+		// 	"**/tmp/**",
+		// 	"**/temp/**",
+		// 	"**/.history/**",
+		// 	"**/.cache/**",
+		// ],
 		//
 	},
 	"extensions": {
 		"recommendations": [
-			"dbaeumer.vscode-eslint",
+			//
+			// Foundational
 			"ryu1kn.partial-diff",
-			"koalamer.workspace-in-status-bar",
 			"mikestead.dotenv",
+			"EditorConfig.EditorConfig",
+			//
+			// UI Widgets
 			"compulim.vscode-clock",
-			"hbenl.vscode-test-explorer",
-			"ms-vscode.test-adapter-converter",
-			"hbenl.vscode-mocha-test-adapter",
-			"connorshea.vscode-test-explorer-status-bar",
-			"maty.vscode-mocha-sidebar",
+			"koalamer.workspace-in-status-bar",
+			//
+			// autorun
+			"philfontaine.autolaunch",
+			"zoma.vscode-auto-open-workspace",
+			"matt-rudge.auto-open-preview-panel",
+			//
+			// Disaster recovery
+			"xyz.local-history",
+			//
+			// Explorers: todo
+			"gruntfuggly.todo-tree",
+			//
+			// Explorers: bookmarks
+			// "alefragnani.Bookmarks",
+			// "koalamer.labeled-bookmarks",
+			// "alefragnani.numbered-bookmarks",
+			// "tintinweb.vscode-inline-bookmarks",
+			//
+			// Explorers: regions
+			// "SantaCodes.santacodes-region-viewer",
+			//
+			// Explorers: git
+			// "eamodio.gitlens",
+			//
+			// Explorers: tasks
 			"spmeesseman.vscode-taskexplorer",
 			"microhobby.vscode-tasks-label",
-			"gruntfuggly.todo-tree"
+			//
+			// Explorers: tests
+			// "hbenl.vscode-test-explorer",
+			// "connorshea.vscode-test-explorer-status-bar",
+			// "maty.vscode-mocha-sidebar",
+			//
+			// Linting/Formatting/Testing
+			// "dbaeumer.vscode-eslint",
+			// "esbenp.prettier-vscode",
+			// "ms-vscode.test-adapter-converter",
+			// "hbenl.vscode-mocha-test-adapter",
+			//
+			// Unshitification
+			"Soulcode.vscode-unwanted-extensions",
+			//
 		]
 	},
 	

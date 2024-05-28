@@ -7,35 +7,52 @@ import { inspect } from 'node:util';
 import { getLogTag } from '../../packages/startx/devt/common/locations.js';
 const logTag = getLogTag();
 
+// CONSTANTS
 
-// CONSTANTS & SETTINGS
+/** 
+ * @constant {boolean} DEBUG_THIS - Manual debug flag for this script.
+ */
+const DEBUG_THIS = false;
 
-
-const DEBUG = false;
+/** 
+ * @constant {boolean} DEBUG_PAUSE - Whether to hit a breakpoint at the end of the script.
+ */
 const DEBUG_PAUSE = false;
+
+/** 
+ * @constant {boolean} LOG_VERBOSE - Whether to log out the configurations in detail.
+ * These verbose logs are not nested inside `DEBUG` blocks, as it can be useful even when `DEBUG` is false.
+ */
 const LOG_VERBOSE = false;
 
 
 // IMPLEMENTATION
 
 
-if (DEBUG) { 
-    console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
-}    
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
+
 
 import { makeConfig, RuleSet, SourceType, LangType } from "../../eslint.config.mjs";
+
+
+const theUsualSuspects = [
+    'node_modules',
+    '.history',
+    '.cache',
+];
+
 const configs = [
         // src / <esm|cjs> / ts
-        makeConfig(RuleSet.src.id, SourceType.module.id, LangType.ts.id, ['src'], ['dist'], false ),
-        makeConfig(RuleSet.src.id, SourceType.commonjs.id, LangType.ts.id, ['src'], ['dist'], false ),
+        makeConfig(RuleSet.src.id, SourceType.module.id, LangType.ts.id, ['src'], ['dist', ...theUsualSuspects], false ),
+        makeConfig(RuleSet.src.id, SourceType.commonjs.id, LangType.ts.id, ['src'], ['dist', ...theUsualSuspects], false ),
 
         // src / <esm|cjs> / js
-        makeConfig(RuleSet.src.id, SourceType.module.id, LangType.js.id, ['src'], ['dist'], false ),
-        makeConfig(RuleSet.src.id, SourceType.commonjs.id, LangType.js.id, ['src'], ['dist'], false ),
+        makeConfig(RuleSet.src.id, SourceType.module.id, LangType.js.id, ['src'], ['dist', ...theUsualSuspects], false ),
+        makeConfig(RuleSet.src.id, SourceType.commonjs.id, LangType.js.id, ['src'], ['dist', ...theUsualSuspects], false ),
 
         // dist / <esm|cjs> / js
-        makeConfig(RuleSet.dist.id, SourceType.module.id, LangType.js.id, ['dist'], ['src'], false ),
-        makeConfig(RuleSet.dist.id, SourceType.commonjs.id, LangType.js.id, ['dist'], ['src'], false ),
+        makeConfig(RuleSet.dist.id, SourceType.module.id, LangType.js.id, ['dist'], ['src', ...theUsualSuspects], false ),
+        makeConfig(RuleSet.dist.id, SourceType.commonjs.id, LangType.js.id, ['dist'], ['src', ...theUsualSuspects], false ),
 ];
 
 
@@ -64,19 +81,11 @@ if (LOG_VERBOSE) {
 }
 
 
+// EXPORTS
+
+
 export default configs;
 
 
-if (DEBUG) { 
-    console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
-
-    if (DEBUG_PAUSE) {
-
-        debugger;
-
-        // or
-        // console.log(`[${logTag}] Pausing...`);
-        // process.stdin.resume();
-    }
-
-}
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
+if (process.env.DEBUG && DEBUG_THIS && DEBUG_PAUSE) debugger;

@@ -35,30 +35,50 @@ const logTag = getLogTag();
 // CONSTANTS
 
 
-const DEBUG = true;
+const DEBUG = false;
 
 
-// arbitrary number, but it should be high enough to be confident that this is the root of a package
+// an arbitrary number, but it should be high enough
+// to be confident that this is the root of a package
 const THRESHOLD_SCORE = 12;
+
+
+const STRINGIFY_PAD = 4;
+
+
+const File = {
+    packageJson: 'package.json',
+    fallbackEntry: 'index.js',
+};
+
+
+const Dir = {
+    src: 'src',
+    dist: 'dist',
+}
+
+
+const ModSys = {
+    cjs: {
+        dir: 'cjs',
+        sourceType: 'commonjs',
+        entryPointKey: 'main',
+    },
+    esm: {
+        dir: 'esm',
+        sourceType: 'module',
+        entryPointKey: 'module',
+    },
+}
 
 
 // IMPLEMENTATION
 
 
-if (DEBUG && process.env.DEBUG) { 
-    console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
-}
-
-const scriptMeta = new Location();
-
-const thisFilePath = scriptMeta.originLocation.toPath();
-const thisDirPath = Path.dirname(thisFilePath);
-const parentDirPath = Path.dirname(thisDirPath);
-
-const processCwd = process.cwd();
-console.log(`[${logTag}] process.cwd(): ${processCwd}`);
+if (process.env.DEBUG && DEBUG) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
 
 
+/** @enum {number} A simple enum to represent the confidence level of a context indicator */
 const ChanceIs = {
     veryGood: 2,
     good: 1,
@@ -67,8 +87,8 @@ const ChanceIs = {
     veryBad: -2,
 };
 
-
-// files expected to be present in the root dir of a package
+/** An array of context indicators that help us determine if directory under inspection is a package root.
+ * @type {Array<{name: RegExp, isFile: boolean, isPackageRoot: ChanceIs}>} */
 const contextIndicators = [
     {
         name: /^node_modules$/,
@@ -113,8 +133,29 @@ const contextIndicators = [
 ];
 
 
-const dirContents = readDirSync(parentDirPath);
+// ---------------------------------------------------------------
+//
+// I think this section only applies in the specific case where
+// this script is run from the <root>/packages/startx directory
+// as was most likely the case during initial development
+// - we should read dir contents depending on the context -> the cwd()!
+// - not the 'context' of the script itself
+//
+// Old / deprecated code segment:
+// const scriptMeta = new Location();
+// const thisFilePath = scriptMeta.originLocation.toPath();
+// const thisDirPath = Path.dirname(thisFilePath);
+// const parentDirPath = Path.dirname(thisDirPath);
+// const dirContents = readDirSync(parentDirPath);
+//
+// New / revised code segment:
+const processCwd = process.cwd();
+const dirContents = readDirSync(processCwd);
+// ---------------------------------------------------------------
 
+
+/** The score that we will use to determine the probability that the directory under inspection is a package root 
+ * @type {number} */
 const score = dirContents
     .map((entry) => {
         contextIndicators.forEach((indicator) => {
@@ -125,127 +166,187 @@ const score = dirContents
     })
     .reduce((prev, curr) => prev + curr, 0);
 
+
+// if the score is below the (arbitrary) threshold, 
 if (score < THRESHOLD_SCORE) {
-        console.error(`[${logTag}] Not confident that this is the root of a package`);
-        process.exit(1);
-}
-
-// still here? then we can proceed with (relative) confidence ..
-const packageRootPath = parentDirPath;
-console.log(`[${logTag}] Found a package root at "${packageRootPath}"`);
-
-
-const main = async (packageRootPath) => {
-
-    let rootPackageJson;
-
-const rootPackageJsonPath = Path.join(packageRootPath, 'package.json');
-if (!await pathExistsAsync(rootPackageJsonPath)) {
-    console.error(`[${logTag}] Expected to find a package.json file in the package root`);
+    // then we are not confident that the directory under inspection is a package root
+    console.error(`[${logTag}] Not confident that this is the root of a package`);
     process.exit(1);
 }
 else {
-    const packageJson = await readFileAsync(rootPackageJsonPath);
-    const parsed = JSON.parse(packageJson);
-    if (parsed && parsed.name !== Path.basename(packageRootPath)) {
-        console.error(`[${logTag}] This script should be in the "scripts" directory of the "${packageName}" package`);
+    // relatively confident that the directory under inspection is a package root
+    if (process.env.DEBUG && DEBUG) {
+        console.log(`[${logTag}] Relatively confident (score: ${score}) that this is the root of a package`);
+        console.log(`[${logTag}] cwd(): ${processCwd}`);
+    }
+}
+
+
+// rest is in main() because of async/await
+
+
+const main = async (rootPath) => {
+
+    let _rootPackageJsonParsed;
+
+    // last checks to make sure we are in the right context
+
+    const rootPackageJsonPath = Path.join(rootPath, `${File.packageJson}`);
+    if (!await pathExistsAsync(rootPackageJsonPath)) {
+        // fail
+        console.error(`[${logTag}] Expected to find a package.json file in the package root.`);
         process.exit(1);
     }
-    rootPackageJson = parsed;
-}
+    else {
+        
+        // we're not try-catch'ing this parse because we want to exit if this fails
+        const packageJson = await readFileAsync(rootPackageJsonPath);
+        const parsed = JSON.parse(packageJson);
 
-const distPackageJson = Lodash.omit(Lodash.merge({}, rootPackageJson), [
-    'scripts',
-    'devDependencies',
-    'workspaces',
-]);
-for (const key in distPackageJson) {
-    if (key.startsWith('_')) {
-        delete distPackageJson[key];
+        const dirName = Path.basename(rootPath);
+        if (parsed && parsed.name !== dirName) {
+            // fail
+            console.error(`[${logTag}] '${parsed.name}' !== '${dirName}'`);
+            console.error(`[${logTag}] Expected the package name in package.json to match the directory name.`);
+            process.exit(1);
+        }
+        else {
+            // success
+            console.log(`[${logTag}] Package name: ${parsed.name}`);
+            _rootPackageJsonParsed = parsed;
+        }
+
+        
     }
-    if (key === 'main' || key === 'module') {
-        distPackageJson[key] = distPackageJson[key].replace(/^(\.\/)?(src|dist)\//, '');
+
+    // all checks passed, let's proceed
+
+    const distPackageJson = Lodash.omit(Lodash.merge({}, _rootPackageJsonParsed,
+        {
+            $schema: _rootPackageJsonParsed.$schema || 'https://json.schemastore.org/package.json',
+            name: `${_rootPackageJsonParsed.name}-${Dir.dist}`
+        }
+    ), [
+        'scripts',
+        'devDependencies', 
+        'workspaces',
+        // Important! keep 'dependencies' field
+    ]);
+
+    // clean up package.json
+    for (const key in distPackageJson) {
+
+        // remove custom keys
+        if (key.startsWith('_')) {
+            delete distPackageJson[key];
+        }
+
+        // remove 'src/' and 'dist/' from 'main' and 'module' fields (if present)
+        if (key in Object.values(ModSys).map(mod => mod.entryPointKey)) {
+            distPackageJson[key] = distPackageJson[key]
+                .replace(new RegExp(`^(\.\/)?(${Dir.src}|${Dir.dist})\/`), '');
+        }
+
+        // TODO: (later)
+        // Remove other non-standard fields i.e. configs of tools, etc.
     }
+
+    // minimal base package.json files for cjs and esm directories
+    // - ensures fields like author, license, etc. are present
+    const reducedDistPackageJson = Lodash.omit(Lodash.merge({}, distPackageJson), [
+        'main', // will be re-added
+        'module', // will be re-added
+        'type', // will be re-added
+        'keywords', // meh? or keep but remove terms like: esm, cjs, dist, src, etc?
+        // Important! keep 'dependencies' field
+    ]);
+
+    const distCjsPackageJson = {
+        ...reducedDistPackageJson,
+        name: `${distPackageJson.name}-${ModSys.cjs.dir}`,
+        main: (
+            // remove 'cjs/' from 'main' field (if present)
+            distPackageJson.main || `${ModSys.cjs.dir}/${File.fallbackEntry}`)
+            .replace(new RegExp(`^(\.\/)?${ModSys.cjs.dir}\/`), ''),
+        type: `${ModSys.cjs.sourceType}`,
+    };
+
+    const distEsmPackageJson = {
+        ...reducedDistPackageJson,
+        name: `${distPackageJson.name}-${ModSys.esm.dir}`,
+        module: (
+            // remove 'esm/' from 'module' field (if present)
+            distPackageJson.module || `${ModSys.esm.dir}/${File.fallbackEntry}`)
+                .replace(new RegExp(`^(\.\/)?${ModSys.esm.dir}\/`), ''
+        ),
+        type: `${ModSys.esm.sourceType}`,
+    };
+
+    // make sure dirs exist
+
+    const distPath = Path.join(rootPath, `${Dir.dist}`);
+    if (!await pathExistsAsync(distPath)) {
+        await mkdir(distPath);
+    }
+
+    const distCjsPath = Path.join(distPath, `${ModSys.cjs.dir}`);
+    if (!await pathExistsAsync(distCjsPath)) {
+        await mkdir(distCjsPath);
+    }
+
+    const distEsmPath = Path.join(distPath, `${ModSys.esm.dir}`);
+    if (!await pathExistsAsync(distEsmPath)) {
+        await mkdir(distEsmPath);
+    }
+
+    // read/merge/write package.json files
+
+    const distPackageJsonPath = Path.join(distPath, `${File.packageJson}`);
+    if (!await pathExistsAsync(distPackageJsonPath)) {
+        await writeFileAsync(distPackageJsonPath, JSON.stringify(distPackageJson, null, STRINGIFY_PAD));
+    }
+    else {
+        // read and merge
+        const existing = await readFileAsync(distPackageJsonPath);
+        const parsed = JSON.parse(existing);
+        const merged = Lodash.merge({}, parsed, distPackageJson);
+        // write
+        await writeFileAsync(distPackageJsonPath, JSON.stringify(merged, null, STRINGIFY_PAD));
+    }
+
+    const distCjsPackageJsonPath = Path.join(distCjsPath, `${File.packageJson}`);
+    if (!await pathExistsAsync(distCjsPackageJsonPath)) {
+        await writeFileAsync(distCjsPackageJsonPath, JSON.stringify(distCjsPackageJson, null, STRINGIFY_PAD));
+    }
+    else {
+        // read and merge
+        const existing = await readFileAsync(distCjsPackageJsonPath);
+        const parsed = JSON.parse(existing);
+        const merged = Lodash.merge({}, parsed, distCjsPackageJson);
+        // write
+        await writeFileAsync(distCjsPackageJsonPath, JSON.stringify(merged, null, STRINGIFY_PAD));
+    }
+
+    const distEsmPackageJsonPath = Path.join(distEsmPath, `${File.packageJson}`);
+    if (!await pathExistsAsync(distEsmPackageJsonPath)) {
+        await writeFileAsync(distEsmPackageJsonPath, JSON.stringify(distEsmPackageJson, null, STRINGIFY_PAD));
+    }
+    else {
+        // read and merge
+        const existing = await readFileAsync(distEsmPackageJsonPath);
+        const parsed = JSON.parse(existing);
+        const merged = Lodash.merge({}, parsed, distEsmPackageJson);
+        // write
+        await writeFileAsync(distEsmPackageJsonPath, JSON.stringify(merged, null, STRINGIFY_PAD));
+    }
+
 }
 
-const distCjsPackageJson = {
-    type: 'commonjs',
-    main: (distPackageJson.main || 'cjs/index.js').replace(/^(\.\/)?cjs\//, ''),
-    dependencies: rootPackageJson.dependencies || {},
-    $schema: rootPackageJson.$schema || 'https://json.schemastore.org/package.json',
-};
 
-const distEsmPackageJson = {
-    type: 'module',
-    module: (distPackageJson.module || 'esm/index.js').replace(/^(\.\/)?esm\//, ''),
-    dependencies: rootPackageJson.dependencies || {},
-    $schema: rootPackageJson.$schema || 'https://json.schemastore.org/package.json',
-};
-
-// make sure dirs exist
-
-const distPath = Path.join(packageRootPath, 'dist');
-if (!await pathExistsAsync(distPath)) {
-    await mkdir(distPath);
-}
-
-const distCjsPath = Path.join(distPath, 'cjs');
-if (!await pathExistsAsync(distCjsPath)) {
-    await mkdir(distCjsPath);
-}
-
-const distEsmPath = Path.join(distPath, 'esm');
-if (!await pathExistsAsync(distEsmPath)) {
-    await mkdir(distEsmPath);
-}
-
-// read and write package.json files
-
-const distPackageJsonPath = Path.join(distPath, 'package.json');
-if (!await pathExistsAsync(distPackageJsonPath)) {
-    await writeFileAsync(distPackageJsonPath, JSON.stringify(distPackageJson, null, 4));
-}
-else {
-    // read and merge
-    const existing = await readFileAsync(distPackageJsonPath);
-    const parsed = JSON.parse(existing);
-    const merged = Lodash.merge({}, parsed, distPackageJson);
-    await writeFileAsync(distPackageJsonPath, JSON.stringify(merged, null, 4));
-}
-
-const distCjsPackageJsonPath = Path.join(distCjsPath, 'package.json');
-if (!await pathExistsAsync(distCjsPackageJsonPath)) {
-    await writeFileAsync(distCjsPackageJsonPath, JSON.stringify(distCjsPackageJson, null, 4));
-}
-else {
-    // read and merge
-    const existing = await readFileAsync(distCjsPackageJsonPath);
-    const parsed = JSON.parse(existing);
-    const merged = Lodash.merge({}, parsed, distCjsPackageJson);
-    await writeFileAsync(distCjsPackageJsonPath, JSON.stringify(merged, null, 4));
-}
-
-const distEsmPackageJsonPath = Path.join(distEsmPath, 'package.json');
-if (!await pathExistsAsync(distEsmPackageJsonPath)) {
-    await writeFileAsync(distEsmPackageJsonPath, JSON.stringify(distEsmPackageJson, null, 4));
-}
-else {
-    // read and merge
-    const existing = await readFileAsync(distEsmPackageJsonPath);
-    const parsed = JSON.parse(existing);
-    const merged = Lodash.merge({}, parsed, distEsmPackageJson);
-    await writeFileAsync(distEsmPackageJsonPath, JSON.stringify(merged, null, 4));
-}
-
-}
+await main(processCwd);
 
 
-await main(packageRootPath);
-
-
-if (DEBUG && process.env.DEBUG) { 
-    console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
-}
+if (process.env.DEBUG && DEBUG) console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
 
 
 

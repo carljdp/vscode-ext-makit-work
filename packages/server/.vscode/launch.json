@@ -1,47 +1,88 @@
+// launch.json docs: https://code.visualstudio.com/docs/editor/debugging#_launch-configurations
 {
+    // file: <root>/packages/server/.vscode/launch.json
     "version": "0.2.0",
     "configurations": [
+        // First entry is considered the default (see docs)
         {
-            "name": "Debug current file",
+            "name": "Debug JS (current file)",
+            // - This configuration is used to debug the current/focussed JS file.
+            // - In contrast to the "Debug TS (current file)" configuration,
+            //   this configuration does not pre-load the TypeScript compiler.
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "node",
             "runtimeArgs": [
-                // "--enable-source-maps",
-                "--env-file",
-                "../../.env.experiments",
-                // "--import",
-                // "./packages/startx/dist/esm/index.js",
-                // "--require",
-                // "./packages/startx/dist/cjs/index.js",
+                "--enable-source-maps",
+                "--env-file", // optional env vars
+                "${workspaceFolder}/../../.env.experiments",
             ],
+            "program": "${relativeFile}",
             "skipFiles": [
                 "<node_internals>/**",
                 "node_modules/**",
                 ".history/**",
                 ".git/**",
             ],
-            "program": "${relativeFile}",
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
         },
-        // {
-        //     "type": "node",
-        //     "request": "launch",
-        //     "name": "Launch Current TS File",
-        //     "runtimeArgs": [
-        //         // "--import=../startx/dist/esm/index.js",
-        //         "--import=./bootstrap.mjs",
-        //     ],
-        //     "args": [
-        //         "${relativeFile}",
-        //         "--cli-server-args={\\\"path\\\":\\\"./dist/esm\\\",\\\"port\\\":\\\"3000\\\",\\\"filesAsHtml\\\":\\\"false\\\"}"
-        //     ],
-        //     "console": "integratedTerminal",
-        //     "skipFiles": [
-        //         "<node_internals>/**",
-        //         "node_modules/**"
-        //     ],
-        //     "internalConsoleOptions": "openOnSessionStart"
-        // }
+        {
+            "name": "Debug TS (current file)",
+            // - This configuration is used to debug the current/focussed JS file.
+            // - In contrast to the "Debug JS (current file)" configuration,
+            //   this configuration pre-loads the TypeScript compiler.
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "node",
+            "runtimeArgs": [
+                "--enable-source-maps",
+                "--env-file", // optional env vars
+                "${workspaceFolder}/../../.env.experiments",
+                "--import", // pre-load TypeScript compiler
+                "${workspaceFolder}/../../packages/startx/dist/esm/index.js",
+            ],
+            "program": "${relativeFile}",
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**",
+                ".history/**",
+                ".git/**",
+                // not sure if really needed?
+                "dist/**"
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": "Debug src/server.ts",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "node",
+            "runtimeArgs": [
+                "--enable-source-maps",
+                "--env-file", // optional env vars
+                "${workspaceFolder}/../../.env.experiments",
+                "--import", // pre-load TypeScript compiler
+                "${workspaceFolder}/../../packages/startx/dist/esm/index.js",
+            ],
+            "args": [
+                "${relativeFile}",
+                "--cli-server-args={\\\"path\\\":\\\"./dist/esm\\\",\\\"port\\\":\\\"3000\\\",\\\"filesAsHtml\\\":\\\"false\\\"}"
+            ],
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**",
+                ".history/**",
+                ".git/**",
+                // not sure if really needed?
+                "dist/**"
+            ],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        }
     ]
 }
