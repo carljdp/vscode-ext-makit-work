@@ -1,12 +1,12 @@
 {
 	"folders": [
 		{
-			"path": "../../packages/server",
-			// "name": "<this>"
+			"path": ".",
+			"name": ".",
 		},
 		{
-			"path": "../../packages/startx/devt",
-			"name": "<root>/packages/startx/devt"
+			"path": "../startx",
+			"name": "../startx"
 		}
 	],
 	"settings": {

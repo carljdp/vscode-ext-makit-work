@@ -1,45 +1,24 @@
 {
-	// File: `./root-dev.code-workspace`
-	// Our mono-repo's root workspace, meant for general development.
-	//
-	// Purpose:
-	// A workspace for when you need to work on bits and pieces of everything.
-	//
-	// Also see:
-	// - `./root-mon.code-workspace` for complimentory auto-running/background tasks
-	//
 	"folders": [
 		{
 			"path": ".",
 			"name": ".",
 		},
 		{
-			"path": "./packages/experi",
-			"name": "./packages/experi",
+			"path": "../server",
+			"name": "../server"
 		},
 		{
-			"path": "./packages/extens",
-			"name": "./packages/extens",
+			"path": "../webapp",
+			"name": "../webapp"
 		},
 		{
-			"path": "./packages/server",
-			"name": "./packages/server",
-		},
-		{
-			"path": "./packages/startx",
-			"name": "./packages/startx",
-		},
-		{
-			"path": "./packages/webapp",
-			"name": "./packages/webapp",
+			"path": "../startx",
+			"name": "../startx"
 		},
 	],
 	"settings": {
 		"files.exclude": {
-			// because we added the folders above, we can exclude this
-			"packages/": true,
-			//
-			// The usual suspects
 			"**/.git": true,
 			"**/.history": true,
 			"**/.cache": true,
@@ -56,14 +35,19 @@
 		"search.exclude": {
 			".cache": true,
 			".history": true,
+			// 	"build": true,
+			// 	"dist": true,
+			// 	"out": true,
+			// 	"output": true,
+			// 	"tmp": true
 		},
 		//
-		"workbench.settings.useSplitJSON": true, 
+		"workbench.settings.useSplitJSON": true,
 		"terminal.integrated.defaultProfile.windows": "Git Bash",
 		"debug.console.collapseIdenticalLines": false,
 		"explorer.compactFolders": false,
 		//
-		"json.schemaDownload.enable": false,  // in an attempt to fix the "schema not found" error
+		"json.schemaDownload.enable": false, // in an attempt to fix the "schema not found" error
 		"json.schemas": [
 			{
 				"url": "https://json.schemastore.org/package.json",
@@ -131,7 +115,6 @@
 		"eslint.useESLintClass": true,
 		"eslint.workingDirectories": [
 			"./",
-			"./packages/*",
 		],
 		//
 		// //
@@ -223,5 +206,4 @@
 			//
 		]
 	},
-	
 }
