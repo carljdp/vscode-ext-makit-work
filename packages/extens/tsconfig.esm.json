@@ -1,0 +1,17 @@
+{
+    "extends": "../../tsconfig.esm.json",
+    "compilerOptions": {
+        // Rescope to `./*` (this dir contents and below)
+        "baseUrl": "./",
+        "outDir": "./",
+        "rootDir": "./"
+    },
+    // "include": [
+    //     // Rescope to `./*` (this dir contents and below)
+    //     ".*/**/*",
+    //     "*/**/*",
+    //     ".*",
+    //     "*"
+    // ],
+    "$schema": "https://json.schemastore.org/tsconfig"
+}

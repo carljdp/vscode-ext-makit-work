@@ -13,34 +13,26 @@
 	"folders": [
 		{
 			"path": ".",
-			"name": "",
+			"name": ".",
 		},
 		{
-			"path": "./packages/experiments/",
-			"name": "./packages/experiments",
+			"path": "./packages/experi",
+			"name": "./packages/experi",
 		},
 		{
-			"path": "./packages/extens-tsc/",
-			"name": "./packages/extens-tsc",
+			"path": "./packages/extens",
+			"name": "./packages/extens",
 		},
 		{
-			"path": "./packages/extens-wpk/",
-			"name": "./packages/extens-wpk",
-		},
-		{
-			"path": "./packages/extens-x10/",
-			"name": "./packages/extens-x10",
-		},
-		{
-			"path": "./packages/server/",
+			"path": "./packages/server",
 			"name": "./packages/server",
 		},
 		{
-			"path": "./packages/startx/",
+			"path": "./packages/startx",
 			"name": "./packages/startx",
 		},
 		{
-			"path": "./packages/webapp/",
+			"path": "./packages/webapp",
 			"name": "./packages/webapp",
 		},
 	],

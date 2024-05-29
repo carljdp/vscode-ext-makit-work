@@ -362,17 +362,22 @@ const ResourceLocation = {
  * - This helps to make sure a file is matched with the correct
  * config or sub-config, and does not patch multiple conflicting
  * configurations.
- * @param { {startDir: string, fallbackModSysId: SourceTypeId} } [opts={dir: './', fallbackModSysId: 'commonjs'}] As Node.js defaults to CommonJS
+ * @param { {startDir: string, fallbackModSysId: SourceTypeId} } [opts={}] 
  * @returns { SourceType['module']['id'] | SourceType['commonjs']['id'] }
  */
-const getPackageSourceTypeId = (opts = { startDir: process.cwd(), fallbackModSysId: SourceType.commonjs.id }) => {
+const getPackageSourceTypeId = (opts = {}) => {
+
+    const _opts = Object.assign({
+        startDir: process.cwd(),
+        fallbackModSysId: SourceType.commonjs.id, // As Node.js defaults to CommonJS
+    }, opts);
 
     const processCwd = process.cwd();
     const maxTreeTraversal = 4; // from <root>/packages/dist/esm/ back up to <root>/
 
     console.log();
     console.log(`[${logTag}] Attempting to resolve 'sourceType' from a package.json file`);
-    console.log(`[${logTag}] - for virtual location: ${opts.startDir}`);
+    console.log(`[${logTag}] - for virtual location: ${_opts.startDir}`);
     console.log(`[${logTag}] - and cwd: ${processCwd}`);  
 
     // TODO: Which package.json file should we read here??
@@ -399,7 +404,7 @@ const getPackageSourceTypeId = (opts = { startDir: process.cwd(), fallbackModSys
     // - repeat until we reach the CWD
 
     
-    let currentDir = opts.startDir;
+    let currentDir = _opts.startDir;
     let relativePathToCurrent = Path.relative(processCwd, currentDir);
     let currentDirIsDecendantOfCwd = !relativePathToCurrent.startsWith('..');
     
@@ -424,12 +429,9 @@ const getPackageSourceTypeId = (opts = { startDir: process.cwd(), fallbackModSys
             packageJsonParsed = JSON.parse(packageJsonData);
             
             if (packageJsonParsed && typeof packageJsonParsed.type === 'string' && packageJsonParsed.type.length > 0) {
-
                 console.log(`[${logTag}]     - Found package.json with type: ${packageJsonParsed.type}`);
-
                 // success
                 foundPackageJsonWithType = true;
-                // break out of while loop searching for package.json
                 break; 
             }
             
@@ -437,9 +439,9 @@ const getPackageSourceTypeId = (opts = { startDir: process.cwd(), fallbackModSys
 
         // short-circuit if not found after a few steps
         if (++treeStepCount > maxTreeTraversal) {
-            console.error(`[${logTag}] Could not find a package.json file after ${maxTreeTraversal} steps up the tree.`);
-            // no point in living like this
-            process.exit(1);
+            // fail
+            foundPackageJsonWithType = false;
+            break; 
         }
 
         // prep for next while-iteration
@@ -449,22 +451,20 @@ const getPackageSourceTypeId = (opts = { startDir: process.cwd(), fallbackModSys
     }
 
     if (!foundPackageJsonWithType) {
-        console.error(`[${logTag}] Could not find a package.json file in the starting directory '${opts.startDir}' or any of the ${maxTreeTraversal} parent directories.`);
-        // no point in living like this
-        process.exit(1);
+        console.warn(`[${logTag}] Could not find a package.json file, with a type property, in the starting directory '${_opts.startDir}' or any of the ${maxTreeTraversal} directories above it.`);
+        console.info(`[${logTag}] Falling back to the default sourceType: ${_opts.fallbackModSysId}`)
     }
 
-
-    // TODO: should file read & json parse be in a try-catch block?
-    packageJsonData = FsSync.readFileSync(packageJsonPath, 'utf8');
-    packageJsonParsed = JSON.parse(packageJsonData);
+    // // this was moved inside the while loop right? commenting out for now
+    // packageJsonData = FsSync.readFileSync(packageJsonPath, 'utf8');
+    // packageJsonParsed = JSON.parse(packageJsonData);
 
 
     // TODO: We are ignoring the presence and content of `main` and `module` fields
     // - do we need to consider them?
-    return (packageJsonParsed && typeof packageJsonParsed.type === 'string' && packageJsonParsed.type.length > 0)
-        ? (SourceType[packageJsonParsed.type.toLowerCase().trim()] || {id: opts.fallbackModSysId} ).id
-        : opts.fallbackModSysId;
+    return (foundPackageJsonWithType)
+        ? (SourceType[packageJsonParsed.type.toLowerCase().trim()] || {id: _opts.fallbackModSysId} ).id
+        : _opts.fallbackModSysId;
 }
 
 
@@ -1309,7 +1309,7 @@ export {
     configs,
 
     makeConfig,
-    ResourceLocation as RuleSet,
+    ResourceLocation,
     ModSysType,
     LangType,
 

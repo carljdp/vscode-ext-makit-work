@@ -1,0 +1,197 @@
+// launch.json for WORKSPACE FOLDER
+{
+	"version": "0.2.0",
+	"configurations": [
+		// First entry is considered the default (see docs)
+		{
+			"name": "Debug JS (current file)",
+			// - This configuration is used to debug the current/focussed JS file.
+			// - In contrast to the "Debug TS (current file)" configuration,
+			//   this configuration does not pre-load the TypeScript compiler.
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "node",
+			"runtimeArgs": [
+				"--enable-source-maps",
+				"--env-file", // optional env vars
+				"${workspaceFolder}/../../.env.experiments",
+			],
+			"program": "${relativeFile}",
+			"skipFiles": [
+				"<node_internals>/**",
+				"node_modules/**",
+				".history/**",
+				".git/**",
+			],
+			"console": "internalConsole",
+			"internalConsoleOptions": "openOnSessionStart"
+		},
+		{
+			"name": "Debug TS (current file)",
+			// - This configuration is used to debug the current/focussed JS file.
+			// - In contrast to the "Debug JS (current file)" configuration,
+			//   this configuration pre-loads the TypeScript compiler.
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "node",
+			"runtimeArgs": [
+				"--enable-source-maps",
+				"--env-file", // optional env vars
+				"${workspaceFolder}/../../.env.experiments",
+				"--import", // pre-load TypeScript compiler
+				"${workspaceFolder}/../../packages/startx/dist/esm/index.js",
+			],
+			"program": "${relativeFile}",
+			"skipFiles": [
+				"<node_internals>/**",
+				"node_modules/**",
+				".history/**",
+				".git/**",
+				// not sure if really needed?
+				"dist/**"
+			],
+			"console": "internalConsole",
+			"internalConsoleOptions": "openOnSessionStart"
+		},
+		{
+			"name": "extens & server: watch (workspace & profile)",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--profile=vscode-ext-dev-debug",
+				"${workspaceFolder}/.debug/debug.code-workspace"
+			],
+			"outFiles": [
+				"${workspaceFolder}/dist/**/*.js"
+			],
+			"preLaunchTask": "compile-watch & server",
+			"envFile": "${workspaceFolder}/.env.dev"
+		},
+		{
+			"name": "extens & server: watch (empty)",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+			],
+			"outFiles": [
+				"${workspaceFolder}/dist/**/*.js"
+			],
+			"preLaunchTask": "compile-watch & server",
+			"envFile": "${workspaceFolder}/.env.dev"
+		},
+		{
+			"name": "extens & tests: watch",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index",
+			],
+			"outFiles": [
+				"${workspaceFolder}/dist/**/*.js"
+			],
+			"preLaunchTask": "compile-watch & tests",
+			"envFile": "${workspaceFolder}/.env.dev"
+		},
+		//
+		//
+		//
+		// =====================================================================
+		//
+		//
+		//
+		{
+			"name": "Debug TS current-file",
+			"request": "launch",
+			"type": "node",
+			"cwd": "${workspaceFolder}",
+			"nodeVersionHint": 18,
+			"runtimeExecutable": "node",
+			"runtimeArgs": [
+				"--import=../startx/dist/esm/index.js",
+			],
+			"args": [
+				"${relativeFile}",
+				"--startx-args={\"log\":\"verbose\"}",
+				"--startx-args={\"dotenv\":\".env.dev\"}",
+			],
+			"sourceMaps": true,
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**",
+			],
+			"console": "internalConsole",
+		},
+		// {
+		// 	"name": "Debug JS current-file",
+		// 	"request": "launch",
+		// 	"type": "node",
+		// 	"cwd": "${workspaceFolder}",
+		// 	"nodeVersionHint": 18,
+		// 	"runtimeExecutable": "node",
+		// 	"runtimeArgs": [],
+		// 	"args": [
+		// 		"${relativeFile}",
+		// 	],
+		// 	"sourceMaps": true,
+		// 	"skipFiles": [
+		// 		"<node_internals>/**",
+		// 		"**/node_modules/**",
+		// 	],
+		// 	"console": "internalConsole",
+		// 	"envFile": "${workspaceFolder}/.env.dev",
+		// },
+		//
+		//
+		//
+		// =====================================================================
+		//
+		//
+		//
+		// {
+		// 	"name": "Debug TS current-file (with tests)",
+		// 	"request": "launch",
+		// 	"type": "node",
+		// 	"cwd": "${workspaceFolder}",
+		// 	"nodeVersionHint": 18,
+		// 	"runtimeExecutable": "node",
+		// 	"runtimeArgs": [
+		// 		// "--trace-warnings",
+		// 		// "--trace-deprecation",
+		// 		// "--trace-uncaught",
+		// 		// "--abort-on-uncaught-exception",
+		// 		"--require",
+		// 		"./startx/dist/cjs/index.js",
+		// 	],
+		// 	"args": [
+		// 		"${workspaceFolder}/node_modules/.bin/_mocha",
+		// 		"--timeout",
+		// 		"999999",
+		// 		"--colors",
+		// 		"${relativeFile}",
+		// 	],
+		// 	"sourceMaps": true,
+		// 	"skipFiles": [
+		// 		"<node_internals>/**",
+		// 		"**/node_modules/**",
+		// 	],
+		// 	"console": "internalConsole",
+		// 	"envFile": "${workspaceFolder}/.env.dev",
+		// 	"presentation": {
+		// 		"clear": false,
+		// 		"echo": true,
+		// 		"hidden": false,
+		// 		"reveal": "always",
+		// 		"showReuseMessage": false,
+		// 		"focus": true,
+		// 		"order": 1,
+		// 		"group": "debug",
+		// 		"panel": "decicated"
+		// 	},
+		// },
+	]
+}

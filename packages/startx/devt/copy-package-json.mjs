@@ -255,10 +255,18 @@ const main = async (rootPath) => {
             distPackageJson[key] = distPackageJson[key]
                 .replace(new RegExp(`^(\.\/)?(${Dir.src}|${Dir.dist})\/`), '');
         }
-
-        // TODO: (later)
-        // Remove other non-standard fields i.e. configs of tools, etc.
     }
+
+
+    // TODO: (later)
+    // Remove other non-standard fields i.e. configs of tools, etc.
+    //
+    // i.e. the hundreds of fields introduced by vscode, etc.
+    //
+    // - or maybe just keep the 'standard' fields
+    //   - go find a list of std fields to keep..
+
+
 
     // minimal base package.json files for cjs and esm directories
     // - ensures fields like author, license, etc. are present
