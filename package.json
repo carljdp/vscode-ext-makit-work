@@ -14,7 +14,7 @@
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
     "scripts": {
-        "reinstall": "npx pnpm install --loglevel error",
+        "reinstall": "npx pnpm install -w --loglevel error",
         "check-eslint": "npx @eslint/config-inspector",
         "check-tsconf": "npx tsc -p tsconfig.cjs.json --showConfig && npx tsc -p tsconfig.esm.json --showConfig",
         "lint-once": "eslint --config eslint.config.mjs --cache --cache-location .cache",

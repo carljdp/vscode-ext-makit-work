@@ -1,3 +1,4 @@
 packages:
-  - 'packages/*'      # local packages src
-  - 'packages/*/dist' # local packages dist
+  - 'packages/*'        # local packages src
+  - 'packages/*/dist'   # local packages dist
+  - 'packages/*/dist/*' # local packages dist/cjs & dist/esm

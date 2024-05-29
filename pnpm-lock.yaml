@@ -93,6 +93,129 @@ importers:
         specifier: ^7.10.0
         version: 7.10.0(eslint@9.3.0)(typescript@5.4.5)
 
+  packages/extens:
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.2.0
+        version: 9.3.0
+      '@swc-node/register':
+        specifier: ^1.9.1
+        version: 1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5)
+      '@swc/cli':
+        specifier: ^0.3.12
+        version: 0.3.12(@swc/core@1.5.7(@swc/helpers@0.5.11))(chokidar@3.6.0)
+      '@swc/core':
+        specifier: ^1.4.17
+        version: 1.5.7(@swc/helpers@0.5.11)
+      '@swc/helpers':
+        specifier: ^0.5.11
+        version: 0.5.11
+      '@swc/types':
+        specifier: ^0.1.6
+        version: 0.1.7
+      '@types/dotenv-webpack':
+        specifier: ^7.0.7
+        version: 7.0.7(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack-cli@5.1.4(webpack@5.91.0))
+      '@types/eslint__js':
+        specifier: ^8.42.3
+        version: 8.42.3
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
+      '@types/lockfile':
+        specifier: ^1.0.4
+        version: 1.0.4
+      '@types/lodash':
+        specifier: ^4.17.0
+        version: 4.17.4
+      '@types/mocha':
+        specifier: ^10.0.6
+        version: 10.0.6
+      '@types/node':
+        specifier: ^18.19.31
+        version: 18.19.33
+      '@types/three':
+        specifier: ^0.163.0
+        version: 0.163.0
+      '@types/vscode':
+        specifier: ^1.87.0
+        version: 1.89.0
+      '@types/vscode-webview':
+        specifier: ^1.57.5
+        version: 1.57.5
+      '@vscode/test-cli':
+        specifier: ^0.0.6
+        version: 0.0.6
+      '@vscode/test-electron':
+        specifier: ^2.3.9
+        version: 2.3.10
+      chai:
+        specifier: ^5.1.0
+        version: 5.1.1
+      copy-webpack-plugin:
+        specifier: ^12.0.2
+        version: 12.0.2(webpack@5.91.0(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack-cli@5.1.4))
+      env-cmd:
+        specifier: ^10.1.0
+        version: 10.1.0
+      eslint:
+        specifier: ^8.56.0
+        version: 8.57.0
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.2.0
+      globals:
+        specifier: ^15.2.0
+        version: 15.3.0
+      html-loader:
+        specifier: ^5.0.0
+        version: 5.0.0(webpack@5.91.0(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack-cli@5.1.4))
+      html-webpack-plugin:
+        specifier: ^5.6.0
+        version: 5.6.0(webpack@5.91.0(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack-cli@5.1.4))
+      jsdoc:
+        specifier: ^4.0.2
+        version: 4.0.3
+      jsonc-parser:
+        specifier: ^3.2.1
+        version: 3.2.1
+      lockfile:
+        specifier: ^1.0.4
+        version: 1.0.4
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      mocha:
+        specifier: ^10.4.0
+        version: 10.4.0
+      mocha-explorer-launcher-scripts:
+        specifier: ^0.4.0
+        version: 0.4.0
+      template-ejs-loader:
+        specifier: ^0.9.4
+        version: 0.9.4(webpack@5.91.0(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack-cli@5.1.4))
+      terser-webpack-plugin:
+        specifier: ^5.3.10
+        version: 5.3.10(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack@5.91.0(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack-cli@5.1.4))
+      three:
+        specifier: ^0.163.0
+        version: 0.163.0
+      ts-loader:
+        specifier: ^9.5.1
+        version: 9.5.1(typescript@5.4.5)(webpack@5.91.0(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack-cli@5.1.4))
+      typescript:
+        specifier: ^5.3.3
+        version: 5.4.5
+      typescript-eslint:
+        specifier: ^7.8.0
+        version: 7.10.0(eslint@8.57.0)(typescript@5.4.5)
+      webpack:
+        specifier: ^5.90.3
+        version: 5.91.0(@swc/core@1.5.7(@swc/helpers@0.5.11))(esbuild@0.21.3)(webpack-cli@5.1.4)
+      webpack-cli:
+        specifier: ^5.1.4
+        version: 5.1.4(webpack@5.91.0)
+
   packages/extens-tsc:
     devDependencies:
       '@types/mocha':
@@ -273,6 +396,12 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(webpack@5.91.0)
 
+  packages/extens/dist: {}
+
+  packages/extens/dist/cjs: {}
+
+  packages/extens/dist/esm: {}
+
   packages/server:
     dependencies:
       express:
@@ -365,6 +494,30 @@ importers:
         version: 7.10.0(eslint@9.3.0)(typescript@5.4.5)
 
   packages/server/dist:
+    dependencies:
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
+      prismjs:
+        specifier: ^1.29.0
+        version: 1.29.0
+      sharp:
+        specifier: ^0.33.4
+        version: 0.33.4
+
+  packages/server/dist/cjs:
+    dependencies:
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
+      prismjs:
+        specifier: ^1.29.0
+        version: 1.29.0
+      sharp:
+        specifier: ^0.33.4
+        version: 0.33.4
+
+  packages/server/dist/esm:
     dependencies:
       express:
         specifier: ^4.19.2
@@ -473,6 +626,30 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
 
+  packages/startx/dist/cjs:
+    dependencies:
+      '@swc-node/register':
+        specifier: ^1.9.1
+        version: 1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+
+  packages/startx/dist/esm:
+    dependencies:
+      '@swc-node/register':
+        specifier: ^1.9.1
+        version: 1.9.1(@swc/core@1.5.7(@swc/helpers@0.5.11))(@swc/types@0.1.7)(typescript@5.4.5)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+
   packages/webapp:
     dependencies:
       ejs:
@@ -559,6 +736,24 @@ importers:
         version: 7.10.0(eslint@9.3.0)(typescript@5.4.5)
 
   packages/webapp/dist:
+    dependencies:
+      ejs:
+        specifier: ^3.1.10
+        version: 3.1.10
+      three:
+        specifier: ^0.164.1
+        version: 0.164.1
+
+  packages/webapp/dist/cjs:
+    dependencies:
+      ejs:
+        specifier: ^3.1.10
+        version: 3.1.10
+      three:
+        specifier: ^0.164.1
+        version: 0.164.1
+
+  packages/webapp/dist/esm:
     dependencies:
       ejs:
         specifier: ^3.1.10
