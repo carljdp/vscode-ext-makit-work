@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"path": "."
-		}
+		},
 	],
 	"settings": {
 		"files.exclude": {
@@ -100,6 +100,38 @@
 			"./packages/*",
 		],
 		//
+		// //
+		// "testExplorer.useNativeTesting": true,
+		// //
+		// "mocha.path": "node_modules/mocha",
+		// "mocha.showErrorPopup": false,
+		// "mocha.files.glob": "**/*.test.js",
+		// "mocha.files.ignore": [
+		// 		"**/node_modules/**",
+		// 		"**/dist/**",
+		// 		"**/out/**",
+		// 		"**/output/**",
+		// 		"**/build/**",
+		// 		"**/tmp/**",
+		// 		"**/temp/**",
+		// 		"**/.history/**",
+		// 		"**/.cache/**",
+		// 	],
+		// //
+		// "mochaExplorer.logpanel": true,
+		// "mochaExplorer.files": "**/*.test.js",
+		// "mochaExplorer.ignore": [
+		// 	"**/node_modules/**",
+		// 	"**/dist/**",
+		// 	"**/out/**",
+		// 	"**/output/**",
+		// 	"**/build/**",
+		// 	"**/tmp/**",
+		// 	"**/temp/**",
+		// 	"**/.history/**",
+		// 	"**/.cache/**",
+		// ],
+		//
 	},
 	"extensions": {
 		"recommendations": [
@@ -157,4 +189,5 @@
 			//
 		]
 	},
+	
 }

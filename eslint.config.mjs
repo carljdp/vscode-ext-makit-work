@@ -15,37 +15,56 @@
  */
 
 
-import { inspect } from 'node:util';
-// import { fileURLToPath } from 'node:url';
-// import { dirname } from 'node:path';
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+// Other todos:
+//
+// 1. Perhaps set a script level failure mode?
+// - then return error obj, or throw an exception, or process.exit();
+// - currently many process.exit() calls are scattered around
+//
+// 2. very few of the functions in this file are type checking or validating their inputs
+// - at the time of writing we had other priorities
+// - were not focussed on testing the code that generates configs to help test other code :D
+//
 
-import { createRequire } from 'node:module';
-const require = createRequire(import.meta.url);
 
+import FsSync from 'node:fs';
+import Path from 'node:path';
 
 import EsLintJs from '@eslint/js';
 import EsLintTs from 'typescript-eslint';
 import Globals from 'globals';
 import Lodash from 'lodash';
 
-const DEBUG = false;
+
+import { inspect } from 'node:util';
+import { getLogTag } from './packages/startx/devt/common/locations.js';
+const logTag = getLogTag();
+
+
+// CONSTANTS
+
+
+/** Manual debug flag for this script.
+ * @constant {boolean} DEBUG_THIS */
+const DEBUG_THIS = false;
+
+/** Whether to hit a breakpoint at the end of the script.
+ * @constant {boolean} DEBUG_PAUSE */
 const DEBUG_PAUSE = false;
+
+/** Whether to log out the configurations in detail.
+ * These verbose logs are not nested inside `DEBUG` blocks, as it can be useful even when `DEBUG` is false.
+ * @constant {boolean} LOG_VERBOSE */
 const LOG_VERBOSE = false;
 
 
-const MONOREPO_PACKAGES_DIR = 'packages';
-
-import { getLogTag } from './packages/startx/devt/common/locations.js';
-
-const logTag = getLogTag();
-
-if (DEBUG) { 
-    console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
-}
+const ROOT_PACKAGES_DIR = 'packages';
 
 
+// IMPLEMENTATION
+
+
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
 
 
 // Parse CLI arguments (future / maybe)
@@ -151,9 +170,13 @@ const EnvDependent = {
  * @typedef { 'CommonJs' | 'EsModule' | 'SystemJs' | 'Amd' | 'Umd' | 'Iife' } ModSysTypeLong
  * @typedef { 'cjs' | 'esm' | 'sys' | 'amd' | 'umd' | 'iif' } ModSysTypeId
  * 
- * @typedef { 'EsModule' | 'CommonJS' | 'script' } SourceTypeName as specified to a compiler
- * @typedef { 'module' | 'commonjs' | undefined } SourceTypeId as read from a package.json file
- * @typedef { 'esm' | 'cjs' | undefined } SourceModSysId associated ModSysTypeId
+ * @typedef { 'module' | 'commonjs' | 'script' } SourceTypeId as read from a package.json's `type` field
+ * @typedef { 'esm' | 'cjs' | 'any' } SourceTypeAssModSysId a key in a lookup
+ * @typedef { 'esm' | 'cjs' | '.' } SourceTypeAssDir return value in a lookup, for dir names
+ * 
+ * @typedef { 'SourceCode' | 'BuiltCode' | 'Anywhere' } ResourceLocationName
+ * @typedef { 'src' | 'dist' | 'any' } ResourceLocationId a key in a lookup
+ * @typedef { 'src' | 'dist' | '.' } ResourceLocationAssDirName return value in a lookup, for dir names
  * 
  * @typedef { 'JavaScript' | 'TypeScript' } LangTypeLong
  * @typedef { 'js' | 'ts' } LangTypeId
@@ -168,6 +191,10 @@ const EnvDependent = {
  * @typedef { JsFileExtDotted | TsFileExtDotted } AnyFileExtDotted
  * 
  */
+
+
+
+
 
 /**
  * @enum {Record<LangTypeId, { id: LangTypeId, name: LangTypeLong }>}
@@ -184,23 +211,23 @@ const LangType = {
 };
 
 /**
- * @enum {Record<SourceTypeId, { id: SourceTypeId, name: SourceTypeName, assModSysId: SourceModSysId }>}
+ * @enum {Record<SourceTypeId, { id: SourceTypeId, name: SourceTypeId, assModSysId: SourceTypeAssModSysId, assDirName: SourceTypeAssDir }>}
  */
 const SourceType = {
     module: {
         id: 'module',
-        name: 'module',
-        assModSysId: 'esm'
+        assModSysId: 'esm',
+        assDirName: 'esm',
     },
     commonjs: {
         id: 'commonjs',
-        name: 'commonjs',
-        assModSysId: 'cjs'
+        assModSysId: 'cjs',
+        assDirName: 'cjs',
     },
     script: {
-        id: undefined,
-        name: 'script',
-        assModSysId: undefined
+        id: 'script',
+        assModSysId: 'any',
+        assDirName: '.',
     }
 };
 
@@ -305,36 +332,138 @@ const FileType = {
 };
 
 /**
- * @enum {Record<('src'|'dist'|'common'), { id: ('src'|'dist'|'common'), name: string }>}
+ * @enum {Record< ResourceLocationId, { id: ResourceLocationId, name: ResourceLocationName, assDirName: ResourceLocationAssDirName }>}
  */
-const RuleSetType = {
+const ResourceLocation = {
     src: {
         id: 'src',
-        name: 'Source',
+        name: 'SourceCode',
+        assDirName: 'src'
     },
     dist: {
         id: 'dist',
-        name: 'Distribution',
+        name: 'BuiltCode',
+        assDirName: 'dist'
     },
-    common: {
-        id: 'common',
-        name: 'Common', // shared
+
+    // using `any` for both /src and /dist code
+    // - not using name 'common' to avoid confusion with `CommonJs`
+    any: {
+        id: 'any',
+        name: 'Anywhere',
+        assDirName: '.'
     },
 }
 
-/**
+/** Read the `type` field from the `package.json` file relative to the current working directory.
  * - The deciding factor for where we draw the line between
  * which file extensions (like .js or .ts) are meant to be
  * interpreted as ESM or CJS.
  * - This helps to make sure a file is matched with the correct
  * config or sub-config, and does not patch multiple conflicting
  * configurations.
+ * @param { {startDir: string, fallbackModSysId: SourceTypeId} } [opts={dir: './', fallbackModSysId: 'commonjs'}] As Node.js defaults to CommonJS
+ * @returns { SourceType['module']['id'] | SourceType['commonjs']['id'] }
  */
-const getPackageSourceTypeId = (opts = {fallbackModSysId: SourceType.commonjs.id}) => {
-    const packageJson = require('./package.json');
+const getPackageSourceTypeId = (opts = { startDir: process.cwd(), fallbackModSysId: SourceType.commonjs.id }) => {
 
-    return (packageJson && typeof packageJson.type === 'string' && packageJson.type.length > 0)
-        ? packageJson.type.toLowerCase() === SourceType.module.id ? SourceType.module.id : SourceType.commonjs.id
+    const processCwd = process.cwd();
+    const maxTreeTraversal = 4; // from <root>/packages/dist/esm/ back up to <root>/
+
+    console.log();
+    console.log(`[${logTag}] Attempting to resolve 'sourceType' from a package.json file`);
+    console.log(`[${logTag}] - for virtual location: ${opts.startDir}`);
+    console.log(`[${logTag}] - and cwd: ${processCwd}`);  
+
+    // TODO: Which package.json file should we read here??
+    // - the one in the root of the repo? NO
+    // - the one in the CWD? - that's what we are doing now?
+    // - the one in the directory of the file being linted? - maybe, not sure?
+    //
+    // Going by what we are trying to determine from the output of this function:
+    // - trying to determine the sourceType of the file being linted i.e. script, module, commonjs
+    // - so, logically, which package.json file should we read?
+    //   - does it then not actually mean that we should traverse up the tree for each file being linted?
+    //   - up to the nearest package.json that indicates the sourceType for it's children?
+    //
+    // WHAT TO DO??
+
+    // previous
+    //const packageJson = require('./package.json');
+    //
+    // new
+
+
+    // starting from `opts.startDir`, check if there is a `package.json` file
+    // - if not, move up one directory and try again
+    // - repeat until we reach the CWD
+
+    
+    let currentDir = opts.startDir;
+    let relativePathToCurrent = Path.relative(processCwd, currentDir);
+    let currentDirIsDecendantOfCwd = !relativePathToCurrent.startsWith('..');
+    
+    let foundPackageJsonWithType = false;
+    let treeStepCount = 0;
+    
+    let packageJsonPath;
+    let packageJsonData;
+    let packageJsonParsed;
+
+    while (!foundPackageJsonWithType && currentDirIsDecendantOfCwd) {
+
+        packageJsonPath = Path.resolve(currentDir, './package.json');
+
+        console.log(`[${logTag}]   - Checking in: ${currentDir}`);
+        
+
+        if (FsSync.existsSync(packageJsonPath)) {
+            
+            // TODO: should file read & json parse be in a try-catch block?
+            packageJsonData = FsSync.readFileSync(packageJsonPath, 'utf8');
+            packageJsonParsed = JSON.parse(packageJsonData);
+            
+            if (packageJsonParsed && typeof packageJsonParsed.type === 'string' && packageJsonParsed.type.length > 0) {
+
+                console.log(`[${logTag}]     - Found package.json with type: ${packageJsonParsed.type}`);
+
+                // success
+                foundPackageJsonWithType = true;
+                // break out of while loop searching for package.json
+                break; 
+            }
+            
+        }
+
+        // short-circuit if not found after a few steps
+        if (++treeStepCount > maxTreeTraversal) {
+            console.error(`[${logTag}] Could not find a package.json file after ${maxTreeTraversal} steps up the tree.`);
+            // no point in living like this
+            process.exit(1);
+        }
+
+        // prep for next while-iteration
+        currentDir = Path.resolve(currentDir, '../');
+        relativePathToCurrent = Path.relative(processCwd, currentDir);
+        currentDirIsDecendantOfCwd = !relativePathToCurrent.startsWith('..');
+    }
+
+    if (!foundPackageJsonWithType) {
+        console.error(`[${logTag}] Could not find a package.json file in the starting directory '${opts.startDir}' or any of the ${maxTreeTraversal} parent directories.`);
+        // no point in living like this
+        process.exit(1);
+    }
+
+
+    // TODO: should file read & json parse be in a try-catch block?
+    packageJsonData = FsSync.readFileSync(packageJsonPath, 'utf8');
+    packageJsonParsed = JSON.parse(packageJsonData);
+
+
+    // TODO: We are ignoring the presence and content of `main` and `module` fields
+    // - do we need to consider them?
+    return (packageJsonParsed && typeof packageJsonParsed.type === 'string' && packageJsonParsed.type.length > 0)
+        ? (SourceType[packageJsonParsed.type.toLowerCase().trim()] || {id: opts.fallbackModSysId} ).id
         : opts.fallbackModSysId;
 }
 
@@ -923,24 +1052,32 @@ const globalExcludes = ComposeConfig.named( 'global/excludes',
 
 /**
  * Compose a configuration object for a specific module system and language
- * 
- * @param {SourceModSysId} sourceTypeId - The module system to target
- * @param {LangTypeId} sourceLangId - The language family to target
- * @param {string[]} [inclWhereDir=[]] Include where sub dirs contain this e.g. 'packages'
- * @param {string[]} [exclWhereDir=[]] Exclude where sub dirs contain this e.g. 'dist'
- * @param {boolean} [isRootConf=false] Flag to indicate if this is the root of a monorepo with sub-packages
+ * @param {ResourceLocationId} resourceLocationId - Signals the location of the resources, and the set of rules to apply to them
+ * @param {SourceTypeId} sourceTypeId - The sourceType of the resources
+ * @param {LangTypeId} sourceLangId - The language family of the source files
+ * @param {string[]} [inclWhereDir=[]] Generate include patterns for filepath containing a 'packages' dir
+ * @param {string[]} [exclWhereDir=[]] Generate exclude patterns for filepath containing a 'dist' dir
+ * @param {boolean} [isRootConf=false] Flag to indicate if this is the root of a monorepo with sub-packages. 
+ * If true, will include /packages dir, instead or just defaulting the the contents of the CWD.
  * @returns 
  */
-const makeConfig = (ruleSetTypeId, sourceTypeId, sourceLangId, inclWhereDir = [], exclWhereDir = [], isRootConf = false) => {
+const makeConfig = (resourceLocationId, sourceTypeId, sourceLangId, inclWhereDir = [], exclWhereDir = [], isRootConf = false) => {
 
     // reverse map to get the associated module system id
     // that should be assumef for indescriminate file types
     // like .js or .ts (read from package.json or fallback to commonjs)
-    const defaultAssModSysId = Object.values(SourceType).find((st) => st.id === getPackageSourceTypeId()).assModSysId;
+    const whereUnsureUseModSysId = SourceType[getPackageSourceTypeId({
+        // specifying the path in which to start searching for the package.json file
+        // - non-existent path like /src/esm/ is allowed, as the function will traverse up the tree
+        startDir: (() => {
+            const _startDir = Path.resolve(process.cwd(), ResourceLocation[resourceLocationId].assDirName, SourceType[sourceTypeId].assModSysId);
+            return _startDir;
+        })(),
+    })].assModSysId;
 
     // reverse map to get the associated module system id
     // that's also used for the respective output dir name & config file names
-    const sourceAssModSysId = Object.values(SourceType).find((st) => st.id === sourceTypeId).assModSysId;
+    const sourceAssModSysId = SourceType[sourceTypeId].assModSysId;
 
     // We do these file-extension gymnastics to make sure we don't
     // accidentally match files that are meant to be interpreted
@@ -951,13 +1088,13 @@ const makeConfig = (ruleSetTypeId, sourceTypeId, sourceLangId, inclWhereDir = []
 
     const depAddedToEsm = allFileTypes
         .filter((ft) => ft.langId === sourceLangId && ft.impliedModSysId === ModSysType.esm.id)
-        .concat(defaultAssModSysId === ModSysType.esm.id ? depFileTypes : []);
+        .concat(whereUnsureUseModSysId === ModSysType.esm.id ? depFileTypes : []);
 
     const depAddedToCjs = allFileTypes
         .filter((ft) => ft.langId === sourceLangId && ft.impliedModSysId === ModSysType.cjs.id)
-        .concat(defaultAssModSysId === ModSysType.cjs.id ? depFileTypes : []);
+        .concat(whereUnsureUseModSysId === ModSysType.cjs.id ? depFileTypes : []);
 
-    const targetFileTypes = defaultAssModSysId !== sourceAssModSysId
+    const targetFileTypes = whereUnsureUseModSysId === sourceAssModSysId
         ? depAddedToEsm
         : depAddedToCjs;
 
@@ -977,19 +1114,19 @@ const makeConfig = (ruleSetTypeId, sourceTypeId, sourceLangId, inclWhereDir = []
 
     const CD = `.`; // current directory / specific level
 
-    const monoWithVisibleSubPackage = `${MONOREPO_PACKAGES_DIR}/${vD}`;
-    const monoWithHiddenSubPackage = `${MONOREPO_PACKAGES_DIR}/${hD}`;
+    const monoWithVisibleSubPackage = `${ROOT_PACKAGES_DIR}/${vD}`;
+    const monoWithHiddenSubPackage = `${ROOT_PACKAGES_DIR}/${hD}`;
 
     
 
-    return ComposeConfig.named( `${ruleSetTypeId}/${sourceAssModSysId}/${sourceLangId}`,
+    return ComposeConfig.named( `${resourceLocationId}/${sourceAssModSysId}/${sourceLangId}`,
 
         // plugins & parser
         sourceLangId === LangType.js.id ? PartialConfig.jsEslintPluginAndParser() : {},
         sourceLangId === LangType.ts.id ? PartialConfig.tsEslintPluginAndParser() : {},
 
         // include monorepo's sub-packages?
-        isRootConf && MONOREPO_PACKAGES_DIR.length > 0
+        isRootConf && ROOT_PACKAGES_DIR.length > 0
         ? ComposeConfig.named( '_inclSubPackages', 
             PartialConfig.includeFiles([
                 // visible sub-packages
@@ -1069,10 +1206,10 @@ const makeConfig = (ruleSetTypeId, sourceTypeId, sourceLangId, inclWhereDir = []
 
                     // if this is the root config of a monorepo
                     // - also include all the tsconfig files in the sub packages
-                    isRootConf && MONOREPO_PACKAGES_DIR.length > 0
+                    isRootConf && ROOT_PACKAGES_DIR.length > 0
                         ? `${CD}/${monoWithVisibleSubPackage}/tsconfig.${sourceAssModSysId}.json`
                         : '',
-                    isRootConf && MONOREPO_PACKAGES_DIR.length > 0
+                    isRootConf && ROOT_PACKAGES_DIR.length > 0
                         ? `${CD}/${monoWithHiddenSubPackage}/tsconfig.${sourceAssModSysId}.json`
                         : '',
                 ].filter((val) => val.length > 0)
@@ -1088,14 +1225,14 @@ const makeConfig = (ruleSetTypeId, sourceTypeId, sourceLangId, inclWhereDir = []
         sourceLangId === LangType.ts.id ? langTsBaseRules : {},
 
         // Specific rules: for /src directory types
-        ruleSetTypeId === RuleSetType.src.id ? ruleSetSrcCommon : {},
-        ruleSetTypeId === RuleSetType.src.id && sourceTypeId === SourceType.commonjs.id ? ruleSetSrcCjs : {},
-        ruleSetTypeId === RuleSetType.src.id && sourceTypeId === SourceType.module.id ? ruleSetSrcEsm : {},
+        resourceLocationId === ResourceLocation.src.id ? ruleSetSrcCommon : {},
+        resourceLocationId === ResourceLocation.src.id && sourceTypeId === SourceType.commonjs.id ? ruleSetSrcCjs : {},
+        resourceLocationId === ResourceLocation.src.id && sourceTypeId === SourceType.module.id ? ruleSetSrcEsm : {},
 
         // Specific rules: for /dist directory types
-        ruleSetTypeId === RuleSetType.dist.id ? ruleSetDistCommon : {},
-        ruleSetTypeId === RuleSetType.dist.id && sourceAssModSysId === ModSysType.cjs.id ? ruleSetDistCjs : {},
-        ruleSetTypeId === RuleSetType.dist.id && sourceAssModSysId === ModSysType.esm.id ? ruleSetDistEsm : {},
+        resourceLocationId === ResourceLocation.dist.id ? ruleSetDistCommon : {},
+        resourceLocationId === ResourceLocation.dist.id && sourceAssModSysId === ModSysType.cjs.id ? ruleSetDistCjs : {},
+        resourceLocationId === ResourceLocation.dist.id && sourceAssModSysId === ModSysType.esm.id ? ruleSetDistEsm : {},
     )
 }
 
@@ -1129,14 +1266,15 @@ const configs = [
     // // -----------------------------------------------------------
 
     // src / <esm|cjs> / ts
-    makeConfig(RuleSetType.src.id, SourceType.module.id, LangType.ts.id, [], [], true ),
-    makeConfig(RuleSetType.src.id, SourceType.commonjs.id, LangType.ts.id, [], [], true ),
+    makeConfig(ResourceLocation.src.id, SourceType.module.id, LangType.ts.id, [], [], true ),
+    makeConfig(ResourceLocation.src.id, SourceType.commonjs.id, LangType.ts.id, [], [], true ),
 
-    // <src|dist> / <esm|cjs> / js
-    makeConfig(RuleSetType.src.id, SourceType.module.id, LangType.js.id, [], [], true ),
-    makeConfig(RuleSetType.src.id, SourceType.commonjs.id, LangType.js.id, [], [], true ),
-    makeConfig(RuleSetType.dist.id, SourceType.module.id, LangType.js.id, [], [], true ),
-    makeConfig(RuleSetType.dist.id, SourceType.commonjs.id, LangType.js.id, [], [], true ),
+    // src / <esm|cjs> / js
+    makeConfig(ResourceLocation.src.id, SourceType.module.id, LangType.js.id, [], [], true ),
+    makeConfig(ResourceLocation.src.id, SourceType.commonjs.id, LangType.js.id, [], [], true ),
+    // dist / <esm|cjs> / js
+    makeConfig(ResourceLocation.dist.id, SourceType.module.id, LangType.js.id, [], [], true ),
+    makeConfig(ResourceLocation.dist.id, SourceType.commonjs.id, LangType.js.id, [], [], true ),
 
 ];
 
@@ -1171,7 +1309,7 @@ export {
     configs,
 
     makeConfig,
-    RuleSetType as RuleSet,
+    ResourceLocation as RuleSet,
     ModSysType,
     LangType,
 
@@ -1180,16 +1318,5 @@ export {
 };
 
 
-if (DEBUG) { 
-    console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
-
-    if (DEBUG_PAUSE) {
-
-        debugger;
-
-        // or
-        // console.log(`[${logTag}] Pausing...`);
-        // process.stdin.resume();
-    }
-
-}
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
+if (process.env.DEBUG && DEBUG_THIS && DEBUG_PAUSE) debugger;

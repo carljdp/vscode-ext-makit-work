@@ -17,14 +17,29 @@ import Chokidar from 'chokidar';
 import Path, { dirname, resolve } from 'path';
 import FsAsync from 'fs/promises';
 import { bundleRequire } from 'bundle-require';
-import { getLogTag } from './common/locations.js';
+
+
+import { inspect } from 'node:util';
+import { getLogTag } from '../../../packages/startx/devt/common/locations.js';
 const logTag = getLogTag();
 
 
 // CONSTANTS
 
 
-const DEBUG = true;
+/** Manual debug flag for this script.
+ * @constant {boolean} DEBUG_THIS */
+const DEBUG_THIS = false;
+
+/** Whether to hit a breakpoint at the end of the script.
+ * @constant {boolean} DEBUG_PAUSE */
+const DEBUG_PAUSE = false;
+
+/** Whether to log out the configurations in detail.
+ * These verbose logs are not nested inside `DEBUG` blocks, as it can be useful even when `DEBUG` is false.
+ * @constant {boolean} LOG_VERBOSE */
+const LOG_VERBOSE = false;
+
 const DRY_RUN = false;
 
 const ESLINT_USE_CONFIG = true;
@@ -42,7 +57,7 @@ const ESLINT_CACHE_CLEAN_ON_START = true;
 // IMPLEMENTATION
 
 
-
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
 
 
 class LogUtil{

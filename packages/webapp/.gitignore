@@ -1,14 +1,29 @@
-
 # environment files
+# ----------------------
 .env.*
 !.env.example
 *.env
 !.env.example
 
-# generated files
+# Generated config files
+# ----------------------
+# Note: In this project we procedurally generate the following
+# SWC config files. (normally they would not be ignored)
+.swcrc.*.json
+.swc.cli.*.json
+
+# Build artifacts
+# ----------------------
 dist
 
-# node files
+# Node.js
+# ----------------------
 node_modules
 
+# VS Code Extensions
+# ----------------------
+.eslint-config-inspector
+.nyc_output
 .history
+.cache
+coverage

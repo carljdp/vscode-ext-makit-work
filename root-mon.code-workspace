@@ -1,11 +1,55 @@
 {
+	// File: `./root-mon.code-workspace`
+	// Our mono-repo's root workspace, meant for monitoring background tasks.
+	//
+	// Purpose: 
+	// A workspace meant to be launched in parallel with the root workspace
+	// - A workaround for VS Code's inability to run multiple instances/windows of the same workspace
+	// - So we've put out auto running tasks (e.g. linting) in this workspace
+	//
+	// Also see:
+	// - `./root-mon.code-workspace` for general development
+	//
 	"folders": [
 		{
-			"path": "."
-		}
+			"path": ".",
+			"name": "",
+		},
+		{
+			"path": "./packages/experiments/",
+			"name": "./packages/experiments",
+		},
+		{
+			"path": "./packages/extens-tsc/",
+			"name": "./packages/extens-tsc",
+		},
+		{
+			"path": "./packages/extens-wpk/",
+			"name": "./packages/extens-wpk",
+		},
+		{
+			"path": "./packages/extens-x10/",
+			"name": "./packages/extens-x10",
+		},
+		{
+			"path": "./packages/server/",
+			"name": "./packages/server",
+		},
+		{
+			"path": "./packages/startx/",
+			"name": "./packages/startx",
+		},
+		{
+			"path": "./packages/webapp/",
+			"name": "./packages/webapp",
+		},
 	],
 	"settings": {
 		"files.exclude": {
+			// because we added the folders above, we can exclude this
+			"packages/": true,
+			//
+			// The usual suspects
 			"**/.git": true,
 			"**/.history": true,
 			"**/.cache": true,
@@ -23,11 +67,6 @@
 			".cache": true,
 			".history": true,
 		},
-		//
-		"workbench.settings.useSplitJSON": true, 
-		"terminal.integrated.defaultProfile.windows": "Git Bash",
-		"debug.console.collapseIdenticalLines": false,
-		"explorer.compactFolders": false,
 		//
 		"json.schemaDownload.enable": false,  // in an attempt to fix the "schema not found" error
 		"json.schemas": [
@@ -100,61 +139,26 @@
 			"./packages/*",
 		],
 		//
+		"mocha.path": "node_modules/mocha",
+		"mocha.showErrorPopup": false,
+		"mocha.files.glob": "**/*.test.js",
+		"mocha.files.ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/out/**",
+			"**/output/**",
+			"**/build/**",
+			"**/tmp/**",
+			"**/temp/**",
+			"**/.history/**",
+			"**/.cache/**"
+		],
+		//
 	},
 	"extensions": {
 		"recommendations": [
-			//
-			// Foundational
-			"ryu1kn.partial-diff",
-			"mikestead.dotenv",
-			"EditorConfig.EditorConfig",
-			//
-			// UI Widgets
-			"compulim.vscode-clock",
-			"koalamer.workspace-in-status-bar",
-			//
-			// autorun
-			"philfontaine.autolaunch",
-			"zoma.vscode-auto-open-workspace",
-			"matt-rudge.auto-open-preview-panel",
-			//
-			// Disaster recovery
-			"xyz.local-history",
-			//
-			// Explorers: todo
-			"gruntfuggly.todo-tree",
-			//
-			// Explorers: bookmarks
-			// "alefragnani.Bookmarks",
-			// "koalamer.labeled-bookmarks",
-			// "alefragnani.numbered-bookmarks",
-			// "tintinweb.vscode-inline-bookmarks",
-			//
-			// Explorers: regions
-			// "SantaCodes.santacodes-region-viewer",
-			//
-			// Explorers: git
-			// "eamodio.gitlens",
-			//
-			// Explorers: tasks
-			"spmeesseman.vscode-taskexplorer",
-			"microhobby.vscode-tasks-label",
-			//
-			// Explorers: tests
-			// "hbenl.vscode-test-explorer",
-			// "connorshea.vscode-test-explorer-status-bar",
-			// "maty.vscode-mocha-sidebar",
-			//
-			// Linting/Formatting/Testing
-			// "dbaeumer.vscode-eslint",
-			// "ms-vscode.vscode-typescript-next",
-			// "esbenp.prettier-vscode",
-			// "ms-vscode.test-adapter-converter",
-			// "hbenl.vscode-mocha-test-adapter",
-			//
-			// Unshitification
-			"Soulcode.vscode-unwanted-extensions",
-			//
+			"github.copilot",
+			"github.copilot-chat"
 		]
-	},
+	}
 }

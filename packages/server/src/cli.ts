@@ -99,7 +99,7 @@ const app = express();
 // Start the server
 app.listen(cliArgsParsedFlat.port, () => {
     console.log(`[${logTag}] root: ${pathToFileURL(CONFIG.SERVER_ROOT_ABSOLUTE!)}`);
-    console.log(`[${logTag}] link: ${CONFIG.SERVER_URL_BASE}`);
+    console.log(`[${logTag}] link: ${CONFIG.SERVER_URL_BASE} or ${CONFIG.SERVER_URL_BASE}/index.html`);
 });
 
 

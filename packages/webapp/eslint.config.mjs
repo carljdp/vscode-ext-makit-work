@@ -12,16 +12,16 @@ const logTag = getLogTag();
 
 /** Manual debug flag for this script.
  * @constant {boolean} DEBUG_THIS */
-const DEBUG_THIS = false;
+const DEBUG_THIS = true;
 
 /** Whether to hit a breakpoint at the end of the script.
  * @constant {boolean} DEBUG_PAUSE */
-const DEBUG_PAUSE = false;
+const DEBUG_PAUSE = true;
 
 /** Whether to log out the configurations in detail.
  * These verbose logs are not nested inside `DEBUG` blocks, as it can be useful even when `DEBUG` is false.
  * @constant {boolean} LOG_VERBOSE */
-const LOG_VERBOSE = false;
+const LOG_VERBOSE = true;
 
 
 // IMPLEMENTATION

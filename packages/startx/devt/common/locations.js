@@ -46,26 +46,34 @@
 import Path from "node:path";
 import { fileURLToPath } from 'node:url';
 
-/**
- * This is the last time we assemble this tag manually!!!
+/** This is the last time we assemble this tag manually!!!
  * - by the end of this file, we will have a utility function to get the log tag
- * @type {string}
- */
+ * @type {string} */
 const logTag = Path.basename(fileURLToPath(import.meta.url));
 
 
 // CONSTANTS
 
 
-const DEBUG = false;
+/** Manual debug flag for this script.
+ * @constant {boolean} DEBUG_THIS */
+const DEBUG_THIS = false;
+
+/** Whether to hit a breakpoint at the end of the script.
+ * @constant {boolean} DEBUG_PAUSE */
+const DEBUG_PAUSE = false;
+
+/** Whether to log out the configurations in detail.
+ * These verbose logs are not nested inside `DEBUG` blocks, as it can be useful even when `DEBUG` is false.
+ * @constant {boolean} LOG_VERBOSE */
+const LOG_VERBOSE = false;
 
 
 // IMPLEMENTATION
 
 
-if (DEBUG && process.env.DEBUG) { 
-    console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
-}
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
+
 
 /**
  * A class representing the call-site location obtained from a stack trace line.
@@ -529,6 +537,6 @@ export {
     getLogTag
 };
 
-if (DEBUG && process.env.DEBUG) { 
-    console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
-}
+
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
+if (process.env.DEBUG && DEBUG_THIS && DEBUG_PAUSE) debugger;

@@ -7,8 +7,33 @@ import JSON5 from 'json5';
 import { parse as parseJsonc } from 'jsonc-parser';
 
 
+import { inspect } from 'node:util';
+import { getLogTag } from '../../../../packages/startx/devt/common/locations.js';
+const logTag = getLogTag();
 
-const DEBUG = false;
+
+// CONSTANTS
+
+
+/** Manual debug flag for this script.
+ * @constant {boolean} DEBUG_THIS */
+const DEBUG_THIS = false;
+
+/** Whether to hit a breakpoint at the end of the script.
+ * @constant {boolean} DEBUG_PAUSE */
+const DEBUG_PAUSE = false;
+
+/** Whether to log out the configurations in detail.
+ * These verbose logs are not nested inside `DEBUG` blocks, as it can be useful even when `DEBUG` is false.
+ * @constant {boolean} LOG_VERBOSE */
+const LOG_VERBOSE = false;
+
+
+// IMPLEMENTATION
+
+
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
+
 
 /** @type {(dirOrFilePathStr: string) => Promise<boolean>} */
 export async function pathExistsAsync(dirOrFilePathStr) {
@@ -17,7 +42,7 @@ export async function pathExistsAsync(dirOrFilePathStr) {
         await fsAsync.access(resolvedPath, fsAsync.constants.F_OK);
         return true;
     } catch (error) {
-        if (DEBUG) {
+        if (DEBUG_THIS) {
             console.log(`DEBUG: fs-utils.pathExistsAsync() failed. Path: ${dirOrFilePathStr}\n${error}`);
         }
         return false;
@@ -31,7 +56,7 @@ export function pathExistsSync(dirOrFilePathStr) {
         fsSync.accessSync(resolvedPath, fsSync.constants.F_OK);
         return true;
     } catch (error) {
-        if (DEBUG) {
+        if (DEBUG_THIS) {
             console.log(`DEBUG: fs-utils.pathExistsSync() failed. Path: ${dirOrFilePathStr}\n${error}`);
         }
         return false;
@@ -51,7 +76,7 @@ export async function readFileAsync(strPathToFileWithExt) {
         return await fsAsync.readFile(strPathToFileWithExt, 'utf8');
     }
     catch (error) {
-        if (DEBUG) {
+        if (DEBUG_THIS) {
             console.log(`DEBUG: fs-utils.readFileAsync() failed. Path: ${strPathToFileWithExt}\n${error}`);
         }
         throw error;
@@ -71,7 +96,7 @@ export function readFileSync(strPathToFileWithExt) {
         return fsSync.readFileSync(strPathToFileWithExt, 'utf8');
     }
     catch (error) {
-        if (DEBUG) {
+        if (DEBUG_THIS) {
             console.log(`DEBUG: fs-utils.readFileSync() failed. Path: ${strPathToFileWithExt}\n${error}`);
         }
         throw error;
@@ -90,7 +115,7 @@ export async function writeFileAsync(strPathToFileWithExt, strFileContent) {
         await fsAsync.writeFile(strPathToFileWithExt, strFileContent);
     }
     catch (error) {
-        if (DEBUG) {
+        if (DEBUG_THIS) {
             console.log(`DEBUG: fs-utils.writeFileAsync() failed. Path: ${strPathToFileWithExt}\n${error}`);
         }
         throw error;
@@ -108,7 +133,7 @@ export function writeFileSync(strPathToFileWithExt, strFileContent) {
         fsSync.writeFileSync(strPathToFileWithExt, strFileContent);
     }
     catch (error) {
-        if (DEBUG) {
+        if (DEBUG_THIS) {
             console.log(`DEBUG: fs-utils.writeFileSync() failed. Path: ${strPathToFileWithExt}\n${error}`);
         }
         throw error;
@@ -126,7 +151,7 @@ export function readDirSync(dirPathStr) {
         return fsSync.readdirSync(dirPathStr, { withFileTypes: true });
     }
     catch (error) {
-        if (DEBUG) {
+        if (DEBUG_THIS) {
             console.log(`DEBUG: fs-utils.readDirSync() failed. Path: ${dirPathStr}\n${error}`);
         }
         throw error;
@@ -143,7 +168,7 @@ export async function readDirAsync(dirPathStr) {
         return await fsAsync.readdir(dirPathStr, { withFileTypes: true });
     }
     catch (error) {
-        if (DEBUG) {
+        if (DEBUG_THIS) {
             console.log(`DEBUG: fs-utils.readDirAsync() failed. Path: ${dirPathStr}\n${error}`);
         }
         throw error;
@@ -245,7 +270,7 @@ export class JsonFile {
             return JSON.parse(stringFileContent);
         }
         catch (error) {
-            if (DEBUG) {
+            if (DEBUG_THIS) {
                 console.log(`JsonFile.parseJson() failed. Content:\n${stringFileContent}\n${error}`);
             }
             throw error;
@@ -262,7 +287,7 @@ export class JsonFile {
             return parseJsonc(stringFileContent);
         }
         catch (error) {
-            if (DEBUG) {
+            if (DEBUG_THIS) {
                 console.log(`JsonFile.parseJsonC() failed. Content:\n${stringFileContent}\n${error}`);
             }
             throw error;
@@ -279,7 +304,7 @@ export class JsonFile {
             return JSON5.parse(stringFileContent);
         }
         catch (error) {
-            if (DEBUG) {
+            if (DEBUG_THIS) {
                 console.log(`JsonFile.parseJson5() failed. Content:\n${stringFileContent}\n${error}`);
             }
             throw error;
@@ -370,7 +395,7 @@ export class JsonFile {
             this.state.rawMaybeValidStr = readFileSync(this.pathNameExt);
         }
         catch (error) {
-            if (DEBUG) {
+            if (DEBUG_THIS) {
                 console.log(`JsonFile.read() failed. Path: ${this.pathNameExt}\n${error}`);
             }
         }
@@ -393,7 +418,7 @@ export class JsonFile {
             }
         }
         catch (error) {
-            if (DEBUG) {
+            if (DEBUG_THIS) {
                 console.log(`JsonFile.write() failed. Path: ${this.pathNameExt}\n${error}`);
             }
         }
@@ -413,7 +438,7 @@ export class JsonFile {
             // done, already parsed!
         }
         else if (!this.state.rawMaybeValidStr) {
-            if (DEBUG) {
+            if (DEBUG_THIS) {
                 console.log(`JsonFile.parse() failed. Missing raw content.`);
             }
             this.state.confirmedValidStr = undefined;
@@ -437,7 +462,7 @@ export class JsonFile {
                         throw new Error(`Unsupported file type: ${this.#options.fileType}`);
                 }
             } catch (error) {
-                if (DEBUG) {
+                if (DEBUG_THIS) {
                     console.log(`JsonFile.parse() failed. Content:\n${this.state.rawMaybeValidStr}\n${error}`);
                 }
                 this.state.parsedContent = undefined;
@@ -542,7 +567,7 @@ export class JsonFile {
             _options.fileContent = options ? options.fileContent : undefined;
 
         } catch (error) {
-            if (DEBUG) {
+            if (DEBUG_THIS) {
                 console.log(`JsonFile._normalizeOptions() failed.\n${error}`);
             }
             throw error;
@@ -553,3 +578,7 @@ export class JsonFile {
     }
 
 }
+
+
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
+if (process.env.DEBUG && DEBUG_THIS && DEBUG_PAUSE) debugger;

@@ -1,11 +1,53 @@
 {
+	// File: `./root-dev.code-workspace`
+	// Our mono-repo's root workspace, meant for general development.
+	//
+	// Purpose:
+	// A workspace for when you need to work on bits and pieces of everything.
+	//
+	// Also see:
+	// - `./root-mon.code-workspace` for complimentory auto-running/background tasks
+	//
 	"folders": [
 		{
-			"path": "."
+			"path": ".",
+			"name": "",
+		},
+		{
+			"path": "./packages/experiments/",
+			"name": "./packages/experiments",
+		},
+		{
+			"path": "./packages/extens-tsc/",
+			"name": "./packages/extens-tsc",
+		},
+		{
+			"path": "./packages/extens-wpk/",
+			"name": "./packages/extens-wpk",
+		},
+		{
+			"path": "./packages/extens-x10/",
+			"name": "./packages/extens-x10",
+		},
+		{
+			"path": "./packages/server/",
+			"name": "./packages/server",
+		},
+		{
+			"path": "./packages/startx/",
+			"name": "./packages/startx",
+		},
+		{
+			"path": "./packages/webapp/",
+			"name": "./packages/webapp",
 		},
 	],
 	"settings": {
 		"files.exclude": {
+			// because we added the folders above, we can exclude this
+			"packages/": true,
+			//
+			// The usual suspects
 			"**/.git": true,
 			"**/.history": true,
 			"**/.cache": true,
@@ -20,13 +62,8 @@
 			"**/package-lock.json": true,
 		},
 		"search.exclude": {
-		// 	".cache": true,
+			".cache": true,
 			".history": true,
-		// 	"build": true,
-		// 	"dist": true,
-		// 	"out": true,
-		// 	"output": true,
-		// 	"tmp": true
 		},
 		//
 		"workbench.settings.useSplitJSON": true, 
@@ -56,6 +93,37 @@
 				],
 			},
 		],
+		//
+		// built-in "vscode.npm"
+		"npm.autoDetect": "on",
+		"npm.scriptHover": true,
+		"npm.runSilent": false,
+		"npm.packageManager": "pnpm",
+		"npm.fetchOnlinePackageInfo": true,
+		"npm.scriptExplorerAction": "open",
+		"npm.enableRunFromFolder": true,
+		"npm.exclude": "**/node_modules/**",
+		"npm.scriptExplorerExclude": [
+			"^_.*$"
+		],
+		//
+		// Extension: "spmeesseman.vscode-taskexplorer"
+		"taskExplorer.enableSideBar": true,
+		"taskExplorer.exclude": [],
+		"taskExplorer.enabledTasks": {
+			"ant": false,
+			"composer": false,
+			"gradle": false,
+			"grunt": false,
+			"gulp": false,
+			"make": false,
+			"maven": false,
+			"npm": false,
+			"perl": false,
+			"pipenv": false,
+			"ruby": false,
+			"tsc": false
+		},
 		//
 		// Experimental: turn off builtin eslint/typescript
 		//
@@ -153,6 +221,7 @@
 			//
 			// Linting/Formatting/Testing
 			// "dbaeumer.vscode-eslint",
+			// "ms-vscode.vscode-typescript-next",
 			// "esbenp.prettier-vscode",
 			// "ms-vscode.test-adapter-converter",
 			// "hbenl.vscode-mocha-test-adapter",

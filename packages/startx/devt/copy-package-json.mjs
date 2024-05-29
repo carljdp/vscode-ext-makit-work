@@ -23,19 +23,28 @@ import { mkdir } from 'node:fs/promises';
 import Lodash from 'lodash';
 
 import { readDirSync, readFileAsync, writeFileAsync, pathExistsAsync } from './common/fs-utils.js';
-import { Location as LocationClass, getLogTag } from "./common/locations.js";
 
-// just an experiment, not really needed
-const Location = LocationClass.staticClone();
-Location.pinDrop();
 
+import { inspect } from 'node:util';
+import { getLogTag } from '../../../packages/startx/devt/common/locations.js';
 const logTag = getLogTag();
 
 
 // CONSTANTS
 
 
-const DEBUG = false;
+/** Manual debug flag for this script.
+ * @constant {boolean} DEBUG_THIS */
+const DEBUG_THIS = false;
+
+/** Whether to hit a breakpoint at the end of the script.
+ * @constant {boolean} DEBUG_PAUSE */
+const DEBUG_PAUSE = false;
+
+/** Whether to log out the configurations in detail.
+ * These verbose logs are not nested inside `DEBUG` blocks, as it can be useful even when `DEBUG` is false.
+ * @constant {boolean} LOG_VERBOSE */
+const LOG_VERBOSE = false;
 
 
 // an arbitrary number, but it should be high enough
@@ -75,7 +84,7 @@ const ModSys = {
 // IMPLEMENTATION
 
 
-if (process.env.DEBUG && DEBUG) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
 
 
 /** @enum {number} A simple enum to represent the confidence level of a context indicator */
@@ -175,7 +184,7 @@ if (score < THRESHOLD_SCORE) {
 }
 else {
     // relatively confident that the directory under inspection is a package root
-    if (process.env.DEBUG && DEBUG) {
+    if (process.env.DEBUG && DEBUG_THIS) {
         console.log(`[${logTag}] Relatively confident (score: ${score}) that this is the root of a package`);
         console.log(`[${logTag}] cwd(): ${processCwd}`);
     }
@@ -346,7 +355,7 @@ const main = async (rootPath) => {
 await main(processCwd);
 
 
-if (process.env.DEBUG && DEBUG) console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
 
 
 

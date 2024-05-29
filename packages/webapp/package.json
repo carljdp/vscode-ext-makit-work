@@ -1,5 +1,5 @@
 {
-    "name": "vscode-ext-makit-work",
+    "name": "webapp",
     "version": "0.0.1-dev",
     "description": "",
     "author": {
@@ -11,25 +11,24 @@
     "license": "Proprietary",
     "private": true,
     "type": "module",
-    "module": "src/index.ts",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
     "scripts": {
         "reinstall": "npx pnpm install --loglevel error",
         "check-eslint": "npx @eslint/config-inspector",
         "check-tsconf": "npx tsc -p tsconfig.cjs.json --showConfig && npx tsc -p tsconfig.esm.json --showConfig",
         "lint-once": "eslint --config eslint.config.mjs --cache --cache-location .cache",
-        "lint-watch": "node ./packages/startx/devt/eslint-watch.mjs --config eslint.config.mjs --cache --cache-location .cache",
+        "lint-watch": "node ../../packages/startx/devt/eslint-watch.mjs --config eslint.config.mjs --cache --cache-location .cache",
         "lint-fix:dry": "eslint --config eslint.config.mjs --cache --cache-location .cache --fix-dry-run",
         "lint-fix:do": "eslint --config eslint.config.mjs --cache --cache-location .cache --fix",
         "lint-types:cjs": "tsc --project tsconfig.cjs.json --noEmit",
         "lint-types:esm": "tsc --project tsconfig.esm.json --noEmit",
-        "build-run:pre": "node ./packages/startx/devt/swc-configs-generate.js",
+        "build-run:pre": "node ../../packages/startx/devt/swc-configs-generate.js",
         "build-swc:cjs": "swc --cli-config-file .swc.cli.cjs.json src",
         "build-swc:esm": "swc --cli-config-file .swc.cli.esm.json src",
-        "build-run:post": "node ./packages/startx/devt/copy-package-json.mjs",
+        "build-run:post": "node ../../packages/startx/devt/copy-package-json.mjs",
         "build-all": "npm run build-run:pre && npm run build-swc:cjs && npm run build-swc:esm && npm run build-run:post",
-        "test": "mocha --config .mocharc.cjs",
-        "bin-startx:dist:cjs": "startx-cjs",
-        "bin-startx:dist:esm": "startx-esm"
+        "serve-dist:esm:once": "node ../server/dist/esm/cli.js --cli-server-args={\\\"path\\\":\\\"./dist/esm\\\",\\\"port\\\":\\\"5001\\\"}"
     },
     "devDependencies": {
         "@eslint/config-inspector": "^0.4.8",
@@ -52,23 +51,20 @@
         "chai": "^5.1.1",
         "mocha": "^10.4.0",
         "nyc": "^15.1.0",
-        "startx": "workspace:./packages/startx/dist",
+        "startx": "workspace:../../packages/startx/dist",
         "ts-node": "^10.9.2",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.10.0",
-        "bundle-require": "^4.1.0",
-        "chokidar": "^3.6.0",
-        "glob": "^10.3.16",
-        "minimatch": "^9.0.4"
+        "@types/three": "^0.164.0"
     },
     "dependencies": {
+        "ejs": "^3.1.10",
+        "three": "^0.164.1"
     },
     "engines": {
-        "node": "^21.7.3",
-        "vscode": "^1.89.0"
+        "node": "^21.7.3"
     },
     "workspaces": [
-        "packages/*"
     ],
     "$schema": "https://json.schemastore.org/package.json"
 }

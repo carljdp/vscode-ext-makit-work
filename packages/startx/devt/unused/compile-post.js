@@ -26,7 +26,7 @@ const _logTag = getLogTag();
 // CONSTANTS
 
 
-const DEBUG = false;
+const DEBUG_THIS = false;
 
 
 // CLI ARGUMENTS
@@ -54,9 +54,8 @@ const logTag = combinedArgs.dryRun
     ? `${_logTag} (dry-run)`
     : `${_logTag}`;
 
-if (DEBUG && process.env.DEBUG) { 
-    console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
-}
+
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮`);
 
 
 /** 
@@ -225,6 +224,6 @@ async function run({ packageName, scriptsDir, outputDir, dryRun = true }) {
 
 run(combinedArgs);
 
-if (DEBUG && process.env.DEBUG) { 
-    console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
-}
+
+if (process.env.DEBUG && DEBUG_THIS) console.log(`╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ ${logTag} ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯`);
+if (process.env.DEBUG && DEBUG_THIS && DEBUG_PAUSE) debugger;

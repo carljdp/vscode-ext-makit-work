@@ -1,5 +1,14 @@
 // @ts-check
 
+// Original purpose:
+// This file was intended to be used to register modules with Node.js
+// when the application starts up, e.g. to register a loader that
+// will enable us to run TS files directly with Node.js.
+//
+// I think this file has been replaced by <root>/packages/startx/devt/**/*.js
+// - Once confirmed, this file can be deleted
+
+
 /**
  * @typedef {Object} RegisterOptions
  * @property {string | URL} parentURL - The parent URL.
